@@ -1,7 +1,8 @@
+<a id="pl"></a>
 # Portfolio - Jakub Ćwiek [PL]
 
 This is the Polish version of my portfolio description.
-[Click here to go to English version.](#Portfolio---Jakub-Ćwiek-[EN])
+[English version](#en)
 
 Kontakt email: mail.jakubcwiek@gmail.com
 
@@ -211,11 +212,11 @@ Najważniejsze elementy:
 - pomoc innym użytkownikom i współpraca ze społecznością.
 
 
-
+<a id="en"></a>
 # Portfolio - Jakub Ćwiek [EN]
 
 Jest to Angielska wersja mojego Portfolio.
-[Naciśnij link tutaj, aby przejść do Polskiej wersji.](#Portfolio---Jakub-Ćwiek-[PL])
+[Wersja Polska](#pl)
 
 Contact email: mail.jakubcwiek@gmail.com
 
