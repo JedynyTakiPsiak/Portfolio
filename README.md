@@ -71,7 +71,7 @@ Ta sekcja pokazuje moją pracę na konkretnych poleceniach, analizę wymagań i 
 
 ## Java - 4-gatunkowa sieć gazowa
 
-[Przejdź do projektu](./Studies/Program Java 4-grade network gas)
+[Przejdź do projektu](./Studies/Program%20Java%204-grade%20network%20gas)
 
 Symulacja czterogatunkowego modelu gazu sieciowego.
 
