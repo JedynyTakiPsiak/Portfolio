@@ -86,7 +86,7 @@ Najważniejsze elementy:
 
 ## Termistor
 
-[Przejdź do folderu]("./Studies/Termistor Device Software and Hardware photos")
+[Przejdź do folderu](./Studies/Termistor%20Device%20Software%20and%20Hardware%20photos)
 
 Projekt łączący teorię i praktykę.
 
@@ -97,7 +97,7 @@ Zakres:
 
 ## WxWidgets
 
-[Przejdź do projektu](./Studies/WxWidget Simple Game)
+[Przejdź do projektu](./Studies/WxWidget%20Simple%20Game)
 
 Prosta gra w kółko i krzyżyk wykonana w C++ z użyciem wxWidgets.
 
@@ -131,7 +131,7 @@ Zbiór mniejszych programów pokazujących naukę podstaw algorytmiki, struktur 
 
 ## Gra komputerowa "Drwal"
 
-[Przejdź do folderu](./Studies/Lumberjack Game in Godot.zip)
+[Przejdź do folderu](./Studies/Lumberjack%20Game%20in%20Godot.zip)
 
 Zespołowy projekt gry 3D w Godot Engine 4.6.
 
@@ -149,7 +149,7 @@ Moja rola:
 
 ## Gra komputerowa "Saper"
 
-[Przejdź do folderu](./Studies/Saper Game in Godot.zip)
+[Przejdź do folderu](./Studies/Saper%20Game%20in%20Godot.zip)
 
 Projekt wykonany w silniku Godot.
 
@@ -161,7 +161,7 @@ Najważniejsze elementy:
 
 ## PLC - sygnalizacja świetlna
 
-[Przejdź do folderu](./Studies/Projekt sygnalizacji świetlnej na skrzyżowaniu z tramwajami.pdf)
+[Przejdź do folderu](./Studies/Projekt%20sygnalizacji%20świetlnej%20na%20skrzyżowaniu%20z%20tramwajami.pdf)
 
 Dwuosobowy projekt automatycznej sygnalizacji świetlnej dla samochodów, pieszych i tramwajów, wykonany w TIA Portal.
 
