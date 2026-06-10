@@ -86,7 +86,7 @@ Najważniejsze elementy:
 
 ## Termistor
 
-[Przejdź do folderu](./Studies/Termistor Device Software and Hardware photos)
+[Przejdź do folderu]("./Studies/Termistor Device Software and Hardware photos")
 
 Projekt łączący teorię i praktykę.
 
