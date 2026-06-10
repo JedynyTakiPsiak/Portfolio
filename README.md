@@ -64,7 +64,7 @@ Uruchomienie:
 Materiały i projekty związane głównie ze studiami, ale wybrane tak, aby pokazywały coś więcej niż samo zaliczenie przedmiotu.
 
 ## Praktyki
-[Przejdź do folderu](./Studies/praktyki)
+[Przejdź do folderu](./Studies/Praktyki)
 
 Wybrane zadania otrzymane podczas praktyk.  
 Ta sekcja pokazuje moją pracę na konkretnych poleceniach, analizę wymagań i realizację zadań w bardziej „firmowym” stylu.
