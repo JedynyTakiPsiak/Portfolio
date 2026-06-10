@@ -30,7 +30,7 @@ Część materiałów to gotowe projekty, a część to większe zadania, dokume
 Najważniejsze projekty w repozytorium - najbardziej reprezentacyjne i najbardziej dopracowane.
 
 ## Praca inżynierska
-[Przejdź do projektu](./praca-inzynierska)
+[Przejdź do projektu](./Pinned/Praca-Inzynierska)
 
 Praktyczna część mojej pracy inżynierskiej dotyczyła stworzenia systemu do automatycznego pobierania, analizy statystycznej i wizualizacji wyników gry Lotto.
 
@@ -45,7 +45,7 @@ Cel projektu:
 - połączenie programowania, analizy danych i wizualizacji wyników w jednym spójnym systemie.
 
 ## Maly-dresiarz
-[Przejdź do projektu](./Maly-dresiarz)
+[Przejdź do projektu](./Pinned/Maly-Dresiarz)
 
 Projekt wykonany zespołowo w 3 osoby.  
 To 10-rundowa gra strategiczna, w której można grać z inną osobą albo z botem.
@@ -64,14 +64,14 @@ Uruchomienie:
 Materiały i projekty związane głównie ze studiami, ale wybrane tak, aby pokazywały coś więcej niż samo zaliczenie przedmiotu.
 
 ## Praktyki
-[Przejdź do folderu](./studies/praktyki)
+[Przejdź do folderu](./Studies/praktyki)
 
 Wybrane zadania otrzymane podczas praktyk.  
 Ta sekcja pokazuje moją pracę na konkretnych poleceniach, analizę wymagań i realizację zadań w bardziej „firmowym” stylu.
 
 ## Java - 4-gatunkowa sieć gazowa
 
-[Przejdź do projektu](./Java)
+[Przejdź do projektu](./Studies/Program Java 4-grade network gas)
 
 Symulacja czterogatunkowego modelu gazu sieciowego.
 
@@ -86,7 +86,7 @@ Najważniejsze elementy:
 
 ## Termistor
 
-[Przejdź do folderu](./studies/termistor)
+[Przejdź do folderu](./Studies/Termistor Device Software and Hardware photos)
 
 Projekt łączący teorię i praktykę.
 
@@ -97,7 +97,7 @@ Zakres:
 
 ## WxWidgets
 
-[Przejdź do projektu](./Projekt_wxWidgets_w_C++)
+[Przejdź do projektu](./Studies/WxWidget Simple Game)
 
 Prosta gra w kółko i krzyżyk wykonana w C++ z użyciem wxWidgets.
 
@@ -108,7 +108,7 @@ Najważniejsze elementy:
 
 ## Programy w C oraz C++
 
-[Przejdź do folderu](./C)
+[Przejdź do folderu](./Studies/Programs_in_C_Cplusplus)
 
 Zbiór mniejszych programów pokazujących naukę podstaw algorytmiki, struktur danych i komunikacji między procesami.
 
@@ -131,7 +131,7 @@ Zbiór mniejszych programów pokazujących naukę podstaw algorytmiki, struktur 
 
 ## Gra komputerowa "Drwal"
 
-[Przejdź do folderu](./studies)
+[Przejdź do folderu](./Studies/Lumberjack Game in Godot.zip)
 
 Zespołowy projekt gry 3D w Godot Engine 4.6.
 
@@ -149,7 +149,7 @@ Moja rola:
 
 ## Gra komputerowa "Saper"
 
-[Przejdź do folderu](./studies)
+[Przejdź do folderu](./Studies/Saper Game in Godot.zip)
 
 Projekt wykonany w silniku Godot.
 
@@ -161,9 +161,9 @@ Najważniejsze elementy:
 
 ## PLC - sygnalizacja świetlna
 
-[Przejdź do folderu](./studies)
+[Przejdź do folderu](./Studies/Projekt sygnalizacji świetlnej na skrzyżowaniu z tramwajami.pdf)
 
-Projekt automatycznej sygnalizacji świetlnej dla samochodów, pieszych i tramwajów, wykonany w TIA Portal.
+Dwuosobowy projekt automatycznej sygnalizacji świetlnej dla samochodów, pieszych i tramwajów, wykonany w TIA Portal.
 
 Najważniejsze elementy:
 - język drabinkowy (LAD) oraz schemat bloków funkcyjnych (FBD),
@@ -177,7 +177,7 @@ Projekty poboczne rozwijane z ciekawości bądź pasji albo dla nauki nowych nar
 
 ## Frontend-Project
 
-[Przejdź do projektu](./Frontend-Project)
+[Przejdź do projektu](./Hobby/Frontend-Project)
 
 Projekt skupiony głównie na warstwie wizualnej.
 
@@ -188,7 +188,7 @@ Najważniejsze elementy:
 
 ## Cloud-login-ui
 
-[Przejdź do projektu](./Cloud-login-ui)
+[Przejdź do projektu](./Hobby/Cloud-Login-UI)
 
 Projekt interfejsu logowania do chmury plików.
 
@@ -199,7 +199,7 @@ Najważniejsze elementy:
 
 ## SkriptLang
 
-[Przejdź do projektu](./SkriptLang)
+[Przejdź do projektu](./Hobby/SkriptLang)
 
 Kilkuletnia praca ze skryptami do serwerów Minecraft.
 
