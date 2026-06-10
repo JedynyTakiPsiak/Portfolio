@@ -244,7 +244,7 @@ Some of the content consists of complete projects, while other parts are larger 
 
 ## Pinned projects
 
-The most important projects in this repository — the most representative and the most polished ones.
+The most important projects in this repository, the most representative and the most polished ones.
 
 ## Engineering thesis
 
@@ -290,7 +290,7 @@ Projects and materials mainly related to my studies, selected to show more than 
 A selection of tasks completed during my internship.  
 This section shows my work on specific assignments, requirement analysis, and task execution in a more company-oriented style.
 
-## Java – 4-species lattice gas
+## Java - 4-species lattice gas
 
 [Go to project](./Studies/Program%20Java%204-grade%20network%20gas)
 
