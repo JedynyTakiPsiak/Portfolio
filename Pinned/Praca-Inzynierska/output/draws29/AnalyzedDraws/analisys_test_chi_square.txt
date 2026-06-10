@@ -1,0 +1,9 @@
+Test Chi-Square
+H0: liczby występują z jednakową częstotliwością, zgodnie z rozkładem jednostajnym
+Reguła decyzji: odrzucamy H0, jeśli suma chiSquare będzie większa niż wartość krytyczna
+Poziom istotności: alpha = 0.05
+Stopień swobody: df = 48
+Wartość krytyczna = 65.171
+Wynik sumy chiSquare = 58.046
+
+Werdykt: Brak podstaw do odrzucenia H0

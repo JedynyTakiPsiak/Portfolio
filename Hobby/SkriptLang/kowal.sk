@@ -1,0 +1,144 @@
+command /odlameksrebra:
+	trigger:
+		if player has permission "smyf.odlameksrebra":
+			give 64 of iron nugget named "&b&lOdłamek Srebra" to player
+			stop trigger
+
+on right click on entity:
+	if name of clicked entity contains "&8&lKowal":
+		set {_gui} to chest inventory with 6 rows named "&c&lSmyf.pl &7|| &8&lKowal"
+		
+		set slot 20 of {_gui} to 1 of enchanted book named "&a&lFortune IV &7(Kilof)" with lore "&aPotrzebujesz &732 odłamków srebra &aaby wykuć ten przedmiot" and "&6Szansa na udane wykucie wynosi &e20%%"
+		set slot 21 of {_gui} to 1 of enchanted book named "&a&lUnbreaking X &7(Kilof)" with lore "&aPotrzebujesz &732 odłamków srebra &aaby wykuć ten przedmiot" and "&6Szansa na udane wykucie wynosi &e10%%"
+		set slot 22 of {_gui} to 1 of enchanted book named "&a&lFeather Falling VI &7(Buty)" with lore "&aPotrzebujesz &716 odłamków srebra &aaby wykuć ten przedmiot" and "&6Szansa na udane wykucie wynosi &e20%%"
+		set slot 23 of {_gui} to 1 of enchanted book named "&a&lLooting IV &7(Miecz)" with lore "&aPotrzebujesz &716 odłamków srebra &aaby wykuć ten przedmiot" and "&6Szansa na udane wykucie wynosi &e25%%"
+		set slot 24 of {_gui} to 1 of enchanted book named "&a&lKnockback III &7(Miecz)" with lore "&aPotrzebujesz &716 odłamków srebra &aaby wykuć ten przedmiot" and "&6Szansa na udane wykucie wynosi &e10%%"
+		set slot 40 of {_gui} to 1 of dragon egg named "&5&lPuszka Pandory" with lore "&aPotrzebujesz &764 odłamków srebra &aaby wykuć ten przedmiot" and "&6Szansa na udane wykucie wynosi &e10%%"
+
+		set slot (integers between 29 and 33) and 49 of {_gui} to green stained glass pane named " "
+		set slot (integers between 0 and 19) and (integers between 25 and 28) and (integers between 34 and 39) and (integers between 41 and 48) and (integers between 50 and 53) of {_gui} to black stained glass pane named " "
+		open {_gui} to player
+		
+on inventory click:
+	clicked inventory is not player's inventory
+	if name of player's current inventory is "&c&lSmyf.pl &7|| &8&lKowal":
+		cancel event
+		if clicked slot is barrier block:
+			wait 1 tick
+			close inventory of player
+				
+		if clicked slot is 20:
+			if player has 32 of iron nugget named "&b&lOdłamek Srebra":
+				if player's tool is any pickaxe:
+					wait 1 tick
+					close inventory of player
+					remove 32 of iron nugget named "&b&lOdłamek Srebra" from player
+					chance of 20%:
+						play sound "BLOCK_ANVIL_USE" at player for player
+						enchant player's tool with fortune 4
+						send "&aUdało ci się wykuć &6Fortune IV" to player
+						stop
+					else:
+						play sound "BLOCK_ANVIL_LAND" at player for player
+						send "&cNie udało ci się wykuć &4Fortune IV" to player
+				else:
+					send "&cW twojej rece musi znajdować się kilof!" to player
+			else:
+				send "&cNie masz wystarcząjacej ilości odłamków!" to player
+
+		if clicked slot is 21:
+			if player has 32 of iron nugget named "&b&lOdłamek Srebra":
+				if player's tool is any pickaxe:
+					wait 1 tick
+					close inventory of player
+					remove 32 of iron nugget named "&b&lOdłamek Srebra" from player
+					chance of 10%:
+						play sound "BLOCK_ANVIL_USE" at player for player
+						enchant player's tool with unbreaking 10
+						send "&aUdało ci się wykuć &6Unbreaking X" to player
+						stop
+					else:
+						play sound "BLOCK_ANVIL_LAND" at player for player
+						send "&cNie udało ci się wykuć &4Unbreaking X" to player
+				else:
+					send "&cW twojej rece musi znajdować się kilof!" to player
+			else:
+				send "&cNie masz wystarcząjacej ilości odłamków!" to player
+
+		if clicked slot is 22:
+			if player has 16 of iron nugget named "&b&lOdłamek Srebra":
+				if player's tool is any boots:
+					wait 1 tick
+					close inventory of player
+					remove 16 of iron nugget named "&b&lOdłamek Srebra" from player
+					chance of 20%:
+						play sound "BLOCK_ANVIL_USE" at player for player
+						enchant player's tool with feather falling 6
+						send "&aUdało ci się wykuć &6Feather Falling VI" to player
+						stop
+					else:
+						play sound "BLOCK_ANVIL_LAND" at player for player
+						send "&cNie udało ci się wykuć &4Feather Falling VI" to player
+				else:
+					send "&cW twojej rece muszą znajdować się buty!" to player
+			else:
+				send "&cNie masz wystarcząjacej ilości odłamków!" to player
+
+		if clicked slot is 23:
+			if player has 16 of iron nugget named "&b&lOdłamek Srebra":
+				if player's tool is any sword:
+					wait 1 tick
+					close inventory of player
+					remove 16 of iron nugget named "&b&lOdłamek Srebra" from player
+					chance of 25%:
+						play sound "BLOCK_ANVIL_USE" at player for player
+						enchant player's tool with looting 4
+						send "&aUdało ci się wykuć &6Looting IV" to player
+						stop
+					else:
+						play sound "BLOCK_ANVIL_LAND" at player for player
+						send "&cNie Udało ci się wykuć &4Looting IV" to player
+				else:
+					send "&cW twojej rece musi znajdować się miecz!" to player
+			else:
+				send "&cNie masz wystarcząjacej ilości odłamków!" to player
+
+		if clicked slot is 24:
+			if player has 16 of iron nugget named "&b&lOdłamek Srebra":
+				if player's tool is any sword:
+					wait 1 tick
+					close inventory of player
+					remove 16 of iron nugget named "&b&lOdłamek Srebra" from player
+					chance of 10%:
+						play sound "BLOCK_ANVIL_USE" at player for player
+						enchant player's tool with knockback 3
+						send "&aUdało ci się wykuć &6Knockback III" to player
+						stop
+					else:
+						play sound "BLOCK_ANVIL_LAND" at player for player
+						send "&cNie Udało ci się wykuć &4Knockback III" to player
+				else:
+					send "&cW twojej rece musi znajdować się miecz!" to player
+			else:
+				send "&cNie masz wystarcząjacej ilości odłamków!" to player
+
+		if clicked slot is 40:
+			if player has 64 of iron nugget named "&b&lOdłamek Srebra":
+				wait 1 tick
+				close inventory of player
+				remove 64 of iron nugget named "&b&lOdłamek Srebra" from player
+				chance of 10%:
+					play sound "BLOCK_ANVIL_USE" at player for player
+					add 1 dragon egg named "&5Puszka pandory" with lore "&dZawiera bardzo rzadkie przedmioty!" to player
+					send "&aUdało ci się wykuć &5&lPuszkę Pandory" to player
+					stop
+				else:
+					play sound "BLOCK_ANVIL_LAND" at player for player
+					send "&cNie Udało ci sie wykuć &5&lPuszki Pandory" to player
+			else:
+				send "&cNie masz wystarcząjacej ilości odłamków!" to player
+
+
+
+
+

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Jakieś dane -->
+    <title>Prywatna Chmura - Login</title>    
+    <meta name="author" content="JedynyTakiPsiak">
+    <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="pl">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="keywords" content="`JedynyTakiPsiak`, `Psiak`" />
+    <meta name="description" content="Prywatna baza danych ~ by JedynyTakiPsiak" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:site_name" content="Smyf.pl">
+    <meta property="og:title" content="Prywatna baza danych ~ by JedynyTakiPsiak" />
+    <meta property="og:type" content="website">   
+    <meta property="og:url" content="https://www.smyf.pl/chmura">
+    <meta property="og:description" content="Prywatna baza danych ~ by JedynyTakiPsiak" />
+    <meta property="og:locale" content="pl_PL" />
+    <meta property="og:ttl" content="604800" />
+    
+    <!-- FAVICON -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/favicon/site.webmanifest">
+    <meta name="msapplication-TileColor" content="#648DDD">
+    <meta name="theme-color" content="#648DDD">
+    <meta name="msapplication-navbutton-color" content="#648DDD">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- CSS PLIKI -->
+    <link rel="stylesheet" href="main.css" type="text/css">
+    <link rel="stylesheet" href="assets/checkbox.css" type="text/css">
+
+    <!-- JAVASCRIPT -->
+    <script src="assets/background-changer.js"></script>
+    <script>
+        // Blokada wpisywania liter do 2fa input'u
+        function validateNumericInput(input) {
+            input.value = input.value.replace(/[^0-9]/g, '');
+        }
+    </script>
+
+    <!-- sweetalert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+
+<body>
+
+    <!-- free background image: https://www.freepik.com -->
+    <div class="custom-background"></div>
+    <div class="content">
+        <div class="login-box">
+            <img src="assets/favicon/logo.png" alt="logo chmura plików" class="logo" />
+
+            <form class="login-form" id="login-form" method="POST">
+                <input type="text" id="username" name="username" placeholder="Nick" required maxlength="16">
+                <input type="password" id="password" name="password" placeholder="Hasło" required maxlength="32">
+
+                <div class="guziki">
+                    <div class="remember">
+                        <label class="el-switch">
+                            <input type="checkbox" name="rememberMe" id="rememberMe">
+                            <span class="el-switch-style"></span>
+                        </label>
+                        <span class="text">Zapamiętaj</span>
+                    </div>
+
+                    <div class="admin">
+                        <label class="el-switch">
+                            <input type="checkbox" name="isAdmin" id="isAdmin">
+                            <span class="el-switch-style"></span>
+                        </label>
+                        <span class="text">Administrator</span>
+                    </div>
+                </div>
+
+                <button type="submit">Zaloguj</button>
+            </form>
+
+            <form class="login-2fa" id="login-2fa" method="POST">
+                <span class="napis">Wprowadź kod 2FA</span>
+                <input type="text" id="numericInput" name="code" oninput="validateNumericInput(this)" required minlength="6" maxlength="6">
+                <button type="submit">Zweryfikuj</button>
+            </form>
+
+        </div>
+    </div>
+
+</body>
+</html>

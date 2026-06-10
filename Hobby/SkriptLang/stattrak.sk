@@ -1,0 +1,692 @@
+on tab complete of "/stattrak":
+	set tab completions for position 1 to "naloz", "nagrody" and "pomoc"
+		
+command /stattrak <text>:
+	trigger:
+		if arg 1 is "naloz":
+			if line 2 of lore of player's tool doesn't contain "StatTrak":
+				if player has name tag named "&6✬&lStatTrak&6™":
+					if player's tool is any pickaxe:
+						remove 1 name tag named "&6✬&lStatTrak&6™" from player
+						set line 1 of lore of player's tool to " "
+						set line 2 of lore of player's tool to "&6✬&lStatTrak&6™"
+						set line 3 of lore of player's tool to "&7Właściciel: &f%nickname of player%"
+						set line 4 of lore of player's tool to "&7Wykopany Kamień: &f0 &7✬&7✬&7✬&7✬&7✬&7✬"
+						set line 5 of lore of player's tool to "&7Wykopany Obsydian: &f0 &7✬&7✬&7✬&7✬&7✬&7✬"
+						send "&aPomyślnie nałożono technologię &6✬&lStatTrak&6™ &ana przedmiot." to player
+						stop
+					if player's tool is any sword:
+						remove 1 name tag named "&6✬&lStatTrak&6™" from player
+						set line 1 of lore of player's tool to " "
+						set line 2 of lore of player's tool to "&6✬&lStatTrak&6™"
+						set line 3 of lore of player's tool to "&7Właściciel: &f%nickname of player%"
+						set line 4 of lore of player's tool to "&7Zabitych Graczy: &f0 &7✬&7✬&7✬&7✬&7✬&7✬"
+						set line 5 of lore of player's tool to "&7Zadane Obrażenia: &f0"
+						send "&aPomyślnie nałożono technologię &6✬&lStatTrak&6™ &ana przedmiot." to player
+						stop
+					if player's tool is bow:
+						remove 1 name tag named "&6✬&lStatTrak&6™" from player
+						set line 1 of lore of player's tool to " "
+						set line 2 of lore of player's tool to "&6✬&lStatTrak&6™"
+						set line 3 of lore of player's tool to "&7Właściciel: &f%nickname of player%"
+						set line 4 of lore of player's tool to "&7Zadane Obrażenia: &f0"
+						set line 5 of lore of player's tool to "&7Trafionych Przeciwników: &f0"
+						send "&aPomyślnie nałożono technologię &6✬&lStatTrak&6™ &ana przedmiot." to player
+						stop
+					send "&cAby nałożyć technologię StatTrak musisz trzymać narzędzie!" to player
+				else:
+					send "&cNie posiadasz Stattrak'a w ekwipunku!" to player
+			else:
+				send "&cWybrany przedmiot posiada już technologię Stattrak!" to player
+
+		if arg 1 is "nagrody":
+			if line 2 of lore of player's tool contain "StatTrak":
+				if player's tool is any pickaxe:
+					set {_gui} to hopper inventory named "&c&lSmyf&c&l.&c&lpl &7|| &6✬&6&lStatTrak&6&l™"
+					set slot 1 of {_gui} to stone named "&7Wykopany Kamień"
+					set slot 3 of {_gui} to obsidian named "&5Wykopany Obsydian"
+					open {_gui} to player
+					stop
+				if player's tool is any sword:
+					set {_nazwa::*} to line 4 of lore of player's tool split at " "
+					set {_zabitychgraczy} to line 4 of lore of player's tool
+					set {_gwiazdki} to {_nazwa::4}
+					replace all "&7Zabitych Graczy: &f" with "" in {_zabitychgraczy}
+					replace all " %{_gwiazdki}%" with "" in {_zabitychgraczy}
+					set {_zabitychgraczy} to {_zabitychgraczy} parsed as integer
+					set {_gui} to chest inventory with 3 rows named "&c&lSmyf&c&l.&c&lpl &7|| &7Zabitych Graczy"
+					set slot 10 of {_gui} to wooden sword named "&7%{_zabitychgraczy}%&8/&71" 
+					set slot 11 of {_gui} to stone sword named "&7%{_zabitychgraczy}%&8/&72"
+					set slot 12 of {_gui} to golden sword named "&7%{_zabitychgraczy}%&8/&73"
+					set slot 14 of {_gui} to iron sword named "&7%{_zabitychgraczy}%&8/&74"
+					set slot 15 of {_gui} to diamond sword named "&7%{_zabitychgraczy}%&8/&75"
+					set slot 16 of {_gui} to netherite sword named "&7%{_zabitychgraczy}%&8/&76"
+					if {_zabitychgraczy} >= 1:
+						set {_gwiazdki::*} to {_gwiazdki} split at ""
+						if {_gwiazdki::2} is "c":
+							set slot 10 of {_gui} to wooden sword named "&7%{_zabitychgraczy}%&8/&71" with lore "&cOdebrano już nagrodę!"
+						else:
+							set slot 10 of {_gui} to glowing wooden sword named "&7%{_zabitychgraczy}%&8/&71" with lore "&aKliknij aby odebrać nagrodę."
+						if {_zabitychgraczy} >= 2:
+							if {_gwiazdki::5} is "c":
+								set slot 11 of {_gui} to stone sword named "&7%{_zabitychgraczy}%&8/&72" with lore "&cOdebrano już nagrodę!"
+							else:
+								set slot 11 of {_gui} to glowing stone sword named "&7%{_zabitychgraczy}%&8/&72" with lore "&aKliknij aby odebrać nagrodę."
+							if {_zabitychgraczy} >= 3:
+								if {_gwiazdki::8} is "c":
+									set slot 12 of {_gui} to golden sword named "&7%{_zabitychgraczy}%&8/&72" with lore "&cOdebrano już nagrodę!"
+								else:
+									set slot 12 of {_gui} to glowing golden sword named "&7%{_zabitychgraczy}%&8/&73" with lore "&aKliknij aby odebrać nagrodę."
+								if {_zabitychgraczy} >= 4:
+									if {_gwiazdki::11} is "c":
+										set slot 14 of {_gui} to iron sword named "&7%{_zabitychgraczy}%&8/&74" with lore "&cOdebrano już nagrodę!"
+									else:
+										set slot 14 of {_gui} to glowing iron sword named "&7%{_zabitychgraczy}%&8/&74" with lore "&aKliknij aby odebrać nagrodę."
+									if {_zabitychgraczy} >= 5:
+										if {_gwiazdki::14} is "c":
+											set slot 15 of {_gui} to diamond sword named "&7%{_zabitychgraczy}%&8/&75" with lore "&cOdebrano już nagrodę!"
+										else:
+											set slot 15 of {_gui} to glowing diamond sword named "&7%{_zabitychgraczy}%&8/&75" with lore "&aKliknij aby odebrać nagrodę."
+										if {_zabitychgraczy} >= 6:
+											if {_gwiazdki::17} is "c":
+												set slot 16 of {_gui} to netherite sword named "&7%{_zabitychgraczy}%&8/&76" with lore "&cOdebrano już nagrodę!"
+											else:
+												set slot 16 of {_gui} to glowing netherite sword named "&7%{_zabitychgraczy}%&8/&76" with lore "&aKliknij aby odebrać nagrodę."
+					set slot (integers between 0 and 9) and 13 and (integers between 17 and 26) of {_gui} to black stained glass pane named " "
+					open {_gui} to player
+					stop
+				send "&cNagrody są tylko dostępne na kilofie i mieczu!" to player
+			else:
+				send "&cAby odebrać nagrody musisz trzymać przedmiot z technologią StatTrak!" to player
+		
+on inventory click:
+	if name of player's current inventory is "&c&lSmyf&c&l.&c&lpl &7|| &6✬&6&lStatTrak&6&l™":
+		cancel event
+		if clicked slot is 1:
+			set {_nazwa::*} to line 4 of lore of player's tool split at " "
+			set {_wykopanykamien} to line 4 of lore of player's tool
+			set {_gwiazdki} to {_nazwa::4}
+			replace all "&7Wykopany Kamień: &f" with "" in {_wykopanykamien}
+			replace all " %{_gwiazdki}%" with "" in {_wykopanykamien}
+			set {_wykopanykamien} to {_wykopanykamien} parsed as integer
+			set {_gui} to chest inventory with 3 rows named "&c&lSmyf&c&l.&c&lpl &7|| &7Wykopany Kamień"
+			set slot 10 of {_gui} to wooden pickaxe named "&7%{_wykopanykamien}%&8/&71000" 
+			set slot 11 of {_gui} to stone pickaxe named "&7%{_wykopanykamien}%&8/&72000"
+			set slot 12 of {_gui} to golden pickaxe named "&7%{_wykopanykamien}%&8/&73000"
+			set slot 14 of {_gui} to iron pickaxe named "&7%{_wykopanykamien}%&8/&74000"
+			set slot 15 of {_gui} to diamond pickaxe named "&7%{_wykopanykamien}%&8/&75000"
+			set slot 16 of {_gui} to netherite pickaxe named "&7%{_wykopanykamien}%&8/&76000"
+			if {_wykopanykamien} >= 10:
+				set {_gwiazdki::*} to {_gwiazdki} split at ""
+				if {_gwiazdki::2} is "c":
+					set slot 10 of {_gui} to wooden pickaxe named "&7%{_wykopanykamien}%&8/&71000" with lore "&cOdebrano już nagrodę!"
+				else:
+					set slot 10 of {_gui} to glowing wooden pickaxe named "&7%{_wykopanykamien}%&8/&71000" with lore "&aKliknij aby odebrać nagrodę."
+				if {_wykopanykamien} >= 25:
+					if {_gwiazdki::5} is "c":
+						set slot 11 of {_gui} to stone pickaxe named "&7%{_wykopanykamien}%&8/&72000" with lore "&cOdebrano już nagrodę!"
+					else:
+						set slot 11 of {_gui} to glowing stone pickaxe named "&7%{_wykopanykamien}%&8/&72000" with lore "&aKliknij aby odebrać nagrodę."
+					if {_wykopanykamien} >= 50:
+						if {_gwiazdki::8} is "c":
+							set slot 12 of {_gui} to golden pickaxe named "&7%{_wykopanykamien}%&8/&72000" with lore "&cOdebrano już nagrodę!"
+						else:
+							set slot 12 of {_gui} to glowing golden pickaxe named "&7%{_wykopanykamien}%&8/&73000" with lore "&aKliknij aby odebrać nagrodę."
+						if {_wykopanykamien} >= 75:
+							set slot 14 of {_gui} to glowing iron pickaxe named "&7%{_wykopanykamien}%&8/&74000" with lore "&aKliknij aby odebrać nagrodę." 
+							if {_wykopanykamien} >= 100:
+								set slot 15 of {_gui} to glowing diamond pickaxe named "&7%{_wykopanykamien}%&8/&75000" with lore "&aKliknij aby odebrać nagrodę."
+								if {_wykopanykamien} >= 125:
+									set slot 16 of {_gui} to glowing netherite pickaxe named "&7%{_wykopanykamien}%&8/&76000" with lore "&aKliknij aby odebrać nagrodę."
+			set slot (integers between 0 and 9) and 13 and (integers between 17 and 26) of {_gui} to black stained glass pane named " "
+			open {_gui} to player
+
+		if clicked slot is 3:
+			set {_nazwa::*} to line 5 of lore of player's tool split at " "
+			set {_wykopanyobs} to line 5 of lore of player's tool
+			set {_gwiazdki} to {_nazwa::4}
+			replace all "&7Wykopany Obsydian: &f" with "" in {_wykopanyobs}
+			replace all " %{_gwiazdki}%" with "" in {_wykopanyobs}
+			set {_wykopanyobs} to {_wykopanyobs} parsed as integer
+			set {_gui} to chest inventory with 3 rows named "&c&lSmyf&c&l.&c&lpl &7|| &5Wykopany Obsydian"
+			set slot 10 of {_gui} to wooden pickaxe named "&7%{_wykopanyobs}%&8/&71000" 
+			set slot 11 of {_gui} to stone pickaxe named "&7%{_wykopanyobs}%&8/&72000"
+			set slot 12 of {_gui} to golden pickaxe named "&7%{_wykopanyobs}%&8/&73000"
+			set slot 14 of {_gui} to iron pickaxe named "&7%{_wykopanyobs}%&8/&74000"
+			set slot 15 of {_gui} to diamond pickaxe named "&7%{_wykopanyobs}%&8/&75000"
+			set slot 16 of {_gui} to netherite pickaxe named "&7%{_wykopanyobs}%&8/&76000"
+			if {_wykopanyobs} >= 10:
+				set {_gwiazdki::*} to {_gwiazdki} split at ""
+				if {_gwiazdki::2} is "c":
+					set slot 10 of {_gui} to wooden pickaxe named "&7%{_wykopanyobs}%&8/&71000" with lore "&cOdebrano już nagrodę!"
+				else:
+					set slot 10 of {_gui} to glowing wooden pickaxe named "&7%{_wykopanyobs}%&8/&71000" with lore "&aKliknij aby odebrać nagrodę."
+				if {_wykopanyobs} >= 25:
+					if {_gwiazdki::5} is "c":
+						set slot 11 of {_gui} to stone pickaxe named "&7%{_wykopanyobs}%&8/&72000" with lore "&cOdebrano już nagrodę!"
+					else:
+						set slot 11 of {_gui} to glowing stone pickaxe named "&7%{_wykopanyobs}%&8/&72000" with lore "&aKliknij aby odebrać nagrodę."
+					if {_wykopanyobs} >= 50:
+						if {_gwiazdki::8} is "c":
+							set slot 12 of {_gui} to golden pickaxe named "&7%{_wykopanyobs}%&8/&72000" with lore "&cOdebrano już nagrodę!"
+						else:
+							set slot 12 of {_gui} to glowing golden pickaxe named "&7%{_wykopanyobs}%&8/&73000" with lore "&aKliknij aby odebrać nagrodę."
+						if {_wykopanyobs} >= 75:
+							set slot 14 of {_gui} to glowing iron pickaxe named "&7%{_wykopanyobs}%&8/&74000" with lore "&aKliknij aby odebrać nagrodę." 
+							if {_wykopanyobs} >= 100:
+								set slot 15 of {_gui} to glowing diamond pickaxe named "&7%{_wykopanyobs}%&8/&75000" with lore "&aKliknij aby odebrać nagrodę."
+								if {_wykopanyobs} >= 125:
+									set slot 16 of {_gui} to glowing netherite pickaxe named "&7%{_wykopanyobs}%&8/&76000" with lore "&aKliknij aby odebrać nagrodę."
+			set slot (integers between 0 and 9) and 13 and (integers between 17 and 26) of {_gui} to black stained glass pane named " "
+			open {_gui} to player
+
+	if name of player's current inventory is "&c&lSmyf&c&l.&c&lpl &7|| &7Wykopany Kamień":
+		cancel event
+		if lore of clicked item is "&aKliknij aby odebrać nagrodę.":
+			set {_nazwa::*} to line 4 of lore of player's tool split at " "
+			set {_wykopanykamien} to line 4 of lore of player's tool
+			set {_gwiazdki} to {_nazwa::4}
+			replace all " %{_gwiazdki}%" with "" in {_wykopanykamien}
+			replace all "&7Wykopany Kamień: &f" with "" in {_wykopanykamien}
+			set {_do_wywalenia::*} to " ", "✬", "&7", "&c", "&a" and "&f"
+			replace all "%{_do_wywalenia::*}%" with "" in {_wykopanykamien}
+			set {_wykopanykamien} to {_wykopanykamien} parsed as number
+			set {_slot::*} to 10, 11, 12, 14, 15 and 16
+			set {_ujemne_cos::*} to 10, 25, 50, 75, 100 and 125
+			set {_gwiazdki_slot::*} to 2, 5, 8, 11, 14 and 17
+			set {_gwiazdki::*} to {_gwiazdki} split at ""
+			set {_size} to size of {_gwiazdki::*}
+			set {_gwiazdki} to ""
+			loop {_slot::*}:
+				clicked slot is loop-value:
+					set {_i} to loop-index parsed as number
+					if {_wykopanykamien}-{_ujemne_cos::%loop-index%} < {_ujemne_cos::6}:
+						set {_gwiazdki::%{_gwiazdki_slot::6}%} to "7"
+						if {_wykopanykamien}-{_ujemne_cos::%loop-index%} < {_ujemne_cos::5}:
+							set {_gwiazdki::%{_gwiazdki_slot::5}%} to "7"
+							if {_wykopanykamien}-{_ujemne_cos::%loop-index%} < {_ujemne_cos::4}:
+								set {_gwiazdki::%{_gwiazdki_slot::4}%} to "7"
+								if {_wykopanykamien}-{_ujemne_cos::%loop-index%} < {_ujemne_cos::3}:
+									if {_gwiazdki::%{_gwiazdki_slot::3}%} is not "c":
+										set {_gwiazdki::%{_gwiazdki_slot::3}%} to "7"
+									if {_wykopanykamien}-{_ujemne_cos::%loop-index%} < {_ujemne_cos::2}:
+										if {_gwiazdki::%{_gwiazdki_slot::2}%} is not "c":
+											set {_gwiazdki::%{_gwiazdki_slot::2}%} to "7"
+										if {_wykopanykamien}-{_ujemne_cos::%loop-index%} < {_ujemne_cos::1}:
+											if {_gwiazdki::%{_gwiazdki_slot::1}%} is not "c":
+												set {_gwiazdki::%{_gwiazdki_slot::1}%} to "7"
+					{_i} < 4:
+						set {_gwiazdki::%{_gwiazdki_slot::%loop-index%}%} to "c"
+					{_i} >= 4:
+						set {_gwiazdki_slot::%loop-index%} to "7"
+						{_wykopanykamien} >= {_ujemne_cos::%loop-index%}:
+							set {_gwiazdki_slot::%loop-index%} to "a"
+					loop {_gwiazdki::*}:
+						set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-2%}%"
+					set line 4 of lore of player's tool to "&7Wykopany Kamień: &f%{_wykopanykamien}-{_ujemne_cos::%loop-index%}% %{_gwiazdki}%"
+
+					if player has enough space for 1 diamond: 
+						add 1 diamond to player
+					else:
+						drop 1 diamond at player's location
+					send "&aPomyślnie odebrano nagrodę!" to player
+					close inventory of player
+
+	if name of player's current inventory is "&c&lSmyf&c&l.&c&lpl &7|| &5Wykopany Obsydian":
+		cancel event
+		if lore of clicked item is "&aKliknij aby odebrać nagrodę.":
+			set {_nazwa::*} to line 5 of lore of player's tool split at " "
+			set {_wykopanyobs} to line 5 of lore of player's tool
+			set {_gwiazdki} to {_nazwa::4}
+			replace all " %{_gwiazdki}%" with "" in {_wykopanyobs}
+			replace all "&7Wykopany Obsydian: &f" with "" in {_wykopanyobs}
+			set {_do_wywalenia::*} to " ", "✬", "&7", "&c", "&a" and "&f"
+			replace all "%{_do_wywalenia::*}%" with "" in {_wykopanyobs}
+			set {_wykopanyobs} to {_wykopanyobs} parsed as number
+			set {_slot::*} to 10, 11, 12, 14, 15 and 16
+			set {_ujemne_cos::*} to 10, 25, 50, 75, 100 and 125
+			set {_gwiazdki_slot::*} to 2, 5, 8, 11, 14 and 17
+			set {_gwiazdki::*} to {_gwiazdki} split at ""
+			set {_size} to size of {_gwiazdki::*}
+			set {_gwiazdki} to ""
+			loop {_slot::*}:
+				clicked slot is loop-value:
+					set {_i} to loop-index parsed as number
+					if {_wykopanyobs}-{_ujemne_cos::%loop-index%} < {_ujemne_cos::6}:
+						set {_gwiazdki::%{_gwiazdki_slot::6}%} to "7"
+						if {_wykopanyobs}-{_ujemne_cos::%loop-index%} < {_ujemne_cos::5}:
+							set {_gwiazdki::%{_gwiazdki_slot::5}%} to "7"
+							if {_wykopanyobs}-{_ujemne_cos::%loop-index%} < {_ujemne_cos::4}:
+								set {_gwiazdki::%{_gwiazdki_slot::4}%} to "7"
+								if {_wykopanyobs}-{_ujemne_cos::%loop-index%} < {_ujemne_cos::3}:
+									if {_gwiazdki::%{_gwiazdki_slot::3}%} is not "c":
+										set {_gwiazdki::%{_gwiazdki_slot::3}%} to "7"
+									if {_wykopanyobs}-{_ujemne_cos::%loop-index%} < {_ujemne_cos::2}:
+										if {_gwiazdki::%{_gwiazdki_slot::2}%} is not "c":
+											set {_gwiazdki::%{_gwiazdki_slot::2}%} to "7"
+										if {_wykopanyobs}-{_ujemne_cos::%loop-index%} < {_ujemne_cos::1}:
+											if {_gwiazdki::%{_gwiazdki_slot::1}%} is not "c":
+												set {_gwiazdki::%{_gwiazdki_slot::1}%} to "7"
+					{_i} < 4:
+						set {_gwiazdki::%{_gwiazdki_slot::%loop-index%}%} to "c"
+					{_i} >= 4:
+						set {_gwiazdki_slot::%loop-index%} to "7"
+						{_wykopanyobs} >= {_ujemne_cos::%loop-index%}:
+							set {_gwiazdki_slot::%loop-index%} to "a"
+					loop {_gwiazdki::*}:
+						set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-2%}%"
+					set line 5 of lore of player's tool to "&7Wykopany Obsydian: &f%{_wykopanyobs}-{_ujemne_cos::%loop-index%}% %{_gwiazdki}%"
+
+					if player has enough space for 1 diamond: 
+						add 1 diamond to player
+					else:
+						drop 1 diamond at player's location
+					send "&aPomyślnie odebrano nagrodę!" to player
+					close inventory of player
+
+	if name of player's current inventory is "&c&lSmyf&c&l.&c&lpl &7|| &7Zabitych Graczy":
+		cancel event
+		if lore of clicked item is "&aKliknij aby odebrać nagrodę.":
+			set {_nazwa::*} to line 4 of lore of player's tool split at " "
+			set {_zabitychgraczy} to line 4 of lore of player's tool
+			set {_gwiazdki} to {_nazwa::4}
+			replace all " %{_gwiazdki}%" with "" in {_zabitychgraczy}
+			replace all "&7Zabitych Graczy: &f" with "" in {_zabitychgraczy}
+			set {_do_wywalenia::*} to " ", "✬", "&7", "&c", "&a" and "&f"
+			replace all "%{_do_wywalenia::*}%" with "" in {_zabitychgraczy}
+			set {_zabitychgraczy} to {_zabitychgraczy} parsed as number
+			set {_slot::*} to 10, 11, 12, 14, 15 and 16
+			set {_gwiazdki_slot::*} to 2, 5, 8, 11, 14 and 17
+			set {_gwiazdki::*} to {_gwiazdki} split at ""
+			set {_size} to size of {_gwiazdki::*}
+			set {_gwiazdki} to ""
+			loop {_slot::*}:
+				clicked slot is loop-value:
+					set {_gwiazdki::%{_gwiazdki_slot::%loop-index%}%} to "c"
+					loop {_gwiazdki::*}:
+						set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-2%}%"
+					set line 4 of lore of player's tool to "&7Zabitych Graczy: &f%{_zabitychgraczy}% %{_gwiazdki}%"
+
+					if player has enough space for 1 diamond: 
+						add 1 diamond to player
+					else:
+						drop 1 diamond at player's location
+					send "&aPomyślnie odebrano nagrodę!" to player
+					close inventory of player
+
+on inventory click:
+	clicked inventory is player's inventory
+	if cursor slot of player is name tag named "&6✬&lStatTrak&6™":
+		if line 3 of lore of clicked item doesn't contain "&7Właściciel:":
+			if event-itemtype is any pickaxe:
+				cancel event
+				remove 1 of cursor slot of player from cursor slot of player
+				set line 1 of lore of clicked item to " "
+				set line 2 of lore of clicked item to "&6✬&lStatTrak&6™"
+				set line 3 of lore of clicked item to "&7Właściciel: &f%nickname of player%"
+				set line 4 of lore of clicked item to "&7Wykopany Kamień: &f0 &7✬&7✬&7✬&7✬&7✬&7✬"
+				set line 5 of lore of clicked item to "&7Wykopany Obsydian: &f0 &7✬&7✬&7✬&7✬&7✬&7✬"
+				send "&aPomyślnie nałożono technologię &6✬&lStatTrak&6™ &ana przedmiot." to player
+			if event-itemtype is any sword:
+				cancel event
+				remove 1 of cursor slot of player from cursor slot of player
+				set line 1 of lore of clicked item to " "
+				set line 2 of lore of clicked item to "&6✬&lStatTrak&6™"
+				set line 3 of lore of clicked item to "&7Właściciel: &f%nickname of player%"
+				set line 4 of lore of clicked item to "&7Zabitych Graczy: &f0 &7✬&7✬&7✬&7✬&7✬&7✬"
+				set line 5 of lore of clicked item to "&7Zadane Obrażenia: &f0"
+				send "&aPomyślnie nałożono technologię &6✬&lStatTrak&6™ &ana przedmiot." to player
+			if event-itemtype is bow:
+				cancel event
+				remove 1 of cursor slot of player from cursor slot of player
+				set line 1 of lore of clicked item to " "
+				set line 2 of lore of clicked item to "&6✬&lStatTrak&6™"
+				set line 3 of lore of clicked item to "&7Właściciel: &f%nickname of player%"
+				set line 4 of lore of clicked item to "&7Zadane Obrażenia: &f0"
+				set line 5 of lore of clicked item to "&7Trafionych Przeciwników: &f0"
+				send "&aPomyślnie nałożono technologię &6✬&lStatTrak&6™ &ana przedmiot." to player
+		else:
+			send "&cWybrany przedmiot posiada już technologię Stattrak!" to player
+
+on mine of stone:
+	if player's tool is any pickaxe:
+		if line 3 of lore of player's tool contain "&7Właściciel:":
+			set {_nazwa::*} to line 4 of lore of player's tool split at " "
+			set {_wykopanykamien} to line 4 of lore of player's tool
+			set {_gwiazdki} to {_nazwa::4}
+			replace all "&7Wykopany Kamień: &f" with "" in {_wykopanykamien}
+			replace all " %{_gwiazdki}%" with "" in {_wykopanykamien}
+			set {_wykopanykamien} to {_wykopanykamien} parsed as integer
+
+			set line 4 of lore of player's tool to "&7Wykopany Kamień: &f%{_wykopanykamien}+1% %{_gwiazdki}%"
+
+			if {_wykopanykamien}+1 >= 10:
+				if {_wykopanykamien} < 10:
+					set {_gwiazdki::*} to {_gwiazdki} split at ""
+					if {_gwiazdki::2} is "c":
+						stop
+					else:
+						set {_gwiazdki::2} to "a"
+						send "" to player
+						send "&aGratulacje! Wykopałeś &71000 kamienia&a!" to player
+						send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to player
+						send "" to player
+						set {_size} to size of {_gwiazdki::*}
+						set {_gwiazdki} to ""
+						loop {_gwiazdki::*}:
+							set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+						set line 4 of lore of player's tool to "&7Wykopany Kamień: &f%{_wykopanykamien}+1% %{_gwiazdki}%"
+				
+				if {_wykopanykamien}+1 >= 25:
+					if {_wykopanykamien} < 25:
+						set {_gwiazdki::*} to {_gwiazdki} split at ""
+						if {_gwiazdki::5} is "c":
+							stop
+						else:
+							set {_gwiazdki::5} to "a"
+							send "" to player
+							send "&aGratulacje! Wykopałeś &72000 kamienia&a!" to player
+							send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to player
+							send "" to player
+							set {_size} to size of {_gwiazdki::*}
+							set {_gwiazdki} to ""
+							loop {_gwiazdki::*}:
+								set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+							set line 4 of lore of player's tool to "&7Wykopany Kamień: &f%{_wykopanykamien}+1% %{_gwiazdki}%"
+					
+					if {_wykopanykamien}+1 >= 50:
+						if {_wykopanykamien} < 50:
+							set {_gwiazdki::*} to {_gwiazdki} split at ""
+							if {_gwiazdki::8} is "c":
+								stop
+							else:
+								set {_gwiazdki::8} to "a"
+								send "" to player
+								send "&aGratulacje! Wykopałeś &73000 kamienia&a!" to player
+								send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to player
+								send "" to player
+								set {_size} to size of {_gwiazdki::*}
+								set {_gwiazdki} to ""
+								loop {_gwiazdki::*}:
+									set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+								set line 4 of lore of player's tool to "&7Wykopany Kamień: &f%{_wykopanykamien}+1% %{_gwiazdki}%"
+						
+						if {_wykopanykamien}+1 >= 75:
+							if {_wykopanykamien} < 75:
+								send "" to player
+								send "&aGratulacje! Wykopałeś &74000 kamienia&a!" to player
+								send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to player
+								send "" to player
+								set {_gwiazdki::*} to {_gwiazdki} split at ""
+								set {_gwiazdki::11} to "a"
+								set {_size} to size of {_gwiazdki::*}
+								set {_gwiazdki} to ""
+								loop {_gwiazdki::*}:
+									set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+								set line 4 of lore of player's tool to "&7Wykopany Kamień: &f%{_wykopanykamien}+1% %{_gwiazdki}%"
+
+							if {_wykopanykamien}+1 >= 100:
+								if {_wykopanykamien} < 100:
+									send "" to player
+									send "&aGratulacje! Wykopałeś &75000 kamienia&a!" to player
+									send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to player
+									send "" to player
+									set {_gwiazdki::*} to {_gwiazdki} split at ""
+									set {_gwiazdki::14} to "a"
+									set {_size} to size of {_gwiazdki::*}
+									set {_gwiazdki} to ""
+									loop {_gwiazdki::*}:
+										set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+									set line 4 of lore of player's tool to "&7Wykopany Kamień: &f%{_wykopanykamien}+1% %{_gwiazdki}%"
+
+								if {_wykopanykamien}+1 >= 125:
+									if {_wykopanykamien} < 125:
+										send "" to player
+										send "&aGratulacje! Wykopałeś &76000 kamienia&a!" to player
+										send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to player
+										send "" to player
+										set {_gwiazdki::*} to {_gwiazdki} split at ""
+										set {_gwiazdki::17} to "a"
+										set {_size} to size of {_gwiazdki::*}
+										set {_gwiazdki} to ""
+										loop {_gwiazdki::*}:
+											set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+										set line 4 of lore of player's tool to "&7Wykopany Kamień: &f%{_wykopanykamien}+1% %{_gwiazdki}%"
+
+on mine of obsidian:
+	if player's tool is diamond pickaxe or netherite pickaxe:
+		cancel drops of items
+
+		set {_ilosc} to 1
+		if level of fortune of player's tool is 1:
+			set {_ilosc} to a random integer between 1 and 2
+		if level of fortune of player's tool is 2:
+			set {_ilosc} to a random integer between 1 and 3
+		if level of fortune of player's tool is 3:
+			set {_ilosc} to a random integer between 1 and 4
+		if level of fortune of player's tool is 4:
+			set {_ilosc} to a random integer between 2 and 5
+		if player has enough space for {_ilosc} of obsidian:
+			add {_ilosc} of obsidian to player
+		else:
+			drop {_ilosc} of obsidian at player's location
+
+		if line 3 of lore of player's tool contain "&7Właściciel:":
+			set {_nazwa::*} to line 5 of lore of player's tool split at " "
+			set {_wykopanyobs} to line 5 of lore of player's tool
+			set {_gwiazdki} to {_nazwa::4}
+			replace all "&7Wykopany Obsydian: &f" with "" in {_wykopanyobs}
+			replace all " %{_gwiazdki}%" with "" in {_wykopanyobs}
+			set {_wykopanyobs} to {_wykopanyobs} parsed as integer
+
+			set line 5 of lore of player's tool to "&7Wykopany Obsydian: &f%{_wykopanyobs}+{_ilosc}% %{_gwiazdki}%"
+
+			if {_wykopanyobs}+{_ilosc} >= 10:
+				if {_wykopanyobs} < 10:
+					set {_gwiazdki::*} to {_gwiazdki} split at ""
+					if {_gwiazdki::2} is "c":
+						stop
+					else:
+						set {_gwiazdki::2} to "a"
+						send "" to player
+						send "&aGratulacje! Wykopałeś &51000 obsydianu&a!" to player
+						send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to player
+						send "" to player
+						set {_size} to size of {_gwiazdki::*}
+						set {_gwiazdki} to ""
+						loop {_gwiazdki::*}:
+							set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+						set line 5 of lore of player's tool to "&7Wykopany Obsydian: &f%{_wykopanyobs}+{_ilosc}% %{_gwiazdki}%"
+				
+				if {_wykopanyobs}+{_ilosc} >= 25:
+					if {_wykopanyobs} < 25:
+						set {_gwiazdki::*} to {_gwiazdki} split at ""
+						if {_gwiazdki::5} is "c":
+							stop
+						else:
+							set {_gwiazdki::5} to "a"
+							send "" to player
+							send "&aGratulacje! Wykopałeś &52000 obsydianu&a!" to player
+							send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to player
+							send "" to player
+							set {_size} to size of {_gwiazdki::*}
+							set {_gwiazdki} to ""
+							loop {_gwiazdki::*}:
+								set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+							set line 5 of lore of player's tool to "&7Wykopany Obsydian: &f%{_wykopanyobs}+{_ilosc}% %{_gwiazdki}%"
+					
+					if {_wykopanyobs}+{_ilosc} >= 50:
+						if {_wykopanyobs} < 50:
+							set {_gwiazdki::*} to {_gwiazdki} split at ""
+							if {_gwiazdki::8} is "c":
+								stop
+							else:
+								set {_gwiazdki::8} to "a"
+								send "" to player
+								send "&aGratulacje! Wykopałeś &53000 obsydianu&a!" to player
+								send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to player
+								send "" to player
+								set {_size} to size of {_gwiazdki::*}
+								set {_gwiazdki} to ""
+								loop {_gwiazdki::*}:
+									set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+								set line 5 of lore of player's tool to "&7Wykopany Obsydian: &f%{_wykopanyobs}+{_ilosc}% %{_gwiazdki}%"
+						
+						if {_wykopanyobs}+{_ilosc} >= 75:
+							if {_wykopanyobs} < 75:
+								send "" to player
+								send "&aGratulacje! Wykopałeś &54000 obsydianu&a!" to player
+								send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to player
+								send "" to player
+								set {_gwiazdki::*} to {_gwiazdki} split at ""
+								set {_gwiazdki::11} to "a"
+								set {_size} to size of {_gwiazdki::*}
+								set {_gwiazdki} to ""
+								loop {_gwiazdki::*}:
+									set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+								set line 5 of lore of player's tool to "&7Wykopany Obsydian: &f%{_wykopanyobs}+{_ilosc}% %{_gwiazdki}%"
+							
+							if {_wykopanyobs}+{_ilosc} >= 100:
+								if {_wykopanyobs} < 100:
+									send "" to player
+									send "&aGratulacje! Wykopałeś &55000 obsydianu&a!" to player
+									send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to player
+									send "" to player
+									set {_gwiazdki::*} to {_gwiazdki} split at ""
+									set {_gwiazdki::14} to "a"
+									set {_size} to size of {_gwiazdki::*}
+									set {_gwiazdki} to ""
+									loop {_gwiazdki::*}:
+										set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+									set line 5 of lore of player's tool to "&7Wykopany Obsydian: &f%{_wykopanyobs}+{_ilosc}% %{_gwiazdki}%"
+
+								if {_wykopanyobs}+{_ilosc} >= 125:
+									if {_wykopanyobs} < 125:
+										send "" to player
+										send "&aGratulacje! Wykopałeś &56000 obsydianu&a!" to player
+										send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to player
+										send "" to player
+										set {_gwiazdki::*} to {_gwiazdki} split at ""
+										set {_gwiazdki::17} to "a"
+										set {_size} to size of {_gwiazdki::*}
+										set {_gwiazdki} to ""
+										loop {_gwiazdki::*}:
+											set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+										set line 5 of lore of player's tool to "&7Wykopany Obsydian: &f%{_wykopanyobs}+{_ilosc}% %{_gwiazdki}%"
+on death:
+	if attacker's tool is any sword:
+		if {cooldown.stattrak.%attacker%::%victim%} is set:
+			difference between {cooldown.stattrak.%attacker%::%victim%} and now is less than 10 seconds
+			send "&cZabito tego samego gracza! Statystyki do Stattrack'a nie zostały naliczone!" to attacker
+			stop
+		set {cooldown.stattrak.%attacker%::%victim%} to now
+		if line 3 of lore of attacker's tool contain "&7Właściciel:":
+			set {_nazwa::*} to line 4 of lore of attacker's tool split at " "
+			set {_zabitychgraczy} to line 4 of lore of attacker's tool
+			set {_gwiazdki} to {_nazwa::4}
+			replace all "&7Zabitych Graczy: &f" with "" in {_zabitychgraczy}
+			replace all " %{_gwiazdki}%" with "" in {_zabitychgraczy}
+			set {_zabitychgraczy} to {_zabitychgraczy} parsed as integer
+
+			set line 4 of lore of attacker's tool to "&7Zabitych Graczy: &f%{_zabitychgraczy}+1% %{_gwiazdki}%"
+
+			if {_zabitychgraczy}+1 >= 1:
+				if {_zabitychgraczy} < 1:
+					send "" to attacker
+					send "&aGratulacje! Zabiłeś &c1 gracza&a!" to attacker
+					send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to attacker
+					send "" to attacker
+					set {_gwiazdki::*} to {_gwiazdki} split at ""
+					set {_gwiazdki::2} to "a"
+					set {_size} to size of {_gwiazdki::*}
+					set {_gwiazdki} to ""
+					loop {_gwiazdki::*}:
+						set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+					set line 4 of lore of attacker's tool to "&7Zabitych Graczy: &f%{_zabitychgraczy}+1% %{_gwiazdki}%"
+				
+				if {_zabitychgraczy}+1 >= 2:
+					if {_zabitychgraczy} < 2:
+						send "" to attacker
+						send "&aGratulacje! Zabiłeś &c2 graczy&a!" to attacker
+						send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to attacker
+						send "" to attacker
+						set {_gwiazdki::*} to {_gwiazdki} split at ""
+						set {_gwiazdki::5} to "a"
+						set {_size} to size of {_gwiazdki::*}
+						set {_gwiazdki} to ""
+						loop {_gwiazdki::*}:
+							set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+						set line 4 of lore of attacker's tool to "&7Zabitych Graczy: &f%{_zabitychgraczy}+1% %{_gwiazdki}%"
+					
+					if {_zabitychgraczy}+1 >= 3:
+						if {_zabitychgraczy} < 3:
+							send "" to attacker
+							send "&aGratulacje! Zabiłeś &c3 graczy&a!" to attacker
+							send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to attacker
+							send "" to attacker
+							set {_gwiazdki::*} to {_gwiazdki} split at ""
+							set {_gwiazdki::8} to "a"
+							set {_size} to size of {_gwiazdki::*}
+							set {_gwiazdki} to ""
+							loop {_gwiazdki::*}:
+								set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+							set line 4 of lore of attacker's tool to "&7Zabitych Graczy: &f%{_zabitychgraczy}+1% %{_gwiazdki}%"
+						
+						if {_zabitychgraczy}+1 >= 4:
+							if {_zabitychgraczy} < 4:
+								send "" to attacker
+								send "&aGratulacje! Zabiłeś &c4 graczy&a!" to attacker
+								send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to attacker
+								send "" to attacker
+								set {_gwiazdki::*} to {_gwiazdki} split at ""
+								set {_gwiazdki::11} to "a"
+								set {_size} to size of {_gwiazdki::*}
+								set {_gwiazdki} to ""
+								loop {_gwiazdki::*}:
+									set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+								set line 4 of lore of attacker's tool to "&7Zabitych Graczy: &f%{_zabitychgraczy}+1% %{_gwiazdki}%"
+							
+							if {_zabitychgraczy}+1 >= 5:
+								if {_zabitychgraczy} < 5:
+									send "" to attacker
+									send "&aGratulacje! Zabiłeś &c5 graczy&a!" to attacker
+									send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to attacker
+									send "" to attacker
+									set {_gwiazdki::*} to {_gwiazdki} split at ""
+									set {_gwiazdki::14} to "a"
+									set {_size} to size of {_gwiazdki::*}
+									set {_gwiazdki} to ""
+									loop {_gwiazdki::*}:
+										set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+									set line 4 of lore of attacker's tool to "&7Zabitych Graczy: &f%{_zabitychgraczy}+1% %{_gwiazdki}%"
+
+								if {_zabitychgraczy}+1 >= 6:
+									if {_zabitychgraczy} < 6:
+										send "" to attacker
+										send "&aGratulacje! Zabiłeś &c6 graczy&a!" to attacker
+										send "<cmd:/stattrak nagrody><ttp:&f/stattrak nagrody>&aKliknij tutaj aby odebrać nagrodę." to attacker
+										send "" to attacker
+										set {_gwiazdki::*} to {_gwiazdki} split at ""
+										set {_gwiazdki::17} to "a"
+										set {_size} to size of {_gwiazdki::*}
+										set {_gwiazdki} to ""
+										loop {_gwiazdki::*}:
+											set {_gwiazdki} to "%{_gwiazdki}%%{_gwiazdki::%loop-index-1%}%"
+										set line 4 of lore of attacker's tool to "&7Zabitych Graczy: &f%{_zabitychgraczy}+1% %{_gwiazdki}%"
+on damage:
+	if attacker is player:
+		if attacker's tool is any sword:
+			if line 3 of lore of attacker's tool contain "&7Właściciel:":
+				set {_zadanydmg} to line 5 of lore of attacker's tool
+				replace all "&7Zadane Obrażenia: &f" with "" in {_zadanydmg}
+				set {_zadanydmg} to {_zadanydmg} parsed as number
+				set line 5 of lore of attacker's tool to "&7Zadane Obrażenia: &f%{_zadanydmg}+damage%"
+		if projectile is an arrow:
+			set {_zadanydmg} to line 4 of lore of attacker's tool
+			set {_trafionych} to line 5 of lore of attacker's tool
+			replace all "&7Zadane Obrażenia: &f" with "" in {_zadanydmg}
+			replace all "&7Trafionych Przeciwników: &f" with "" in {_trafionych}
+			set {_zadanydmg} to {_zadanydmg} parsed as number
+			set {_trafionych} to {_trafionych} parsed as number
+			set line 4 of lore of attacker's tool to "&7Zadane Obrażenia: &f%{_zadanydmg}+damage%"
+			set line 5 of lore of attacker's tool to "&7Trafionych Przeciwników: &f%{_trafionych}+1%"

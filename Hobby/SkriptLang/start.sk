@@ -1,0 +1,93 @@
+import:
+	com.sk89q.worldedit.bukkit.BukkitWorld
+	com.sk89q.worldedit.extent.clipboard.Clipboard
+	com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats
+	com.sk89q.worldedit.math.BlockVector3
+	com.sk89q.worldedit.regions.CuboidRegion
+	java.io.File
+	java.nio.file.Files
+	java.nio.file.Paths
+
+# Pastes a schematic from a file path to a location, optionally include/exclude air and entities
+# Example file path: "plugins/FastAsyncWorldEdit/schematics/MySchematic.schem"
+effect paste schematic %string% at %location% [(1¦(with|including) air)]:
+    trigger:
+        # Get schematic file
+        set {_file} to new File(expression-1)
+        # Get location
+        set {_location} to BlockVector3.at(expression-2.getBlockX(), expression-2.getBlockY(), expression-2.getBlockZ())
+        set {_world} to new BukkitWorld(expression-2.getWorld())
+        # Include air?
+        set {_includeAir} to true if parse mark = 1, else false
+        # Paste that bad boy
+        ClipboardFormats.findByFile({_file}).load({_file}).paste({_world}, {_location}, false, {_includeAir}, false, null)
+
+
+on load:
+	clear {druzyna-kordy-start::*}
+	set {_kordy::*} to location(500, 100, 500, world "world"), location(-500, 100, 500, world "world"), location(500, 100, -500, world "world"), location(-500, 100, -500, world "world"), location(666, 100, 0, world "world"), location(-666, 100, 0, world "world"), location(0, 100, 666, world "world") and location(0, 100, -666, world "world")
+	set {_dr::*} to "biala", "szara", "zolta", "czerwona", "limonkowa", "zielona", "blekitna" and "niebieska"
+	loop {_kordy::*}:
+		set {_r} to random integer between 1 and 8
+		while {_check::*} contains {_r}:
+			set {_r} to random integer between 1 and 8
+		add {_r} to {_check::*}
+		set {druzyna-kordy-start::%{_dr::%loop-index%}%} to {_kordy::%{_r}%}
+
+command /teststartarenki [<text>]:
+	trigger:
+		if arg-1 is "das":
+			set {_dr::*} to "biala", "szara", "zolta", "czerwona", "limonkowa", "zielona", "blekitna" and "niebieska"
+			loop {_dr::*}:
+				send "%loop-index% - %{druzyna-kordy-start::%loop-value%}%"
+		if arg-1 is not set:
+			apply resistance 255 without any particles whilst hiding the potion icon to player for 3 seconds
+			# start_arenki()
+			# apply haste potion of tier 3 without any particles to the player whilst hiding the potion icon
+			set {_dr::*} to "biala", "szara", "zolta", "czerwona", "limonkowa", "zielona", "blekitna" and "niebieska"
+			loop {_dr::*}:
+				loop {druzyna-%loop-value-1%::*}:
+					clear inventory of loop-value-2 parsed as player
+
+
+function start_arenki():
+	set {_dr::*} to "biala", "szara", "zolta", "czerwona", "limonkowa", "zielona", "blekitna" and "niebieska"
+	loop {_dr::*}:
+		loop {druzyna-%loop-value-1%::*}:
+			if loop-value-2 have permission "smyf.klatkavip":
+				paste schematic "plugins/FastAsyncWorldEdit/schematics/klatkavip1.schem" at {druzyna-kordy-start::%loop-value-1%}
+			else:
+				paste schematic "plugins/FastAsyncWorldEdit/schematics/klatkagracz1.schem" at {druzyna-kordy-start::%loop-value-1%}
+			clear inventory of loop-value-2 parsed as player
+			teleport loop-value-2 to {druzyna-kordy-start::%loop-value-1%} ~ vector(0.5, 0, 0.5)
+
+	wait 3 seconds
+	loop 7 times:
+		send title "&f&l%11 - loop-number%" to {arenki-gracze-nicki::*} for 1 second
+		wait 1 second
+	send title "&e&l3" to {arenki-gracze-nicki::*} for 1 second
+	wait 1 second
+	send title "&6&l2" to {arenki-gracze-nicki::*} for 1 second
+	wait 1 second
+	send title "&c&l1" to {arenki-gracze-nicki::*} for 1 second
+	wait 1 second
+	send title "&aPowodzenia!" to {arenki-gracze-nicki::*} for 2 seconds
+	apply resistance 255 without any particles whilst hiding the potion icon to {arenki-gracze-nicki::*} for 3 seconds
+	loop {_dr::*}:
+		loop {druzyna-%loop-value-1%::*}:
+			paste schematic "plugins/FastAsyncWorldEdit/schematics/klatkausun.schem" at {druzyna-kordy-start::%loop-value-1%} including air
+
+
+
+
+
+
+
+# set {druzyna-kordy-start::biala} to 
+# set {druzyna-kordy-start::szara} to 
+# set {druzyna-kordy-start::zolta} to  
+# set {druzyna-kordy-start::czerwona} to  
+# set {druzyna-kordy-start::limonkowa} to  
+# set {druzyna-kordy-start::zielona} to  
+# set {druzyna-kordy-start::blekitna} to  
+# set {druzyna-kordy-start::niebieska} to  

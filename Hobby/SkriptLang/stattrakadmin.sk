@@ -1,0 +1,22 @@
+command /stattrakadmin [<text=help>] [<number=1>]:
+	permission: smyfstattrak.give
+	trigger:
+		if arg 1 is "help":
+			send "&cPoprawne użycie: /stattrakadmin <give/nick> <ilosc>"
+			stop
+		set {_nick} to arg-1 parsed as player
+		set {_ilosc} to arg-2
+		set {_item} to name tag of unbreaking 10 named "&6✬&lStatTrak&6™"
+		set {_lore::1} to "&eTechnologia pozwalająca śledzić statystyki różnych kategorii."
+		set {_lore::2} to "&eMożesz nałożyć na: Miecz, Łuk, Kilof."
+		set {_lore::3} to "&eAby nałożyć &6✬&lStatTrak&6™ &ekliknij nim na wybrane narzędzie lub"
+		set {_lore::4} to "&etrzymaj wybrany przedmiot oraz wpisz &6/stattrak naloz"
+		set {_lore::5} to "&eWięcej informacji pod &6/stattrak pomoc"
+		if arg-1 is "all":
+			add {_ilosc} of {_item} with lore {_lore::*} to all players
+			send title "&c&lSmyf.pl" with subtitle "&aOtrzymano &f%{_ilosc}% &6✬&lStatTrak&6™&a!" to all players
+		if arg-1 is "give":
+			add {_ilosc} of {_item} with lore {_lore::*} to player
+			send title "&c&lSmyf.pl" with subtitle "&aOtrzymano &f%{_ilosc}% &6✬&lStatTrak&6™&a!" to player
+		add {_ilosc} of {_item} with lore {_lore::*} to {_nick}
+		send title "&c&lSmyf.pl" with subtitle "&aOtrzymano &f%{_ilosc}% &6✬&lStatTrak&6™&a!" to {_nick}

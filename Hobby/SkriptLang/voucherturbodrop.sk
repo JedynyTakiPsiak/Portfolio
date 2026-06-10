@@ -1,0 +1,29 @@
+on right click:
+	if player's tool's name is "&a&lVoucher na: &5&lTurbo Drop &7(30 minut)":
+		set {_gui} to chest inventory with 1 rows named "&c&lSmyf.pl &7|| &eVoucher Turbo Drop"
+		set slot 3 of {_gui} to 1 of green wool named "&aPotwierdź"
+		set slot 5 of {_gui} to 1 of red wool named "&cAnuluj"
+		set slot (integers between 0 and 2) and (integers between 6 and 8) and 4 of {_gui} to black stained glass pane named " "
+		open {_gui} to player
+		
+on inventory click:
+	clicked inventory is not player's inventory
+	if name of player's current inventory is "&c&lSmyf.pl &7|| &eVoucher Turbo Drop":
+		cancel event
+		if clicked slot is barrier block:
+			wait 1 tick
+			close inventory of player
+			
+			
+		if clicked slot is 3:
+			if player has 1 book named "&a&lVoucher na: &5&lTurbo Drop &7(30 minut)":
+				wait 1 tick
+				close inventory of player
+				remove 1 book named "&a&lVoucher na: &5&lTurbo Drop &7(30 minut)" from player
+				make console execute command "/turbo drop %player% 1800 2"
+			else:
+				send "&cPuknij się w łeb, co ty próbujesz?" to player
+				
+		if clicked slot is 5:
+			wait 1 tick
+			close inventory of player

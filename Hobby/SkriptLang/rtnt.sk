@@ -1,0 +1,29 @@
+﻿options:
+	rtnt: &cRzucane TNT
+	cooldawn: 120
+	mocrtnt: 0.7
+	godzinastartutnt: 16          #od ktorej godziny ma byc wlaczone tnt
+	godzinazakonczeniatnt: 22     #do ktorej godziny ma wlaczone tnt
+	ilosc: 0
+	
+command /rtnt [<player>]:
+	trigger:
+		if player has permissions "rtnt.admin":
+			if arg 1 is set:
+				send "&aPodarowałeś &aRzucane TNT dla &f%arg-1% &a!"
+				give 10 tnt of unbreaking 10 named "{@rtnt}" to arg-1
+
+on rightclick with a tnt:
+	if player's tool's name is "{@rtnt}":
+		{cooldownTnt::%player%} is set:
+			difference between {cooldownTnt::%player%} and now is less than {@cooldawn} seconds
+			send "&cMożesz używać rzucanego TNT raz na {@cooldawn} sekund!" to player
+			stop
+		set {cooldownTnt::%player%} to now
+		set player's tool to (item amount of player's tool - 1) of player's tool
+		shoot tnt from player with speed {@mocrtnt}
+				
+on place tnt:
+	if player's tool's name is "{@rtnt}":
+		difference between {cooldownTnt::%player%} and now is less than {@cooldawn} seconds
+		cancel event

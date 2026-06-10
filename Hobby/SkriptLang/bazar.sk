@@ -1,0 +1,355 @@
+options:
+	blokadaitemow: emerald or emerald block
+	kordytabliczki: -5,215,-12, world "plains"
+	kordytabliczki2: -5,216,-12, world "plains"
+
+on first join:
+	set {eme::%player%} to 0
+
+on load:
+	clear {bazar.otwartegui::*}
+
+on right click on armor stand with name tag:
+	cancel event
+
+on tab complete of "/bazar":
+	set tab completions for position 1 to "stworz", "dodaj", "blokady", "odbierz", "wyplac" and "pomoc"
+
+command /bazar <text> [<integer>]:
+	trigger:
+		if arg 1 is "stworz":
+			if player is in region "bazar":
+				if {bazar.otwarty::%player%} is not "true":
+					if amount of all armor stands in radius 0.5 around player is 0:
+						if amount of all armor stands in radius 1 around (location below player) is 0:
+							if player has permission "smyf.bazarvip":
+								if player has 24 emerald:
+									remove 24 emerald from player
+									spawn armor stand at player's location with nbt nbt compound of "{CustomNameVisible:1,Invulnerable:1,ShowArms:1,Small:1,NoBasePlate:1,ArmorItems:[{Count:1,id:golden_boots},{Count:1,id:golden_leggings},{Count:1,id:golden_chestplate},{}],DisabledSlots:63}"
+									set {_bazar} to last spawned armor stand
+									set name of {_bazar} to "&6&lBazar &e★&f%nickname of player%"
+								else:
+									send "&cNie posiadasz 24 szmaragdów aby stworzyć bazar!" to player
+									stop
+							else:
+								if player has 32 emerald:
+									remove 32 emerald from player
+									spawn armor stand at player's location with nbt nbt compound of "{CustomNameVisible:1,Invulnerable:1,ShowArms:1,Small:1,NoBasePlate:1,ArmorItems:[{Count:1,id:leather_boots},{Count:1,id:leather_leggings},{Count:1,id:leather_chestplate},{}],DisabledSlots:63}"
+									set {_bazar} to last spawned armor stand 
+									set name of {_bazar} to "&6&lBazar &7%nickname of player%"
+								else:
+									send "&cNie posiadasz 32 szmaragdów aby stworzyć bazar!" to player
+									stop
+							set {bazar.armorstand::%player%} to uuid of last spawned armor stand
+							set {bazar.czas::%player%} to 2880
+							set helmet of {_bazar} to skull of event-player
+							send "&aPomyślnie stworzono bazar." to player
+							send "&aAby dodawać przedmioty wpisz: /bazar dodaj <cena>" to player
+							set {bazar.otwarty::%player%} to "true"
+						else:
+							send "&cZnajdujesz się za blisko innego bazaru! Odejdź kawałek i spróbuj ponownie." to player
+					else:
+						send "&cZnajdujesz się za blisko innego bazaru! Odejdź kawałek i spróbuj ponownie." to player
+				else:
+					send "&cMasz już stworzony bazar!" to player
+			else:
+				send "&cAby stworzyć bazar musisz być w obszarze czerwonej linii na &4/warp bazar" to player
+
+		if arg 1 is "dodaj":
+			if {bazar.otwarty::%player%} is "true":
+				if players' tool is not air:
+					if player's tool is not {@blokadaitemow}:
+						if arg-2 is set:
+							set {_cena} to arg-2
+							if {_cena} >= 4:
+								if {_cena} <= 2304:
+									set {_itemy} to size of {bazar.item.%player%::*}
+									if player has permission "smyf.bazarvip":
+										if {_itemy} > 14:
+											send "&cTwój bazar jest pełny!" to player
+											stop
+									else:
+										if {_itemy} > 8:
+											send "&cTwój bazar jest pełny!" to player
+											stop
+									add player's tool to {bazar.item.%player%::*}
+									add arg-2 to {bazar.cena.%player%::*}
+									delete player's tool
+									send "&aPomyślnie dodano przedmiot na bazar." to player
+									stop
+								else:
+									send "&cMaksymalna cena to 2304 szmaragdów!" to player
+							else:
+								send "&cMinimalna cena to 4 szmaragdy!" to player
+						else:
+							send "&cNie ustawiono ceny!" to player
+					else: 
+						send "&cNie możesz wystawić tego przedmiotu!" to player
+						send "&cListę przedmiotów zablokowanych na bazarze znajdziesz pod &4/bazar blokady" to player
+				else:
+					send "&cMusisz trzymać przedmiot aby wystawić na bazar!" to player
+			else:
+				send "&cMusisz mieć najpierw stworzony bazar! &4/bazar stworz" to player	
+		if arg 1 is "odbierz":
+			if {bazar.odbierz.%player%::*} is set:
+				if player has enough space for {bazar.odbierz.%player%::*}:
+					add {bazar.odbierz.%player%::*} to player
+					send "&aPomyślnie odebrano przedmioty." to player
+					clear {bazar.odbierz.%player%::*}
+				else:
+					send "&cNie posiadasz wystarczająco miejsca w ekwipunku!" to player
+			else:
+				send "&cNie masz nic do odebrania!" to player
+		if arg 1 is "wyplac":
+			if {eme::%player%} > 0:
+				if player has enough space for {eme::%player%} of emerald:
+					add {eme::%player%} of emerald to player
+					send "&aPomyślnie wypłacono %{eme::%player%}% szmaragdów" to player
+					set {eme::%player%} to 0
+				else:
+					send "&cNie posiadasz wystarczająco miejsca w ekwipunku!" to player
+			else:
+				send "&cNie posiadasz żadnych szmaragdów do wypłacenia!" to player
+		if arg 1 is "blokady":
+			execute player command "/pomoc"
+
+on right click on armor stand:
+	if player is in region "bazar" or "bazar2":
+		set {_nickgraczabazaru} to name of clicked entity
+		replace all "&6&lBazar &e★&f" and "&6&lBazar &7" with "" in {_nickgraczabazaru}
+		if {bazar.otwartegui::%{_nickgraczabazaru}%} is set:
+			if {_nickgraczabazaru} is not player's nickname:
+				if player has permission "smyf.bazaradmin":
+					send "&cAdministrator zamknął twoje okno bazaru!" to ({bazar.otwartegui::%{_nickgraczabazaru}%} parsed as player)
+					close ({bazar.otwartegui::%{_nickgraczabazaru}%} parsed as player)'s inventory
+				else:
+					send "&cWybrany bazar jest obecnie otwarty przez kogoś innego!" to player
+					stop
+			else:
+				if ({bazar.otwartegui::%{_nickgraczabazaru}%} parsed as player) has permission "smyf.bazaradmin":
+					send "&cWybrany bazar jest obecnie otwarty przez Administratora!" to player
+					stop
+				else:
+					send "&cWłaściciel bazaru zamknął twoje okno bazaru!" to ({bazar.otwartegui::%{_nickgraczabazaru}%} parsed as player)
+					close ({bazar.otwartegui::%{_nickgraczabazaru}%} parsed as player)'s inventory
+		if (size of {bazar.item.%{_nickgraczabazaru}%::*}) > 0:
+			if name of clicked entity contains "&6&lBazar &e★&f":
+				set {_gui} to chest inventory with 5 rows named "&6&lBazar &e★&f%{_nickgraczabazaru}%"
+				set {_slot::*} to 11, 12, 13, 14, 15, 20, 21, 22, 23, 24, 29, 30, 31, 32 and 33
+				set {_loop} to 15
+			if name of clicked entity contains "&6&lBazar &7":
+				set {_gui} to chest inventory with 5 rows named "&6&lBazar &7%{_nickgraczabazaru}%"
+				set {_slot::*} to 12, 13, 14, 21, 22, 23, 30, 31 and 32
+				set {_loop} to 9
+			set slot (integers between 0 and 45) of {_gui} to black stained glass pane named ""
+			loop {_loop} times:
+				if {bazar.item.%{_nickgraczabazaru}%::%loop-number%} is not set:
+					if {bazar.item.%{_nickgraczabazaru}%::%loop-number +1%} is set:
+						set {bazar.item.%{_nickgraczabazaru}%::%loop-number%} to {bazar.item.%{_nickgraczabazaru}%::%loop-number +1%}
+						delete {bazar.item.%{_nickgraczabazaru}%::%loop-number +1%}
+						set {bazar.cena.%{_nickgraczabazaru}%::%loop-number%} to {bazar.cena.%{_nickgraczabazaru}%::%loop-number +1%}
+						delete {bazar.cena.%{_nickgraczabazaru}%::%loop-number +1%}
+						set {bazar.item.blokada.%{_nickgraczabazaru}%::%loop-number%} to {bazar.item.blokada.%{_nickgraczabazaru}%::%loop-number +1%}
+						delete {bazar.item.blokada.%{_nickgraczabazaru}%::%loop-number +1%}
+				if {_nickgraczabazaru} is not player's nickname:
+					if {bazar.item.blokada.%{_nickgraczabazaru}%::%loop-number%} is not "true":
+						set slot {_slot::%loop-number%} of {_gui} to {bazar.item.%{_nickgraczabazaru}%::%loop-number%} with lore "&7Cena przedmiotu &8&l- &a%{bazar.cena.%{_nickgraczabazaru}%::%loop-number%}% szmaragdów" and "&7id: %loop-number%" and ""
+					else:
+						set slot {_slot::%loop-number%} of {_gui} to {bazar.item.%{_nickgraczabazaru}%::%loop-number%} named "&c*Zablokowany Przedmiot*" with lore "&7Cena przedmiotu &8&l- &a%{bazar.cena.%{_nickgraczabazaru}%::%loop-number%}% szmaragdów" and "&7id: %loop-number%"
+					if {bazar.item.%{_nickgraczabazaru}%::%loop-number%}'s lore is set:
+						set {_item::*} to lore of {bazar.item.%{_nickgraczabazaru}%::%loop-number%}
+						loop (size of {_item::*}) times:
+							set line (loop-number-2 + 3) of lore of slot {_slot::%loop-number-1%} of {_gui} to "%{_item::%loop-number-2%}%"
+				else:
+					if {bazar.item.blokada.%{_nickgraczabazaru}%::%loop-number%} is not "true":
+						set slot {_slot::%loop-number%} of {_gui} to {bazar.item.%{_nickgraczabazaru}%::%loop-number%} with lore "&7Cena przedmiotu &8&l- &a%{bazar.cena.%{_nickgraczabazaru}%::%loop-number%}% szmaragdów" and "&7id: %loop-number%" and " " and "&eLewy przycisk &8&l- &7zmień cenę przedmiotu" and "&eŚrodkowy przycisk &8&l- &7zablokuj przedmiot" and "&ePrawy przycisk &8&l- &7usuń przedmiot z bazaru"
+					else:
+						set slot {_slot::%loop-number%} of {_gui} to {bazar.item.%{_nickgraczabazaru}%::%loop-number%} named "&c*Zablokowany Przedmiot*" with lore "&7Cena przedmiotu &8&l- &a%{bazar.cena.%{_nickgraczabazaru}%::%loop-number%}% szmaragdów" and "&7id: %loop-number%" and " " and "&eLewy przycisk &8&l- &7zmień cenę przedmiotu" and "&eŚrodkowy przycisk &8&l- &7zablokuj przedmiot" and "&ePrawy przycisk &8&l- &7usuń przedmiot z bazaru"
+			if {_nickgraczabazaru} is player's nickname:
+				set slot 25 of {_gui} to emerald named "&eWypłać szmaragdy" with lore "&7Możesz wypłacić &8&l- &a%{eme::%player%}% szmaragdów"
+				set slot 36 of {_gui} to clock named "&eWażność bazaru" with lore "&7Wygaśnie za &8&l- &e%{bazar.czas::%player%}/1440% dni" and "&7Przedłuż o &f24h &8&l- &a4 szmaragdy"
+				if {bazar.czas::%player%} < 2880:
+					set slot 36 of {_gui} to clock named "&eWażność bazaru" with lore "&7Wygaśnie za &8&l- &e%{bazar.czas::%player%}/60% godzin" and "&7Przedłuż o &f24h &8&l- &a4 szmaragdy"
+					if {bazar.czas::%player%} < 60:
+						set slot 36 of {_gui} to clock named "&eWażność bazaru" with lore "&7Wygaśnie za &8&l- &e%{bazar.czas::%player%}% minut" and "&7Przedłuż o &f24h &8&l- &a4 szmaragdy"
+				set slot 44 of {_gui} to barrier named "&cZamknij Bazar"
+			open {_gui} to player
+			set {bazar.otwartegui::%{_nickgraczabazaru}%} to player's nickname
+		else:
+			if {_nickgraczabazaru} is player's nickname:
+				if name of clicked entity contains "&6&lBazar &e★&f":
+					set {_gui} to hopper inventory named "&6&lBazar &e★&f%{_nickgraczabazaru}%"
+				if name of clicked entity contains "&6&lBazar &7":
+					set {_gui} to hopper inventory named "&6&lBazar &7%{_nickgraczabazaru}%"
+				set slot 0 of {_gui} to clock named "&eWażność bazaru" with lore "&7Wygaśnie za &8&l- &e%{bazar.czas::%player%}/1440% dni" and "&7Przedłuż o &f24h &8&l- &a4 szmaragdy"
+				if {bazar.czas::%player%} < 2880:
+					set slot 0 of {_gui} to clock named "&eWażność bazaru" with lore "&7Wygaśnie za &8&l- &e%{bazar.czas::%player%}/60% godzin" and "&7Przedłuż o &f24h &8&l- &a4 szmaragdy"
+					if {bazar.czas::%player%} < 60:
+						set slot 0 of {_gui} to clock named "&eWażność bazaru" with lore "&7Wygaśnie za &8&l- &e%{bazar.czas::%player%}% minut" and "&7Przedłuż o &f24h &8&l- &a4 szmaragdy"
+				set slot 4 of {_gui} to barrier named "&cZamknij Bazar"
+				if {eme::%player%} > 0:
+					set slot 2 of {_gui} to emerald named "&eWypłać szmaragdy" with lore "&7Możesz wypłacić &8&l- &a%{eme::%player%}% szmaragdów"
+				else:
+					send "&cTwój bazar nie posiada żadnych przedmiotów!" to player
+					send "&aAby dodawać przedmioty wpisz: /bazar dodaj <cena>" to player
+				open {_gui} to player
+				set {bazar.otwartegui::%{_nickgraczabazaru}%} to player's nickname
+			else:
+				send "&cWybrany bazar nie posiada żadnych przedmiotów!" to player
+
+on inventory close:
+	if player is in region "bazar" or "bazar2":
+		if name of player's current inventory contains "&6&lBazar &7" or "&6&lBazar &e★&f":
+			set {_nickgraczabazaru} to name of player's current inventory
+			replace all "&6&lBazar &e★&f" and "&6&lBazar &7" with "" in {_nickgraczabazaru}
+			if {bazar.otwartegui::%{_nickgraczabazaru}%} is set:
+				clear {bazar.otwartegui::%{_nickgraczabazaru}%}
+
+on inventory click:
+	if player is in region "bazar" or "bazar2":
+		if name of player's current inventory contains "&6&lBazar &7" or "&6&lBazar &e★&f":
+			cancel event
+			if line 1 of lore of clicked item contain "&7Cena przedmiotu &8&l-":
+				set {_nickgraczabazaru} to name of player's current inventory
+				replace all "&6&lBazar &e★&f" and "&6&lBazar &7" with "" in {_nickgraczabazaru}
+				set {_id} to line 2 of lore of clicked item
+				replace all "&7id: " with "" in {_id}
+				if {_nickgraczabazaru} is not player's nickname:
+					if {bazar.item.blokada.%{_nickgraczabazaru}%::%{_id}%} is not "true":
+						if amount of emeralds in player's inventory is bigger or equal to {bazar.cena.%{_nickgraczabazaru}%::%{_id}%}:
+							if player has enough space for {bazar.item.%{_nickgraczabazaru}%::%{_id}%}:
+								add {bazar.cena.%{_nickgraczabazaru}%::%{_id}%} to {eme::%{_nickgraczabazaru}%}
+								send "&aPomyślnie zakupiono przedmiot za %{bazar.cena.%{_nickgraczabazaru}%::%{_id}%}% szmaragdów." to player
+								remove {bazar.cena.%{_nickgraczabazaru}%::%{_id}%} of emerald from player
+								give {bazar.item.%{_nickgraczabazaru}%::%{_id}%} to player
+								clear {bazar.item.%{_nickgraczabazaru}%::%{_id}%}
+								clear {bazar.cena.%{_nickgraczabazaru}%::%{_id}%}
+							else:
+								send "&cNie posiadasz wystarczająco miejsca w ekwipunku!" to player
+						else:
+							send "&cNie posiadasz wystarczającej ilości szmaragdów!" to player
+					else:
+						send "&cWybrany przedmiot został zablokowany!" to player
+				else:
+					if click type is left mouse button:
+						close player's inventory
+#						if {bazar.cena.zmiana} is set:
+#							open sign gui of block at location({@kordytabliczki2}) to player
+#						else:
+#							open sign gui of block at location({@kordytabliczki}) to player
+#							set {bazar.cena.zmiana} to "true"
+#						set {bazar.cena.zmiana::%player%} to "%{_id}%"
+						stop
+					if click type is middle mouse button:
+						if {bazar.item.blokada.%{_nickgraczabazaru}%::%{_id}%} is not "true":
+							set {bazar.item.blokada.%{_nickgraczabazaru}%::%{_id}%} to "true"
+							send "&aPomyślnie zablokowano przedmiot." to player
+						else:
+							set {bazar.item.blokada.%{_nickgraczabazaru}%::%{_id}%} to "false"
+							send "&aPomyślnie odblokowano przedmiot." to player
+					if click type is right mouse button:
+						if player has enough space for {bazar.item.%{_nickgraczabazaru}%::%{_id}%}:
+							send "&aPomyślnie usunięto przedmiot z bazaru." to player
+							give {bazar.item.%{_nickgraczabazaru}%::%{_id}%} to player
+							clear {bazar.item.%{_nickgraczabazaru}%::%{_id}%}
+							clear {bazar.cena.%{_nickgraczabazaru}%::%{_id}%}
+							if {bazar.item.blokada.%{_nickgraczabazaru}%::%{_id}%} is "true":
+								set {bazar.item.blokada.%{_nickgraczabazaru}%::%{_id}%} to "false"
+						else:
+							send "&cNie posiadasz wystarczająco miejsca w ekwipunku!" to player
+				close player's inventory
+			if name of clicked item is "&cZamknij Bazar":
+				if {bazar.item.%player%::*} is set:
+					if player has enough space for {bazar.item.%player%::*}:
+						send "&aPomyślnie zamknięto bazar." to player
+						add {bazar.item.%player%::*} to player
+						clear {bazar.item.%player%::*}
+						clear {bazar.cena.%player%::*}
+						clear {bazar.item.blokada.%player%::*}
+						clear {bazar.otwarty::%player%}
+						clear {bazar.czas::%player%}
+						kill ({bazar.armorstand::%player%} parsed as entity)
+						clear {bazar.armorstand::%player%}
+					else:
+						send "&cNie posiadasz wystarczająco miejsca w ekwipunku!" to player
+				else:
+					clear {bazar.otwarty::%player%}
+					clear {bazar.czas::%player%}
+					kill ({bazar.armorstand::%player%} parsed as entity)
+					clear {bazar.armorstand::%player%}
+				close player's inventory
+			if name of clicked item is "&eWypłać szmaragdy":
+				if {eme::%player%} > 0:
+					if player has enough space for {eme::%player%} of emerald:
+						add {eme::%player%} of emerald to player
+						send "&aPomyślnie wypłacono %{eme::%player%}% szmaragdów" to player
+						set {eme::%player%} to 0
+					else:
+						send "&cNie posiadasz wystarczająco miejsca w ekwipunku!" to player
+				else:
+					send "&cNie posiadasz żadnych szmaragdów do wypłacenia" to player
+				close player's inventory
+			if name of clicked item is "&eWażność bazaru":
+				if ({bazar.czas::%player%}+1440) <= 10080:
+					if player has 4 emerald:
+						remove 2 emerald from player
+						add 1440 to {bazar.czas::%player%}
+						send "&aPomyślnie przedłużono bazar o &f24 godzin&a." to player
+					else:
+						send "&cNie masz wystarczającej ilości szmaragdów aby przedłużyć bazar!" to player
+				else:
+					send "&cMaksymalnie możesz przedłużyć ważność bazaru do 7 dni!" to player
+				close player's inventory
+				stop
+on sign change:
+	if player is in region "bazar" or "bazar2":
+		cancel event
+		set {_cena} to 1st line parsed as number
+		if 1st line is not empty:
+			if {_cena} is number:
+				if {_cena} >= 4:
+					if {_cena} <= 2304:
+						if {_cena} is not {bazar.cena.%player%::%{bazar.cena.zmiana::%player%}%}:
+							set {bazar.cena.%player%::%{bazar.cena.zmiana::%player%}%} to {_cena}
+							send "&aPomyślnie zmieniono cenę przedmiotu na %{_cena}% szmaragdów." to player
+						else:
+							send "&6Wpisana cena jest taka sama co obecna!" to player
+					else:
+						send "&cMaksymalna cena to 2304 szmaragdów!" to player
+				else:
+					send "&cMinimalna cena to 4 szmaragdy!" to player
+			else:
+				send "&cWpisano nie prawidłowe znaki!" to player
+		else:
+			send "&cNie wpisano żadnej wartości!" to player
+		clear {bazar.cena.zmiana::%player%}
+		clear {bazar.cena.zmiana}
+
+on every 15 minutes:
+	loop all players:
+		if {eme::%loop-player%} > 0:
+			send "&aMasz do odebrania %{eme::%loop-player%}% szmaragdów z bazaru. /bazar wyplac" to loop-player
+		if {bazar.odbierz.%loop-player%::*} is set:
+			send "&aMasz do odebrania przedmioty z bazaru. /bazar odbierz" to loop-player
+
+on every 1 minute:
+	loop {bazar.czas::*}:
+		remove 1 from {bazar.czas::%loop-index%}
+		if {bazar.czas::%loop-index%} = 60:
+			send "&6Twój bazar wygaśnie za 60 minut! Przedłuż go lub w innym wypadku zostanie usunięty!" to loop-index parsed as player
+		if {bazar.czas::%loop-index%} = 5:
+			send "&6Twój bazar wygaśnie za 5 minut! Przedłuż go lub w innym wypadku zostanie usunięty!" to loop-index parsed as player
+		if {bazar.czas::%loop-index%} = 0:
+			kill ({bazar.armorstand::%loop-index parsed as player%} parsed as entity)
+			clear {bazar.armorstand::%loop-index parsed as player%}
+			clear {bazar.otwarty::%loop-index parsed as player%}
+			if (size of {bazar.item.%loop-index parsed as player%::*}) > 0:
+				add {bazar.item.%loop-index parsed as player%::*} to {bazar.odbierz.%loop-index parsed as player%::*}
+				send "&6Twój bazar został usunięty! Natomiast itemy z bazaru zostały przeniesione do /bazar odbierz" to loop-index parsed as player
+			else:
+				send "&6Twój bazar został usunięty!" to loop-index parsed as player
+			clear {bazar.item.blokada.%loop-index parsed as player%::*}
+			clear {bazar.cena.%loop-index parsed as player%::*}
+			clear {bazar.item.%loop-index parsed as player%::*}
+			clear {bazar.czas::%loop-index%}
+

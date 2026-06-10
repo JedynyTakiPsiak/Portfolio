@@ -1,0 +1,212 @@
+Sub ProcessCSVFiles()
+    Dim csvPath As String
+    Dim outputSheet As Worksheet
+    Dim csvFile As String
+    Dim hourSum As Double
+    Dim currentHour As Date
+    Dim errorLog As Object
+    Dim fso As Object, ts As Object
+    Dim fileContent As String
+    Dim outputData() As Variant
+    Dim dataCounter As Long
+    Dim fileDict As Object
+    Dim dates() As Date
+    Dim i As Long, j As Long
+    Dim parts() As String
+    Dim fileDate As Date
+    Dim prevHour As Date
+    Dim hourIndex As Long
+    Dim startTime As Double
+    Dim hoursSize As Long
+    Dim hoursSizeTemp As Long
+    Dim tableSize As Boolean
+    Dim tableSizeCheck As String
+
+    startTime = Timer
+    Set errorLog = CreateObject("Scripting.Dictionary")
+    Set outputSheet = ThisWorkbook.Sheets("Arkusz1")
+    csvPath = outputSheet.Range("C3").value
+    hoursSizeTemp = outputSheet.Range("C5").value
+    tableSizeCheck = outputSheet.Range("C8").value
+    
+    ' Ustawienie wielkości tablicy
+    If tableSizeCheck = "No" Then
+        hoursSize = hoursSizeTemp
+    Else
+        hoursSize = 999999
+    End If
+
+    Application.ScreenUpdating = False
+    Application.Calculation = xlCalculationManual
+    Application.EnableEvents = False
+
+    If Right(csvPath, 1) <> "\" Then csvPath = csvPath & "\"
+    If Dir(csvPath, vbDirectory) = "" Then
+        MsgBox "Błędna ścieżka: " & csvPath, vbCritical
+        GoTo CleanUp
+    End If
+
+    ' Czyść tylko kolumny A i B
+    outputSheet.Range("A:B").ClearContents
+    outputSheet.Range("A1:B1").value = Array("Data i Godzina", "Zużycie [kWh]")
+
+    ' Przygotuj słownik plików z datą do sortowania
+    Set fileDict = CreateObject("Scripting.Dictionary")
+    csvFile = Dir(csvPath & "*.csv")
+    Do While csvFile <> ""
+        If csvFile Like "##.####.csv" Then
+            parts = Split(csvFile, ".")
+            If UBound(parts) >= 1 Then
+                fileDate = DateSerial(CInt(parts(1)), CInt(parts(0)), 1)
+                fileDict(fileDate) = csvFile
+            End If
+        End If
+        csvFile = Dir()
+    Loop
+
+    ' Ekstrakcja i sortowanie dat
+    ReDim dates(0 To fileDict.Count - 1)
+    Dim liczba As Long
+    liczba = 0
+    Dim key As Variant
+    For Each key In fileDict.keys
+        dates(liczba) = CDate(key)
+        liczba = liczba + 1
+    Next
+
+    ' Sortowanie dat bąbelkowe
+    Dim temp As Date
+    For i = LBound(dates) To UBound(dates) - 1
+        For j = i + 1 To UBound(dates)
+            If dates(i) > dates(j) Then
+                temp = dates(i)
+                dates(i) = dates(j)
+                dates(j) = temp
+            End If
+        Next j
+    Next i
+
+    ' Przygotuj tablicę na X godzin
+    ReDim outputData(1 To hoursSize, 1 To 2)
+    dataCounter = 1
+    hourIndex = 1
+
+    Set fso = CreateObject("Scripting.FileSystemObject")
+
+    For i = LBound(dates) To UBound(dates)
+        csvFile = fileDict(dates(i))
+        On Error Resume Next
+        Set ts = fso.OpenTextFile(csvPath & csvFile, 1, False)
+        If Err.Number <> 0 Then
+            errorLog.Add "Plik: " & csvFile, "Błąd otwarcia pliku"
+            GoTo NextFile
+        End If
+        On Error GoTo 0
+
+        ' Pomijanie nagłówków (7 linii)
+        For j = 1 To 7
+            If Not ts.AtEndOfStream Then ts.SkipLine
+        Next j
+
+        hourSum = 0
+        prevHour = 0
+
+        Do While Not ts.AtEndOfStream
+            fileContent = ts.ReadLine
+            If Len(Trim(fileContent)) = 0 Then GoTo NextLine
+
+            Dim lineData As Variant
+            lineData = Split(Replace(fileContent, ",", "."), ";")
+            If UBound(lineData) < 1 Then GoTo NextLine
+
+            Dim timeValue As String
+            Dim powerValue As Double
+            timeValue = Trim(lineData(0))
+
+            ' Parsowanie różnych formatów daty
+            On Error Resume Next
+            If InStr(timeValue, "-") > 0 Then
+                currentHour = CDate(Left(timeValue, 19))
+            Else
+                currentHour = CDate(Replace(timeValue, ".", "-"))
+            End If
+            If Err.Number <> 0 Then
+                errorLog.Add "Plik: " & csvFile, "Nieprawidłowa data: " & timeValue
+                On Error GoTo 0
+                GoTo NextLine
+            End If
+            On Error GoTo 0
+
+            ' Zaokrąglanie do pełnych 10 minut
+            Dim totalMinutes As Long
+            totalMinutes = Hour(currentHour) * 60 + Minute(currentHour)
+            totalMinutes = Int(totalMinutes / 10) * 10
+            currentHour = DateSerial(Year(currentHour), Month(currentHour), Day(currentHour)) + _
+                          TimeSerial(totalMinutes \ 60, totalMinutes Mod 60, 0)
+
+            ' Ekstrakcja wartości mocy, pomijanie błędnych
+            If InStr(lineData(1), "***") > 0 Then
+                powerValue = 0
+            Else
+                powerValue = Val(Replace(Trim(lineData(1)), ",", "."))
+            End If
+
+            ' Sumowanie energii co godzinę
+            If prevHour = 0 Then prevHour = DateSerial(Year(currentHour), Month(currentHour), Day(currentHour)) + TimeSerial(Hour(currentHour), 0, 0)
+            If DateSerial(Year(currentHour), Month(currentHour), Day(currentHour)) + TimeSerial(Hour(currentHour), 0, 0) <> prevHour Then
+                ' Zapisz wynik do tablicy
+                If hourIndex <= hoursSize Then
+                    outputData(hourIndex, 1) = prevHour
+                    outputData(hourIndex, 2) = Round(hourSum, 4)
+                    hourIndex = hourIndex + 1
+                End If
+                hourSum = 0
+                prevHour = DateSerial(Year(currentHour), Month(currentHour), Day(currentHour)) + TimeSerial(Hour(currentHour), 0, 0)
+            End If
+
+            hourSum = hourSum + powerValue * (10 / 60)
+
+NextLine:
+        Loop
+
+        ' Zapisz ostatnią godzinę z pliku
+        If hourSum > 0 And hourIndex <= hoursSize Then
+            outputData(hourIndex, 1) = prevHour
+            outputData(hourIndex, 2) = Round(hourSum, 4)
+            hourIndex = hourIndex + 1
+        End If
+
+        ts.Close
+NextFile:
+    Next i
+    
+    ' Uzupełnij brakujące godziny zerami
+    If tableSizeCheck = "Yes" Then
+        hoursSize = hourIndex - 1
+    End If
+    
+    Dim dt As Date
+    dt = outputData(1, 1)
+    For i = 1 To hoursSize
+        If IsEmpty(outputData(i, 1)) Then
+            outputData(i, 1) = dt
+            outputData(i, 2) = 0
+        End If
+        dt = dt + TimeSerial(1, 0, 0)
+    Next i
+
+    outputSheet.Range("A2").Resize(hoursSize, 2).value = outputData
+    outputSheet.Columns("A").NumberFormat = "yyyy-mm-dd hh:mm"
+    outputSheet.Columns("B").NumberFormat = "0.00"
+
+CleanUp:
+    Application.ScreenUpdating = True
+    Application.Calculation = xlCalculationAutomatic
+    Application.EnableEvents = True
+
+    MsgBox "Przetworzono: " & hourIndex - 1 & " godzin" & vbCrLf & _
+           "Uzupełniono zerami: " & hoursSize - hourIndex + 1 & vbCrLf & _
+           "Liczba błędów: " & errorLog.Count, vbInformation, "Status"
+End Sub
+
+

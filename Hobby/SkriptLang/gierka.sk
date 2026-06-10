@@ -1,0 +1,45 @@
+function spawnmobON():
+	execute console command "/rg flag -w ""lobby"" -h 3 lobby mob-spawning allow"
+function spawnmobOFF():
+	execute console command "/rg flag -w ""lobby"" -h 3 lobby mob-spawning deny"
+
+function startminigierka():
+	spawnmobON()
+	spawn panda at location(0.5, 105, 0.5, world "lobby") with nbt nbt compound from "{CustomNameVisible:1b}" 
+	set {minigierka-panda} to last spawned panda
+	set glowing of {minigierka-panda} to true
+	set name of {minigierka-panda} to "&f&lPIŁKA"
+	apply slowness of tier 256 without any particles to {minigierka-panda} for 99999 seconds 
+	apply resistance of tier 256 without any particles to {minigierka-panda} for 99999 seconds 
+	spawnmobOFF()
+	sprawdzaregion()
+
+function sprawdzaregion():
+	while {minigierka-status} is true:
+		if {minigierka-panda} is alive:
+			wait 10 ticks
+			if {minigierka-panda} is not part of region "lobby":
+				teleport {minigierka-panda} to location(0.5, 105, 0.5, world "lobby")
+			if {minigierka-panda} is in region "bramaniebieska":
+				send title "&f&lG&0&lO&f&lO&0&lO&f&lO&0&lL&f&l!" to {minigierka-czerwoni::*} and {minigierka-niebiescy::*}
+				send subtitle "&f&lPunkt dla &cCzerwonych!" to {minigierka-czerwoni::*} and {minigierka-niebiescy::*}
+				teleport()
+				add 1 to {minigierka-czerwoni-punkty}
+			if {minigierka-panda} is in region "bramaczerwona":
+				send title "&f&lG&0&lO&f&lO&0&lO&f&lO&0&lL&f&l!" to {minigierka-czerwoni::*} and {minigierka-niebiescy::*}
+				send subtitle "&f&lPunkt dla &9Niebieskich!" to {minigierka-czerwoni::*} and {minigierka-niebiescy::*}
+				teleport()
+				add 1 to {minigierka-niebiescy-punkty}
+
+
+	
+
+function infodlagraczy():
+	while {minigierka-status} is true:
+		send actionbar "&9Niebiescy &f&l%{minigierka-niebiescy-punkty}%&7&l:&f&l%{minigierka-czerwoni-punkty}% &cCzerwoni" to {minigierka-czerwoni::*} and {minigierka-niebiescy::*}
+		wait 50 ticks
+
+function teleport():
+	teleport {minigierka-niebiescy::*} to location(-5.5, 100, 0.5, world "lobby", -90, 0)
+	teleport {minigierka-czerwoni::*} to location(6.5, 100, 0.5, world "lobby", 90, 0)
+	teleport {minigierka-panda} to location(0.5, 105, 0.5, world "lobby")

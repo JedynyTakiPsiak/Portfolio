@@ -1,0 +1,97 @@
+# &aZaładowana Armata do wystrzału!
+# &cŁadowanie Armaty %czas%s  <-10s 9s aż do 0s 
+# jako hologram aby gracz wiedział 
+
+import:
+	eu.decentsoftware.holograms.api.DHAPI
+
+# 	DHAPI.setHologramLine(DHAPI.getHologram("zabojstwa"), 1, "text")
+
+on load:
+	loop indexes of {armata::*}:
+		set {_name} to loop-value
+		replace all "." with "-" in {_name}
+		replace all "," with "_" in {_name}
+		DHAPI.setHologramLine(DHAPI.getHologram("armata%{_name}%"), 1, "&aGotowa do wystrzału")
+
+
+on right click on stone button:
+	if difference between {-cooldown-armata::%player's nickname%} and now is less than 10 ticks:
+		stop
+	set {-cooldown-armata::%player's nickname%} to now
+	set {_xcord} to x-coord of event-block
+	set {_zcord} to z-coord of event-block
+
+	if difference between {armata::%{_xcord}%,%{_zcord}%} and now is less than 10 seconds:
+		send "&cŁadowanie armaty.." to player
+		stop
+	set {armata::%{_xcord}%,%{_zcord}%} to now
+	if event-block is minecraft:stone_button[facing=west]:
+		set {_loc} to location of event-block ~ vector(4,2,0)
+		set yaw of {_loc} to -90
+		teleport player at {_loc}
+		wait 1 tick
+	if event-block is minecraft:stone_button[facing=east]:
+		set {_loc} to location of event-block ~ vector(-4,2,0)
+		set yaw of {_loc} to 90
+		teleport player at {_loc}
+		wait 1 tick
+	clear player's velocity
+	push player forward with force 3.4
+	push player upward with force 1
+
+
+	set {_name} to "%{_xcord}%,%{_zcord}%"
+	replace all "." with "-" in {_name}
+	replace all "," with "_" in {_name}
+	set {_number} to 10
+	loop 10 times:
+		DHAPI.setHologramLine(DHAPI.getHologram("armata%{_name}%"), 1, "&cŁadowanie %{_number}%s...")
+		wait 1 second
+		set {_number} to {_number} - 1
+	DHAPI.setHologramLine(DHAPI.getHologram("armata%{_name}%"), 1, "&aGotowa do wystrzału")
+
+
+
+on tab complete of "/armata":
+	set tab completions for position 1 to "dodaj-guzik", "usuń-guzik", "lista" and "wyczyść-listę"
+
+command /armata [<text>]:
+	permission: fullaccess.smyf.admin
+	trigger:
+		if arg-1 is not set:
+			send "&carg-1 błąd" to player
+			stop
+		set {_xcord} to x-coord of targeted block
+		set {_zcord} to z-coord of targeted block
+		if arg-1 is "dodaj-guzik":
+			if targeted block is not stone button:
+				send "&cBlok nie jest kamiennym guzikiem!" to player
+				stop
+			if {armata::%{_xcord}%,%{_zcord}%} is set:
+				send "&cWybrany blok jest już dodany na liste armat!" to player
+				stop
+			set {armata::%{_xcord}%,%{_zcord}%} to now
+			send "&aPrawidłowo dodano guzik do listy armat" to player
+			set {_name} to "%{_xcord}%,%{_zcord}%"
+			replace all "." with "-" in {_name}
+			replace all "," with "_" in {_name}
+			send "armata%{_name}%" to player
+		if arg-1 is "lista":
+			send "&eLista lokalizacji armat: (%size of {armata::*}%x)" to player
+			if {armata::*} is not set:
+				send "&ebrak wyników" to player
+			else:
+				set {_i} to 1
+				loop {armata::*}:
+					send "&e%{_i}%. &fx,y: %loop-index%" to player
+					add 1 to {_i}
+		if arg-1 is "wyczyść-listę":
+			clear {armata::*}
+			send "&aWyczyszczono listę armat" to player
+		if arg-1 is "usuń-guzik":
+			if {armata::%{_xcord}%,%{_zcord}%} is set:
+				clear {armata::%{_xcord}%,%{_zcord}%}
+				send "&aPoprawnie usunięto armatę z listy" to player
+			else:
+				send "&cNie znaleziono armaty na liście :(" to player

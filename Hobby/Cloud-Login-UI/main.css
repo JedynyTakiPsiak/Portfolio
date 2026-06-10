@@ -1,0 +1,385 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap');
+
+* {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-weight: 700;
+    font-family: 'Comfortaa', cursive;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: #000000;
+}
+
+a {
+    text-decoration: none;
+}
+
+.custom-background{
+    margin-top: -var(--margin-top);
+    background-image: url("assets/2.jpg");
+    background-size: cover;
+    background-position: 50% 50%;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: -2;
+}
+
+
+/* ----------------------------- */
+/* ----- PASEK PRZEWIJANIA ----- */
+/* ----------------------------- */
+
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 3px;
+}
+
+::-webkit-scrollbar-track {
+    background: #001437;
+    border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #013D86;
+    border-radius: 11px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3569A5;
+}
+
+
+/* ----------------------------- */
+/* ------- MEDIA QUERY --------- */
+/* ----------------------------- */
+
+
+/* komputery 16:9 */
+@media only screen and (min-width: 481px){
+    :root{
+        --animation: 0.5s ease-out;
+        --logo: 55px;
+        --logoh: 222px;
+        --login2fa: -7px;
+        --h1: 333px;
+        --h2: 222px;
+        --w1: 444px;
+        --w2: 333px;
+        --w25: 288px;
+        --w3: 222px;
+        --padding1: 88px;
+        --padding2: 22px;
+        --padding3: 3px;
+        --gap1: 11px;
+        --gap2: 7px;
+        --gap3: 22px;
+        --margin1: 11px;
+        --margin2: 7px;
+        --margin3: 3px;
+        --font-size2: 1.11em;
+        --font-size3: 1.22em;
+        --font-size4: 1.44em;
+        --font-size5: 2.33em;
+    }
+    .remember .el-switch, .admin .el-switch{
+        font-size: 88%;
+    }
+}
+ 
+/* telefony */
+@media only screen and (max-width: 480px) {
+    :root{
+        --animation: 0.5s ease-out;
+        --logo: 22px;
+        --logoh: 188px;
+        --login2fa: -7px;
+        --h1: 256px;
+        --h2: 202px;
+        --w1: 350px;
+        --w2: 303px;
+        --w25: 248px;
+        --w3: 202px;
+        --padding1: 55px;
+        --padding2: 11px;
+        --padding3: 3px;
+        --gap1: 11px;
+        --gap2: 7px;
+        --gap3: 3px;
+        --margin1: 11px;
+        --margin2: 7px;
+        --margin3: 3px;
+        --font-size2: 1em;
+        --font-size3: 1.11em;
+        --font-size4: 1.33em;
+        --font-size5: 1.88em;
+    }
+
+    .remember .el-switch, .admin .el-switch{
+        font-size: 68%;
+    }
+}
+
+
+/* ----------------------------- */
+/* ---------- LOGIN ------------ */
+/* ----------------------------- */
+
+
+body .content{
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-box{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.login-box .login-form{
+    /* jeśli chcesz zobaczyć 2fa zamień komentarze tutaj i na dole*/
+    display: flex;
+    /* display: none; */
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.login-box .logo{
+    position: absolute;
+    top: -50%;
+    transform: translateY(var(--logo));
+    height: var(--logoh);
+}
+
+.login-box{
+    margin: auto var(--margin1);
+    padding: var(--padding2);
+    padding-top: var(--padding1);
+    height: var(--h1);
+    width: var(--w1);
+    -webkit-backdrop-filter: blur(11px);
+    backdrop-filter: blur(11px);
+    border-radius: 69px;
+    box-shadow: 0 0 1.33em #000;
+    gap: var(--gap1);
+    transition: box-shadow var(--animation);
+}
+
+.login-box .login-form input[type=text], 
+.login-box .login-form input[type=password], 
+.login-box .login-form div .text, 
+.login-box .login-form button[type=submit], 
+.login-box .login-2fa button[type=submit] {
+    color: #000;
+    font-weight: 700;
+    font-family: 'Comfortaa', cursive;
+}
+    
+.login-box .login-form{
+    gap: var(--gap2);
+}
+
+.login-form .guziki{
+    display: flex;
+    align-items: center;
+    margin-top: var(--margin2);
+    gap: var(--gap3);
+}
+    
+.login-form .guziki .remember, 
+.login-form .guziki .admin{
+    display: flex;
+    align-items: center;
+    gap: var(--gap2);
+}
+
+.login-form .guziki .remember .text, 
+.login-form .guziki .admin .text{
+    font-size: var(--font-size3);
+    cursor: default;
+}
+
+.login-form input[type=text], .login-form input[type=password] {
+    font-size: var(--font-size2);
+    width: var(--w2);
+    padding: var(--padding3);
+    background: #fff;
+    border: 2.22px solid #c0ccda;
+    border-radius: 11px;
+    padding-left: var(--margin2);
+    transition: border-color var(--animation);
+}
+
+.login-form input::placeholder{
+    color: #000;
+}
+
+.login-form button[type=submit] {
+    width: var(--w3);
+    margin-top: var(--margin2);
+    padding: var(--padding3);
+    font-size: var(--font-size4);
+    border: 2.22px solid #c0ccda;
+    border-radius: 11px;
+    cursor: pointer;
+    transition: border-color var(--animation), box-shadow var(--animation);
+}
+
+.login-box:hover{
+    box-shadow: 0 0 3.33em #fff, inset 0 0 .33em #fff;
+}
+
+.login-box .login-form input[type=text]:focus, 
+.login-box .login-form input[type=password]:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.login-box .login-form button:hover{
+    border-color: #fff;
+    box-shadow: 0 0 1.33em #fff;
+}
+
+
+/* ----------------- */
+/* --- login-2fa --- */
+/* ----------------- */
+
+
+.login-box .login-2fa{
+    /* jeśli chcesz zobaczyć normalnie zamień komentarze tutaj i na dole*/
+    display: none;
+    /* display: flex; */
+    position: absolute;
+    align-items: center;
+    flex-direction: column;
+    gap: var(--gap2);
+    transform: translateY(var(--login2fa));
+}
+
+.login-box .login-2fa .napis{
+    margin-bottom: var(--margin2);
+    color: #000;
+    font-size: var(--font-size5);
+    cursor: default;
+    transition: text-shadow var(--animation), color var(--animation);
+}
+
+.login-2fa button[type=submit] {
+    width: var(--w3);
+    margin-top: var(--margin2);
+    padding: var(--padding3);
+    font-size: var(--font-size4);
+    border: 2.22px solid #c0ccda;
+    border-radius: 11px;
+    cursor: pointer;
+    transition: border-color var(--animation), box-shadow var(--animation);
+}
+
+.login-2fa input[type=text]{
+    text-align: center;
+    font-size: var(--font-size2);
+    width: var(--w25);
+    padding: var(--padding3);
+    background: #fff;
+    border: 2.22px solid #c0ccda;
+    border-radius: 11px;
+    padding-left: var(--margin2);
+    transition: border-color var(--animation);
+}
+
+.login-2fa input[type=text]:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.login-box:hover .login-2fa .napis {
+    color: #fff;
+    text-shadow: 0 0 1.1em #000, 0 0 0.22em #000;
+}
+
+.login-box .login-2fa button:hover{
+    border-color: #fff;
+    box-shadow: 0 0 1.33em #fff;
+}
+
+
+/* ----------------- */
+/* ---- animacja --- */
+/* ----------------- */
+
+/* animacja ze strony https://www.theappguruz.com/tag-tools/web/CSSAnimations/ */
+.login-box:hover {
+    -webkit-animation-name: pulse;
+    animation-name: pulse;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+@-webkit-keyframes pulse {
+    0% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+    50% {
+        -webkit-transform: scale3d(1.05, 1.05, 1.05);
+        transform: scale3d(1.05, 1.05, 1.05);
+    }
+    100% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+    50% {
+        -webkit-transform: scale3d(1.05, 1.05, 1.05);
+        transform: scale3d(1.05, 1.05, 1.05);
+    }
+    100% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+} 
+
+.swal2-popup {
+    background: transparent;
+    background-image: url("assets/2.jpg");
+    background-size: cover;
+    background-position: 50% 50%;
+    border-radius: 24px;
+    font-family: 'Comfortaa', sans-serif;
+    color: #fff;
+    width: 666px;
+    gap: 33px;
+    padding-bottom: 33px;
+}

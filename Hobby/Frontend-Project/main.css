@@ -1,0 +1,933 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap');
+
+* {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-weight: 700;
+    font-family: 'Comfortaa', cursive;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: #000000;
+}
+
+a {
+    text-decoration: none;
+}
+
+.custom-background{
+    margin-top: -var(--margin-top);
+    background-image: url("assets/5.jpg");
+    background-size: cover;
+    background-position: 50% 50%;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: -2;
+}
+
+
+/* ----------------------------- */
+/* ----- PASEK PRZEWIJANIA ----- */
+/* ----------------------------- */
+
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 3px;
+}
+
+::-webkit-scrollbar-track {
+    background: #001437;
+    border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #013D86;
+    border-radius: 11px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3569A5;
+}
+
+
+/* ----------------------------- */
+/* --------- ANIMACJE ---------- */
+/* ----------------------------- */
+
+
+@-webkit-keyframes pulse {
+    0% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+    50% {
+        -webkit-transform: scale3d(1.05, 1.05, 1.05);
+        transform: scale3d(1.05, 1.05, 1.05);
+    }
+    100% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+    50% {
+        -webkit-transform: scale3d(1.05, 1.05, 1.05);
+        transform: scale3d(1.05, 1.05, 1.05);
+    }
+    100% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+.inviter-upper:hover, .discord:hover, .tiktok:hover, .youtube:hover, .rekrutacja .text:hover, .bottom .administracja:hover, .bottom .beta:hover{
+    -webkit-animation-name: pulse;
+    animation-name: pulse;
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+    animation-timing-function: ease;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+:root{
+    --animation: 0.5s ease-out;
+    /* header */
+    --margin-top: 111px;
+    --margin-bottom: 55px;
+    --margin-left: 55px;
+    --margin-right: 22px;
+    --margin1: -66px;
+    --margin2: 7px;
+    --margin3: 11px;
+    --border: 111px 111px 444% 444%;
+    --icon1: 50px;
+    --icon2: 35px;
+    --icon3: 20px;
+    --icon6: -11px;
+    --icon6image: -7px;
+    --logo: -33px;
+    --logoimage: 256px;
+    --iconsimage: 64px;
+    --font: 2.22rem;
+
+    /* inviter */
+    --font2: 1.77rem;
+    --font3: 1.33rem;
+    --font4: 1.99rem;
+    --padding: 22px;
+    --width1: 777px;
+    --width2: 300px;
+    --tree: 88px;
+    --mediaikony: 55px;
+    --margin-bottom2: 11px;
+    
+    /* rekrutacja */
+    --font5: 1rem;
+    --width3: 800px;
+    --width4: 333px;
+    --rekrutacjaikony: 48px;
+    --padding2: 11px;
+    --margin4: 11px;
+}
+
+
+/* ----------------------------- */
+/* --------- NAGŁÓWEK ---------- */
+/* ----------------------------- */
+
+
+.container{
+    display: flex;
+    justify-content: center;
+}
+
+.header{
+    display: grid;
+    grid-template-columns: max-content auto 1fr;
+    margin: var(--margin-top) var(--margin-right) var(--margin-bottom) var(--margin-left);
+    border-radius: var(--border);
+    box-shadow: 0 0 1.33em #000;
+    -webkit-backdrop-filter: blur(11px);
+    backdrop-filter: blur(11px);
+    transition: box-shadow var(--animation);
+}
+
+.header:hover {
+    box-shadow: 0 0 3.33em #fff, inset 0 0 .33em #fff;
+}
+
+.header .header-left, .header .logo, .header .header-right{
+    display: flex;
+    align-items: end;
+    margin: var(--margin1) 0;
+    transform: translateY(var(--margin1));
+}
+
+.header .header-left{
+    justify-self: end;
+    margin-left: var(--margin3);
+}
+
+.header .icon1, .header .icon6{
+    margin: 0 0 var(--icon1) 0;
+}
+
+.header .icon2, .header .icon5{
+    margin: 0 0 var(--icon2) 0;
+}
+
+.header .icon3, .header .icon4{
+    margin: 0 0 var(--icon3) 0;
+}   
+
+.header .icon6{
+    transform: translateX(var(--icon6));
+}
+
+.header .icon6 .image{
+    transform: translateY(var(--icon6image));
+}
+
+.header .logo{
+    transform: translateY(var(--logo));
+}
+
+.header .icons a{
+    display: flex;
+    align-items: center;
+    font-size: var(--font);
+    margin: 0 var(--margin2);
+    color: #000;
+    transition: color var(--animation), text-shadow var(--animation);
+}
+
+.header .icons a:hover{
+    text-shadow: 0 0 1.1em #000, 0 0 0.22em #000;
+    color: #fff;
+}
+
+.header .icon1 a img, .header .icon2 a img, .header .icon3 a img{
+    margin-right: var(--margin2);
+}
+
+.header .icon4 a img, .header .icon5 a img, .header .icon6 a img{
+    margin-left: var(--margin2);
+}
+
+.header .logo img{  
+    max-height: var(--logoimage);
+}
+
+.header .icons img{
+    max-height: var(--iconsimage);
+}
+
+
+/* ----------------------------- */
+/* ---------- INVITER ---------- */
+/* ----------------------------- */
+
+
+.inviter .inviter-upper{
+    display: grid;
+    grid-template-columns: 1% 99%;
+    justify-content: center;
+    width: var(--width1);
+    margin: 0 auto;
+    padding: var(--padding);
+    cursor: pointer;
+    border-radius: 24px;
+    box-shadow: 0 0 .33em #000;
+    -webkit-backdrop-filter: blur(11px);
+    backdrop-filter: blur(11px);
+    transition: box-shadow var(--animation);
+}
+
+.inviter .inviter-upper .community span{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    color: #000;
+    font-size: var(--font2);
+    transition: color var(--animation), text-shadow var(--animation);
+}
+
+.inviter .inviter-upper .community .click{
+    font-size: var(--font3);
+}
+
+.inviter .inviter-upper .image{
+    max-height: var(--tree);
+    margin-left: 11px;
+}
+
+.inviter .inviter-upper:hover .community span{
+    color: #fff;
+    text-shadow: 0 0 1.1em #000, 0 0 0.22em #000;
+}
+
+.inviter .inviter-upper:hover{
+    box-shadow: 0 0 1.33em #fff;
+}
+
+.inviter-bottom {
+    display: flex;
+    justify-content: center;
+    margin-top: 11px;
+}
+
+.inviter-bottom .discord, .inviter-bottom .youtube, .inviter-bottom .tiktok {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 36px;
+    width: var(--width2);
+    margin: 7px;
+    margin-bottom: var(--margin-bottom2);
+    padding: 5px;
+    color: #000;
+    font-size: var(--font4);
+    box-shadow: 0 0 .33em #000;
+    -webkit-backdrop-filter: blur(11px);
+    backdrop-filter: blur(11px);
+    transition: color var(--animation), text-shadow var(--animation), box-shadow var(--animation);
+}
+
+.inviter-bottom .discord img, .youtube img, .tiktok img{
+    max-height: var(--mediaikony);
+    margin-right: 7px;
+}
+
+.inviter-bottom .tiktok img{
+    max-height: calc(var(--mediaikony) - 7px);
+}
+
+.inviter-bottom a:hover{
+    box-shadow: 0 0 1.33em #fff;
+}
+
+
+/* ----------------------------- */
+/* -------- REKRUTACJE --------- */
+/* ----------------------------- */ 
+
+
+.rekrutacja .text{
+    display: flex;
+    margin: 0 auto;
+    text-align: center;
+    width: var(--width3);
+    padding: 22px;
+    margin-top: 11px;
+    border-radius: 24px;
+    color: #000;
+    font-size: var(--font5);
+    box-shadow: 0 0 .33em #000;
+    backdrop-filter: blur(11px);
+    -webkit-backdrop-filter: blur(11px);
+    transition: color var(--animation), text-shadow var(--animation), box-shadow var(--animation);
+}
+
+.rekrutacja .text1{
+    color: #000;
+    font-size: var(--font5);
+    transition: color var(--animation), text-shadow var(--animation);
+}
+
+.rekrutacja .bottom{
+    display: flex;
+    justify-content: center;
+    margin-top: 3px;
+}
+
+.rekrutacja .bottom .administracja, .rekrutacja .bottom .beta{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: var(--width4);
+    padding: var(--padding2);
+    margin: var(--margin4);
+    border-radius: 24px;
+    box-shadow: 0 0 .33em #000;
+    -webkit-backdrop-filter: blur(11px);
+    backdrop-filter: blur(11px);
+    transition: box-shadow var(--animation);
+}
+
+.rekrutacja .bottom  .image{
+    max-height: var(--rekrutacjaikony);
+    margin-right: 22px;
+    margin-left: -11px;
+}
+
+.rekrutacja .text:hover{
+    text-shadow: 0 0 1.1em #000, 0 0 0.22em #000;
+    color: #fff;
+    box-shadow: 0 0 1.33em #fff;
+}
+
+.rekrutacja .administracja:hover, .rekrutacja .beta:hover{
+    box-shadow: 0 0 1.33em #fff;
+}
+
+.rekrutacja .administracja:hover .text1, .rekrutacja .beta:hover .text1{
+    text-shadow: 0 0 1.1em #000, 0 0 0.22em #000;
+    color: #fff;
+}
+
+
+/* ----------------------------- */
+/* ------- MEDIA QUEARY -------- */
+/* ----------------------------- */
+
+
+/* średnie ekrany 0.8x */
+@media (min-width: 1490px) and (max-width: 1666px) {
+    :root {
+        --margin-top: 88.8px;
+        --margin-left: 44px;
+        --margin-right: 17.6px;
+        --margin1: -52.8px;
+        --margin2: 5.6px;
+        --margin3: 8.8px;
+        --icon1: 40px;
+        --icon2: 28px;
+        --icon3: 16px;
+        --icon6: -8.8px;
+        --icon6image: -5.6px;
+        --logo: -26.4px;
+        --logoimage: 204.8px;
+        --iconsimage: 51.2px;
+        --font: 1.776rem;
+    
+        --font2: 1.416rem;
+        --font3: 1.064rem;
+        --font4: 1.592rem;
+        --padding: 17.6px;
+        --width1: 621.6px;
+        --width2: 240px;
+        --tree: 70.4px;
+        --mediaikony: 44px;
+        --margin-bottom2: 8.8px;
+    
+        --font5: 0.8rem;
+        --width3: 640px;
+        --width4: 266.4px;
+        --rekrutacjaikony: 38.4px;
+        --padding2: 8.8px;
+        --margin4: 8.8px;
+    }    
+}
+
+/* małe ekrany 0.6x */
+@media (min-width: 1025px) and (max-width: 1489px) {
+    :root{
+        --margin-top: 66.6px;
+        --margin-bottom: 33px;
+        --margin-left: 33px;
+        --margin-right: 13.2px;
+        --margin1: -39.6px;
+        --margin2: 4.2px;
+        --margin3: 6.6px;
+        --icon1: 30px;
+        --icon2: 21px;
+        --icon3: 12px;
+        --icon6: -6.6px;
+        --icon6image: -4.2px;
+        --logo: -19.8px;
+        --logoimage: 153.6px;
+        --iconsimage: 38.4px;
+        --font: 1.332rem;
+    
+        --font2: 1.062rem;
+        --font3: 0.798rem;
+        --font4: 1.194rem;
+        --padding: 13.2px;
+        --width1: 466.2px;
+        --width2: 180px;
+        --tree: 52.8px;
+        --mediaikony: 33px;
+        --margin-bottom2: 6.6px;
+    
+        --font5: 0.6rem;
+        --width3: 480px;
+        --width4: 199.8px;
+        --rekrutacjaikony: 28.8px;
+        --padding2: 6.6px;
+        --margin4: 6.6px;
+    }
+}
+
+/* tablety 0.5x */
+@media (min-width: 481px) and (max-width: 1024px) {
+    .inviter-upper:hover, .discord:hover, .tiktok:hover, .youtube:hover, .rekrutacja .text:hover, .bottom .administracja:hover, .bottom .beta:hover{
+        -webkit-animation-name: none;
+        animation-name: none;
+    }
+
+    .header{
+        display: grid;
+        grid-template-columns: 1fr 0 1fr;
+        margin: 202px 0 33px 0;
+        border-radius: var(--border);
+        box-shadow: 0 0 1.33em #000;
+        -webkit-backdrop-filter: blur(11px);
+        backdrop-filter: blur(11px);
+    }
+    
+    .header .header-left, .header .logo, .header .header-right{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 1px;
+        padding: 11px 0 0 0;
+        transform: none;
+    }
+    
+    .header .header-left{
+        justify-self: end;
+        margin-right: 11px;
+    }
+
+    .header .header-right{
+        justify-self: start;
+        margin-left: 11px;
+    }
+    
+    .header .icon1, .header .icon2, .header .icon3, .header .icon4, .header .icon5, .header .icon6{
+        margin: 0;
+    }
+    
+    .header .icon6{
+        transform: none;
+    }
+    
+    .header .icon6 .image{
+        transform: none;
+    }
+    
+    .header .logo{
+        transform: translateY(-202px);
+    }
+    
+    .header .icons a{
+        display: flex;
+        align-items: center;
+        font-size: calc(0.88 * var(--font));
+        margin: 0 var(--margin2);
+        color: #000;
+        transition: none;
+    }
+    
+    .header .icon1 a img, .header .icon2 a img, .header .icon3 a img{
+        margin-right: var(--margin2);
+    }
+    
+    .header .icon4 a img, .header .icon5 a img, .header .icon6 a img{
+        margin-left: var(--margin2);
+    }
+    
+    .header .logo img{  
+        max-height: calc(0.88 * var(--logoimage));
+    }
+    
+    .header .icons img{
+        max-height: calc(0.88 * var(--iconsimage));
+    }
+    
+    .header:hover {
+        box-shadow: 0 0 1.33em #000;
+    }
+
+    .header .icons a:hover{
+        text-shadow: none;
+        color: #000;
+    }
+
+    .inviter .inviter-upper{
+        display: grid;
+        grid-template-columns: 1% 99%;
+        justify-content: center;
+        width: calc(0.67 * var(--width1));
+        margin: 0 auto;
+        padding: var(--padding);
+        cursor: pointer;
+        border-radius: 24px;
+        box-shadow: 0 0 .33em #000;
+        -webkit-backdrop-filter: blur(11px);
+        backdrop-filter: blur(11px);
+        transition: none;
+    }
+
+    .inviter .inviter-upper .community span{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        color: #000;
+        font-size: calc(0.77 * var(--font2));
+        transition: none;
+    }
+
+    .inviter .inviter-upper .community .click{
+        font-size: calc(0.77 * var(--font3));
+    }
+
+    .inviter .inviter-upper .image{
+        max-height: calc(0.67 * var(--tree));
+        margin: 11px;
+    }
+
+    .inviter .inviter-upper:hover .community span{
+        color: #000;
+        text-shadow: none;
+    }
+
+    .inviter .inviter-upper:hover{
+        box-shadow: 0 0 .33em #000;
+    }
+
+    .inviter-bottom {
+        display: flex;
+        justify-content: center;
+        margin-top: 11px;
+    }
+
+    .inviter-bottom .discord, .inviter-bottom .youtube, .inviter-bottom .tiktok {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 36px;
+        width: calc(0.57 * var(--width2));
+        margin: 7px;
+        margin-bottom: var(--margin-bottom2);
+        padding: 5px;
+        color: #000;
+        font-size: calc(0.77 * var(--font4));
+        box-shadow: 0 0 .33em #000;
+        -webkit-backdrop-filter: blur(11px);
+        backdrop-filter: blur(11px);
+        transition: none;
+    }
+
+    .inviter-bottom .discord img, .youtube img, .tiktok img{
+        max-height: calc(0.67 * var(--mediaikony));
+        margin-right: 7px;
+    }
+
+    .inviter-bottom .tiktok img{
+        max-height: calc(0.67 * calc(var(--mediaikony) - 7px));
+    }
+
+    .inviter-bottom a:hover{
+        box-shadow: 0 0 .33em #000;
+    }
+
+
+    .rekrutacja .text{
+        display: flex;
+        margin: 0 auto;
+        text-align: center;
+        width: calc(0.67 * var(--width3));
+        padding: 22px;
+        margin-top: 11px;
+        border-radius: 24px;
+        color: #000;
+        font-size: calc(0.77 * var(--font5));
+        box-shadow: 0 0 .33em #000;
+        backdrop-filter: blur(11px);
+        -webkit-backdrop-filter: blur(11px);
+        transition: none;
+    }
+
+    .rekrutacja .text1{
+        color: #000;
+        font-size: calc(0.77 * var(--font5));
+        transition: none;
+    }
+
+    .rekrutacja .bottom{
+        display: flex;
+        justify-content: center;
+        margin-top: 3px;
+    }
+
+    .rekrutacja .bottom .administracja, .rekrutacja .bottom .beta{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: calc(0.67 * var(--width4));
+        padding: var(--padding2);
+        margin: var(--margin4);
+        border-radius: 24px;
+        box-shadow: 0 0 .33em #000;
+        -webkit-backdrop-filter: blur(11px);
+        backdrop-filter: blur(11px);
+        transition: none;
+    }
+
+    .rekrutacja .bottom  .image{
+        max-height: calc(0.67 * var(--rekrutacjaikony));
+        margin-right: 11px;
+    }
+
+    .rekrutacja .text:hover{
+        text-shadow: none;
+        color: #000;
+        box-shadow: 0 0 .33em #000;
+    }
+
+    .rekrutacja .administracja:hover, .rekrutacja .beta:hover{
+        box-shadow: 0 0 .33em #000;
+    }
+
+    .rekrutacja .administracja:hover .text1, .rekrutacja .beta:hover .text1{
+        text-shadow: none;
+        color: #000;
+    }
+}
+
+/* telefony 0.customx */
+@media only screen and (max-width: 480px) {
+    .inviter-upper:hover, .discord:hover, .tiktok:hover, .youtube:hover, .rekrutacja .text:hover, .bottom .administracja:hover, .bottom .beta:hover{
+        -webkit-animation-name: none;
+        animation-name: none;
+    }
+
+    .header{
+        display: grid;
+        grid-template-columns: 1fr 0 1fr;
+        margin: 166px 0 22px 0;
+        border-radius: var(--border);
+        box-shadow: 0 0 1.33em #000;
+        -webkit-backdrop-filter: blur(11px);
+        backdrop-filter: blur(11px);
+    }
+    
+    .header .header-left, .header .logo, .header .header-right{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 0 -22px 0;
+        padding: 3px 0 0 0;
+        transform: none;
+    }
+    
+    .header .header-left{
+        justify-self: end;
+        margin-right: 0;
+    }
+
+    .header .header-right{
+        justify-self: start;
+        margin-left: 0;
+    }
+    
+    .header .icon1, .header .icon2, .header .icon3, .header .icon4, .header .icon5, .header .icon6{
+        margin: 0;
+    }
+    
+    .header .icon6{
+        transform: none;
+    }
+    
+    .header .icon6 .image{
+        transform: none;
+    }
+    
+    .header .logo{
+        transform: translateY(-166px);
+    }
+    
+    .header .icons a{
+        display: flex;
+        align-items: center;
+        font-size: calc(0.68 * var(--font));
+        margin: 0 var(--margin2);
+        color: #000;
+        transition: none;
+    }
+    
+    .header .icon1 a img, .header .icon2 a img, .header .icon3 a img{
+        margin-right: var(--margin2);
+    }
+    
+    .header .icon4 a img, .header .icon5 a img, .header .icon6 a img{
+        margin-left: var(--margin2);
+    }
+    
+    .header .logo img{  
+        max-height: calc(0.68 * var(--logoimage));
+    }
+    
+    .header .icons img{
+        max-height: calc(0.58 * var(--iconsimage));
+    }
+    
+    .header:hover {
+        box-shadow: 0 0 1.33em #000;
+    }
+
+    .header .icons a:hover{
+        text-shadow: none;
+        color: #000;
+    }
+
+    .inviter .inviter-upper{
+        display: grid;
+        grid-template-columns: 1% 99%;
+        justify-content: center;
+        width: calc(0.47 * var(--width1));
+        margin: 0 auto;
+        padding: 11px;
+        cursor: pointer;
+        border-radius: 24px;
+        box-shadow: 0 0 .33em #000;
+        -webkit-backdrop-filter: blur(11px);
+        backdrop-filter: blur(11px);
+        transition: none;
+    }
+
+    .inviter .inviter-upper .community span{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        color: #000;
+        font-size: calc(0.57 * var(--font2));
+        transition: none;
+    }
+
+    .inviter .inviter-upper .community .click{
+        font-size: calc(0.57 * var(--font3));
+    }
+
+    .inviter .inviter-upper .image{
+        max-height: calc(0.47 * var(--tree));
+        margin-left: 11px;
+    }
+
+    .inviter .inviter-upper:hover .community span{
+        color: #000;
+        text-shadow: none;
+    }
+
+    .inviter .inviter-upper:hover{
+        box-shadow: 0 0 .33em #000;
+    }
+
+    .inviter-bottom {
+        display: flex;
+        justify-content: center;
+        margin-top: 11px;
+    }
+
+    .inviter-bottom .discord, .inviter-bottom .youtube, .inviter-bottom .tiktok {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 36px;
+        width: calc(0.57 * var(--width2));
+        margin: 7px;
+        margin-bottom: var(--margin-bottom2);
+        padding: 5px;
+        color: #000;
+        font-size: calc(0.57 * var(--font4));
+        box-shadow: 0 0 .33em #000;
+        -webkit-backdrop-filter: blur(11px);
+        backdrop-filter: blur(11px);
+        transition: none;
+    }
+
+    .inviter-bottom .discord img, .youtube img, .tiktok img{
+        max-height: calc(0.47 * var(--mediaikony));
+        margin-right: 7px;
+    }
+
+    .inviter-bottom .tiktok img{
+        max-height: calc(0.47 * calc(var(--mediaikony) - 7px));
+    }
+
+    .inviter-bottom a:hover{
+        box-shadow: 0 0 .33em #000;
+    }
+
+
+    .rekrutacja .text{
+        display: flex;
+        margin: 0 auto;
+        text-align: center;
+        width: calc(0.47 * var(--width3));
+        padding: 7px;
+        margin-top: 11px;
+        border-radius: 24px;
+        color: #000;
+        font-size: calc(0.77 * var(--font5));
+        box-shadow: 0 0 .33em #000;
+        backdrop-filter: blur(11px);
+        -webkit-backdrop-filter: blur(11px);
+        transition: none;
+    }
+
+    .rekrutacja .text1{
+        color: #000;
+        font-size: calc(0.77 * var(--font5));
+        transition: none;
+    }
+
+    .rekrutacja .bottom{
+        display: flex;
+        justify-content: center;
+        margin-top: 3px;
+    }
+
+    .rekrutacja .bottom .administracja, .rekrutacja .bottom .beta{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: calc(0.67 * var(--width4));
+        padding: 7px;
+        margin: var(--margin4);
+        border-radius: 24px;
+        box-shadow: 0 0 .33em #000;
+        -webkit-backdrop-filter: blur(11px);
+        backdrop-filter: blur(11px);
+        transition: none;
+    }
+
+    .rekrutacja .bottom  .image{
+        max-height: calc(0.67 * var(--rekrutacjaikony));
+        margin-right: 11px;
+    }
+
+    .rekrutacja .text:hover{
+        text-shadow: none;
+        color: #000;
+        box-shadow: 0 0 .33em #000;
+    }
+
+    .rekrutacja .administracja:hover, .rekrutacja .beta:hover{
+        box-shadow: 0 0 .33em #000;
+    }
+
+    .rekrutacja .administracja:hover .text1, .rekrutacja .beta:hover .text1{
+        text-shadow: none;
+        color: #000;
+    }
+}

@@ -1,0 +1,224 @@
+options:
+	id: 1060348123635007549  # kanału logi-pomoc-report
+
+on first join:
+	add nickname of player to {nickgracza.reportsystem::*}
+
+variables:
+	{tag0} = "Brak Priorytetu"
+	{tag1} = "Mały Priorytet"
+	{tag2} = "Średni Priorytet"
+	{tag3} = "Wysoki Priorytet"
+	{tag4} = "KURWA WOŁAJ PSIAKA!"
+
+on load:
+	#clear {report.data::*}, {report.tresc::*}, {report.reported::*}, {report.nick::*}, {report.id::*} and {report.przypnij::*}
+	clear {priorytet.1::*}, {priorytet.2::*}, {priorytet.3::*} and {priorytet.4::*}
+	add "bug", "wyzywa", "obraza", "chamsko", "chamski", "lamie" and "przeklina" to {priorytet.1::*}
+	add "cheater", "hax", "aura", "cziter", "admin", "xray", "odpal" and "sojusz" to {priorytet.2::*}
+	add "kopiuje", "laguje", "lagi", "wywala", "serwer", "wlasciciel", "sprzedaje", "psc", "pp" and "podszywa" to {priorytet.3::*}
+	add "bug", "worldedit", "pluginy" and "hakuje" to {priorytet.4::*}
+
+command /pomoc [<text>]:
+	cooldown: 1 seconds
+	cooldown message: &cMusisz odczekać &4%translateTimespan(remaining time)% &cprzed kolejnym użyciem!
+	trigger:
+		if arg-1 is not set:
+			send "&cPoprawne użycie /pomoc <treść>" to player
+			cancel cooldown
+			stop
+		if length of arg-1 is less than 3:
+			send "&cPoprawne użycie /pomoc <treść>" to player
+			cancel cooldown
+			stop
+		if arg-1 is "usun":
+			clear {pomoc.licznik}
+			send "usunieto" to player
+			stop
+		if {pomoc.licznik} is not set:
+			set {pomoc.licznik} to 1
+		set {_now} to now
+		add 1 hour to {_now}
+		send "&4[&cPomoc ##%{pomoc.licznik}%&4] &7%nickname of player% &8&l» &f%arg-1%" to player
+		set {_priorytet-tag} to {tag0}
+		loop 4 times:
+			loop {priorytet.%loop-number%::*}:
+				if arg-1 contains loop-value-2:
+					set {_priorytet-tag} to {tag%loop-number%}
+					exit 1 loops
+		set {_name} to "%nickname of player% ##%{pomoc.licznik}% (%{_now} formatted as "dd.MM.yyyy HH:mm:ss"%)"
+		create post in forum channel with id "{@id}" with name {_name} "`%arg-1%`" with tags "Pomoc" and {_priorytet-tag}
+		add nickname of player to {report.nick::*}
+		add nickname of player to {report.reported::*}
+		add arg-1 to {report.tresc::*}
+		add {_now} to {report.data::*}
+		add {pomoc.licznik} to {report.id::*}
+		add 1 to {pomoc.licznik}
+
+on tab complete of "/report":
+	set tab completions for position 1 to nicknames of players
+
+command /report [<text>]:
+	cooldown: 5 seconds
+	cooldown message: &cMusisz odczekać &4%translateTimespan(remaining time)% &cprzed kolejnym użyciem!
+	trigger:
+		set {_nickname} to arg-1
+		set {_liczba} to (size of {nickgracza.reportsystem::*})
+		loop {nickgracza.reportsystem::*}:
+			if loop-value is {_nickname}:
+				exit loop
+			remove 1 from {_liczba}
+			if {_liczba} = 0:
+				send "&cWybrany nick gracza jest nie prawidłowy lub w ogóle nie istnieje!" to player
+				send "&cPoprawne użycie /report <nick gracza>" to player
+				cancel cooldown
+				stop
+
+		if {pomoc.licznik} is not set:
+			set {pomoc.licznik} to 1
+		set {_gui} to chest inventory with 4 rows named "&c&lReport &c%{_nickname}%"
+		set slot (integers between 0 and 35) of {_gui} to 1 of black stained glass pane named " "
+		set slot 11 of {_gui} to 1 of campfire named "&f&lFly" with lore "&7Kliknij aby zaznaczyć"
+		set slot 12 of {_gui} to 1 of campfire named "&f&lXray" with lore "&7Kliknij aby zaznaczyć"
+		set slot 13 of {_gui} to 1 of campfire named "&f&lWspomaganie Celowania" with lore "&7Kliknij aby zaznaczyć"
+		set slot 14 of {_gui} to 1 of campfire named "&f&lVelocity" with lore "&7Kliknij aby zaznaczyć"
+		set slot 15 of {_gui} to 1 of campfire named "&f&lAntyKnock" with lore "&7Kliknij aby zaznaczyć"
+		set slot 20 of {_gui} to 1 of campfire named "&f&lReklama" with lore "&7Kliknij aby zaznaczyć"
+		set slot 21 of {_gui} to 1 of campfire named "&f&lUtrudnianie rozgrywki" with lore "&7Kliknij aby zaznaczyć"
+		set slot 22 of {_gui} to 1 of campfire named "&f&lWykorzystywanie błędów serwera" with lore "&7Kliknij aby zaznaczyć"
+		set slot 23 of {_gui} to 1 of campfire named "&f&lPodszywanie się pod Administrację" with lore "&7Kliknij aby zaznaczyć"
+		set slot 24 of {_gui} to 1 of campfire named "&f&lWyłudzanie danych osobowych" with lore "&7Kliknij aby zaznaczyć"
+		set slot 27 of {_gui} to 1 of nether star named "&6Wyślij Report"
+		set slot 35 of {_gui} to 1 of barrier named "&cAnuluj Report"
+		open {_gui} to player
+
+on inventory click:
+	if name of player's current inventory contains "&c&lReport &c":
+		cancel event
+		set {_line} to line (size of lore of clicked slot) of lore of clicked slot
+		if {_line} is "&7Kliknij aby zaznaczyć":
+			set {_name} to name of clicked slot
+			clear lore of clicked slot
+			set clicked slot to 1 of soul campfire named {_name} with lore "&7Kliknij aby odznaczyć"
+		if {_line} is "&7Kliknij aby odznaczyć":
+			set {_name} to name of clicked slot
+			clear lore of clicked slot
+			set clicked slot to 1 of campfire named {_name} with lore "&7Kliknij aby zaznaczyć"
+		if clicked slot is barrier block:
+			close inventory of player
+		if clicked slot is nether star:
+			loop 5 times:
+				if slot (loop-number + 10) of player's current inventory is soul campfire:
+					add (uncolored name of slot (loop-number + 10) of player's current inventory) to {_reporty::*}
+			loop 5 times:
+				if slot (loop-number + 19) of player's current inventory is soul campfire:
+					add (uncolored name of slot (loop-number + 19) of player's current inventory) to {_reporty::*}
+			if {_reporty::*} is not set:
+				set clicked slot to 1 of bedrock named "&cWybierz min. 1 powód aby zgłosić!"
+				wait 3 seconds
+				set clicked slot to 1 of nether star named "&6Wyślij Report"
+				stop
+			set {_nickreported} to name of player's current inventory
+			replace all "&c&lReport &c" with "" in {_nickreported}
+			send "&4[&cReport ##%{pomoc.licznik}%&4] &7Gracz &f%{_nickreported}% &7został zgłoszony za &f%join {_reporty::*} with "&7, &f"%" to player
+			set {_priorytet-tag} to {tag0}
+			loop {_reporty::*}:
+				if loop-value contains "Utrudnianie rozgrywki", "Fly", "Xray", "Wspomaganie Celowania", "Velocity" or  "AntyKnock":
+					set {_priorytet-tag} to {tag2}
+				if loop-value contains "Reklama", "Podszywanie się pod Administrację", "Wyłudzanie danych osobowych" or "Wykorzystywanie błędów serwera":
+					set {_priorytet-tag} to {tag3}
+					exit loop
+			set {_now} to now
+			add 1 hour to {_now}
+			close inventory of player
+			set {_name} to "%nickname of player% ##%{pomoc.licznik}% (%{_now} formatted as "dd.MM.yyyy HH:mm:ss"%)"
+			create post in forum channel with id "{@id}" with name {_name} "`%{_nickreported}%`  %nl%`%join {_reporty::*} with ", "%`" with tags "Report" and {_priorytet-tag}
+			add nickname of player to {report.nick::*}
+			add {_nickreported} to {report.reported::*}
+			set {_report} to join {_reporty::*} with ", "
+			add {_report} to {report.tresc::*}
+			add {_now} to {report.data::*}
+			add {pomoc.licznik} to {report.id::*}
+			add 1 to {pomoc.licznik}
+
+command /reportlist:
+	trigger:
+		set {_gui} to chest inventory with 6 rows named "&c&lLogi - Report/Pomoc"
+		if {report.id::*} is not set:
+			send "&cBrak aktualnych logów!" to player
+			stop
+
+		if {report.id::*} is bigger than 1:
+			set {_report.nick::*} to reversed {report.nick::*}
+			set {_report.reported::*} to reversed {report.reported::*}
+			set {_report.tresc::*} to reversed {report.tresc::*}
+			set {_report.data::*} to reversed {report.data::*}
+			set {_report.id::*} to reversed {report.id::*}
+
+		set slot (integers between 0 and 44) of {_gui} to 1 of black stained glass pane named " "
+		set slot (integers between 45 and 53) of {_gui} to 1 of light gray stained glass pane named "&fPrzypięte logi"
+		set {_now} to now
+		add 1 hour to {_now}
+		loop 45 times:
+			if {_report.nick::%loop-number%} is not set:
+				exit loop
+			clear {_lore::*}
+			set {_lore} to (difference between {_report.data::%loop-number%} and {_now})
+			set {_lore} to translateTimespan({_lore})
+			set {_lore::1} to "&7Utworzono %{_lore}% temu"
+			if {_report.reported::%loop-number%} is not {_report.nick::%loop-number%}:
+				add "&7Gracz zgłoszony: &f%{_report.reported::%loop-number%}%" to {_lore::*}
+			set {_tresc} to (first 50 characters of "%{_report.tresc::%loop-number%}%")
+			add "&7Treść: &f%{_tresc}%" to {_lore::*}
+			set {_loop} to (round down (length of {_report.tresc::%loop-number%} / 50))
+			if {_loop} > 1:
+				loop {_loop} times:
+					set {_tresc} to subtext of {_report.tresc::%loop-number-1%} from characters (1 + (50 * loop-number-2)) to (50 + (50 * loop-number-2))
+					add "&f%{_tresc}%" to {_lore::*}
+			add " " to {_lore::*}
+			add "&7LPM &8&l- &7/tp %{_report.reported::%loop-number%}%" to {_lore::*}
+			if {_przypnij.loop} is not set:
+				set {_przypnij.loop} to 1
+			if "%{report.przypnij::%{_przypnij.loop}%}%" = "%{_report.id::%loop-number%}%":
+				add "&7ŚPM &8&l- &7Odepnij log (id ##%{_report.id::%loop-number%}%)" to {_lore::*}
+				add "&7PPM &8&l- &7/msg %{_report.nick::%loop-number%}%" to {_lore::*}
+				set slot (44 + {_przypnij.loop}) of {_gui} to 1 of head of ({_report.nick::%loop-number%} parsed as offline player) named "&f&l%{_report.nick::%loop-number%}% ##%{_report.id::%loop-number%}%" with lore {_lore::*}
+				add 1 to {_przypnij.loop}
+				clear {_lore::%size of {_lore::*}%} and {_lore::%size of {_lore::*}%}
+			add "&7ŚPM &8&l- &7Przypnij log (id ##%{_report.id::%loop-number%}%)" to {_lore::*}
+			add "&7PPM &8&l- &7/msg %{_report.nick::%loop-number%}%" to {_lore::*}
+			set slot (loop-number - 1) of {_gui} to 1 of head of ({_report.nick::%loop-number%} parsed as offline player) named "&f&l%{_report.nick::%loop-number%}% ##%{_report.id::%loop-number%}%" with lore {_lore::*}
+		open {_gui} to player
+
+on inventory click:
+	if name of player's current inventory is "&c&lLogi - Report/Pomoc":
+		cancel event
+		if clicked slot is skull of player:
+			if click type is left mouse button:
+				set {_nick.tp} to uncolored line (size of lore of clicked slot)-2 of lore of clicked slot
+				replace all "LPM - " with "" in {_nick.tp}
+				make player execute command {_nick.tp}
+			if click type is middle mouse button:
+				set {_id} to uncolored line (size of lore of clicked slot)-1 of lore of clicked slot
+				replace "ŚPM - Odepnij log (id ##", "ŚPM - Przypnij log (id ##" and ")" with "" in {_id}
+				if (size of {report.przypnij::*}) is less than 9:
+					loop {report.przypnij::*}:							
+						if "%{report.przypnij::%loop-index%}%" = "%{_id}%":
+							close inventory of player
+							if line (size of lore of clicked slot)-1 of lore of clicked slot contains "Odepnij log":
+								clear {report.przypnij::%loop-index%}
+								send "&aPomyślnie odpięto log o id ##%{_id}%." to player
+								stop
+							send "&cWybrany log o id ##%{_id}% jest już przypięty!" to player
+							stop
+					add {_id} to {report.przypnij::*}
+					send "&aPomyślnie przypięto log o id ##%{_id}%." to player
+					set {report.przypnij::*} to sorted {report.przypnij::*}
+					set {report.przypnij::*} to reversed {report.przypnij::*}
+				else:
+					send "&cOsiągnięto limit przypiętych logów!" to player
+			if click type is right mouse button:
+				set {_nick.msg} to uncolored line (size of lore of clicked slot) of lore of clicked slot
+				replace all "PPM - " with "" in {_nick.msg}
+				send formatted "<sgt:%{_nick.msg}%>&aKliknij tutaj aby otworzyć czat do gracza ze zgłoszenia." to player
+			close inventory of player

@@ -1,0 +1,436 @@
+# {arenki-status::SERWER}
+# {arenki-gracze-ilosc-SERWER}
+# {arenki-gracze-nicki::NICK}
+# {arenki-gracze-nicki-wgrze-SERWER::NICK}
+# 
+# &a&l✔ Wolna ✔
+# &c☹ &lOffline &c☹
+# &c&l❌ Trwa gra ❌
+# &e⚠ &lRestart &e⚠
+# &e⚠ &lOdliczanie &e⚠
+# 
+
+options:
+	psiak: "JedynyTakiPsiak" parsed as offline player
+	max-size-team: 1
+	#ilosc drużyn * wielkość drużyny np. 8 drużyn * 1 osobowa drużyna = 8
+	max-ilosc-graczy: 4
+
+
+on load:
+	set proxy variable {arenki-status::bs1} to "&a&l✔ Wolna ✔"
+	set proxy variable {arenki-gracze-ilosc-bs1} to 0
+	delete proxy variable {arenki-gracze-nicki-wgrze-bs1::*}
+	set {gracze-ilosc} to 0
+	clear {arenki-gracze-nicki::*} and {odliczanie}
+	message "bingohub" the message "sprawdz" named "arenki status"
+	clear {druzyna::*}, {druzyna-biala::*}, {druzyna-szara::*}, {druzyna-zolta::*}, {druzyna-czerwona::*}, {druzyna-limonkowa::*}, {druzyna-zielona::*}, {druzyna-blekitna::*} and {druzyna-niebieska::*}
+	clear {ustawienia-tryb-linia::*}, {ustawienia-tryb-wszystko::*}, {ustawienia-czas-20m::*}, {ustawienia-czas-40m::*} and {ustawienia-czas-60m::*}
+	set {start-arenki} to true
+	wait 1 seconds
+	set {start-arenki} to false
+	gui_wybor_druzyn()
+	gui_ustawienia()
+	odliczanie()
+
+
+on Skript stop:
+	message "bingohub" the message "server stop" named "arenki status"
+	delete proxy variable {arenki-status::bs1}
+	delete proxy variable {arenki-gracze-nicki-wgrze-bs1::*}
+
+
+on proxy server message "gracz dolacz":
+	# proxy message {@psiak} the message "&e⚠ %event-proxyserver% %event-text%"
+	wait 5 ticks
+	set {_player} to event-text parsed as offline player
+	if {_player} is online:
+		if {gracze-ilosc} is bigger than ({@max-ilosc-graczy} - 1):
+			send "&c&lWystąpił błąd podczas dołączania arenki!" to {_player}
+			proxy send {_player} to "bingohub"
+			stop
+		clear {_player}'s inventory
+		set {_player}'s gamemode to adventure
+		heal {_player}
+		teleport {_player} to spawn of world "lobby" ~ vector(0.5, 0, 0.5)
+		add {_player} to {arenki-gracze-nicki::*}
+		add 1 to proxy variable {arenki-gracze-ilosc-bs1}
+		add 1 to {gracze-ilosc}
+		set {_player}'s selected hotbar slot to slot 0 of {_player}
+		set slot 0 of {_player} to 1 of totem of undying named "&f&lWybór drużyny"
+		set slot 1 of {_player} to 1 of minecart with command block named "&c&lUstawienia Gry"
+		set slot 2 of {_player} to 1 of book named "&e&lStatystyki"
+		set slot 4 of {_player} to 1 of stick named "&f&lWkrótce!"
+		set slot 7 of {_player} to 1 of slimeball named "&c&lUkryj graczy"
+		set slot 8 of {_player} to 1 of oak door named "&c&lOpuść arenę"
+		message "bingohub" the message "sprawdz" named "arenki status"
+
+
+
+on quit:
+	if {arenki-gracze-nicki::*} contains player's nickname:
+		remove player's nickname from {arenki-gracze-nicki::*}
+		remove 1 from proxy variable {arenki-gracze-ilosc-bs1}
+		remove 1 from {gracze-ilosc}
+		message "bingohub" the message "sprawdz" named "arenki status"
+
+	if {druzyna::%player's nickname%} is set:
+		remove player's nickname from {druzyna-%{druzyna::%player's nickname%}%::*}
+		gui_wybor_druzyn_refresh({druzyna::%player's nickname%})
+		delete {druzyna::%player's nickname%}
+	
+	if {ustawienia-tryb-linia::*} or {ustawienia-tryb-wszystko::*} contains player's nickname:
+		remove player's nickname from {ustawienia-tryb-linia::*}
+		remove player's nickname from {ustawienia-tryb-wszystko::*}
+		gui_ustawienia_reflesh(1)
+
+	if {ustawienia-czas-20m::*}, {ustawienia-czas-40m::*} or {ustawienia-czas-60m::*} contains player's nickname:
+		remove player's nickname from {ustawienia-czas-20m::*}
+		remove player's nickname from {ustawienia-czas-40m::*}
+		remove player's nickname from {ustawienia-czas-60m::*}
+		gui_ustawienia_reflesh(4)
+
+
+
+function gui_wybor_druzyn():
+	set {_gui} to a new chest inventory with 1 rows named "&f&lWybierz Drużynę"
+	set {_klata} to leather tunic
+	dye {_klata} (255, 255, 255)
+	set slot 0 of {_gui} to 1 of {_klata} with all flags hidden named "&f&lBiali &f&l0/{@max-size-team}" with lore "" and "&7Kliknij aby &fdołączyć &7do tej drużyny!"
+	dye {_klata} light gray
+	set slot 1 of {_gui} to 1 of {_klata} with all flags hidden named "&7&lSzary &f&l0/{@max-size-team}" with lore "" and "&7Kliknij aby &fdołączyć &7do tej drużyny!"
+	dye {_klata} yellow
+	set slot 2 of {_gui} to 1 of {_klata} with all flags hidden named "&e&lŻółci &f&l0/{@max-size-team}" with lore "" and "&7Kliknij aby &fdołączyć &7do tej drużyny!"
+	dye {_klata} red
+	set slot 3 of {_gui} to 1 of {_klata} with all flags hidden named "&c&lCzerwoni &f&l0/{@max-size-team}" with lore "" and "&7Kliknij aby &fdołączyć &7do tej drużyny!"
+	dye {_klata} light green 
+	set slot 4 of {_gui} to 1 of {_klata} with all flags hidden named "&a&lLimonka &f&l0/{@max-size-team}" with lore "" and "&7Kliknij aby &fdołączyć &7do tej drużyny!"
+	dye {_klata} green
+	set slot 5 of {_gui} to 1 of {_klata} with all flags hidden named "&2&lZieloni &f&l0/{@max-size-team}" with lore "" and "&7Kliknij aby &fdołączyć &7do tej drużyny!"
+	dye {_klata} light blue
+	set slot 6 of {_gui} to 1 of {_klata} with all flags hidden named "&b&lBłękitni &f&l0/{@max-size-team}" with lore "" and "&7Kliknij aby &fdołączyć &7do tej drużyny!"
+	dye {_klata} blue
+	set slot 7 of {_gui} to 1 of {_klata} with all flags hidden named "&9&lNiebiescy &f&l0/{@max-size-team}" with lore "" and "&7Kliknij aby &fdołączyć &7do tej drużyny!"
+	set slot 8 of {_gui} to 1 of barrier named "&c&lOpuść obecną drużynę" with lore "&7Kliknij aby &fopuścić &7swoją drużynę!"
+	set {gui-druzyn} to {_gui}
+
+function gui_wybor_druzyn_refresh(zmiana: text):
+	if {_zmiana} is "biala":
+		set {_slot} to 0
+	else if {_zmiana} is "szara":
+		set {_slot} to 1
+	else if {_zmiana} is "zolta":
+		set {_slot} to 2
+	else if {_zmiana} is "czerwona":
+		set {_slot} to 3
+	else if {_zmiana} is "limonkowa":
+		set {_slot} to 4
+	else if {_zmiana} is "zielona":
+		set {_slot} to 5
+	else if {_zmiana} is "blekitna":
+		set {_slot} to 6
+	else if {_zmiana} is "niebieska":
+		set {_slot} to 7
+	else:
+		stop
+
+	set {_lore::*} to lore of slot {_slot} of {gui-druzyn}
+	loop {druzyna-%{_zmiana}%::*}:
+		add "&f%loop-value%" to {_new-lore::*}
+	add {_lore::%(size of {_lore::*}) - 1%} to {_new-lore::*}
+	add {_lore::%size of {_lore::*}%} to {_new-lore::*}
+	set lore of slot {_slot} of {gui-druzyn} to {_new-lore::*}
+
+	set {_nazwa::*} to name of slot {_slot} of {gui-druzyn} split at " "
+	set name of slot {_slot} of {gui-druzyn} to "%{_nazwa::1}% &f&l%size of {druzyna-%{_zmiana}%::*}%/{@max-size-team}"
+
+function gui_ustawienia():
+	set {_gui} to a new chest inventory with 1 rows named "&c&lUstawienia Gry"
+	set slot 1 of {_gui} to banner pattern with all flags hidden named "&f&lTryb kart &e&lLinia" with lore "&7Liczba głosów: &f0" and "" and "&7Kliknij aby &foddać &7głos!"
+	set slot 2 of {_gui} to banner pattern with all flags hidden named "&f&lTryb kart &e&lWszystko" with lore "&7Liczba głosów: &f0" and "" and "&7Kliknij aby &foddać &7głos!"
+	set slot 4 of {_gui} to clock with all flags hidden named "&f&lDługość arenki &e&l20 minut" with lore "&7Liczba głosów: &f0" and "" and "&7Kliknij aby &foddać &7głos!"
+	set slot 5 of {_gui} to clock with all flags hidden named "&f&lDługość arenki &e&l40 minut" with lore "&7Liczba głosów: &f0" and "" and "&7Kliknij aby &foddać &7głos!"
+	set slot 6 of {_gui} to clock with all flags hidden named "&f&lDługość arenki &e&l60 minut" with lore "&7Liczba głosów: &f0" and "" and "&7Kliknij aby &foddać &7głos!"
+	add "&7Gracz może oddać &f1 głos &7na daną kategorię." to {_lore::*}
+	add "&7Ranga &fVip &7oraz &fSponsor &7ma dodatkowo &f1 głos &7więcej." to {_lore::*}
+	add "" to {_lore::*}
+	add "&fTryb kart &7jest ułożeniem przedmiotów jakie" to {_lore::*}
+	add "&7gracz musi zdobyć, aby wygrać grę." to {_lore::*}
+	add "&7Przykładowe wygrywające ułożenie dla &fLinii" to {_lore::*}
+	add "&f&l█&7&l████ &8| &f&l█&7&l████ &8| &7&l█████" to {_lore::*}
+	add "&f&l█&7&l████ &8| &7&l█&f&l█&7&l███ &8| &f&l█████" to {_lore::*}
+	add "&f&l█&7&l████ &8| &7&l██&f&l█&7&l██ &8| &7&l█████" to {_lore::*}
+	add "&f&l█&7&l████ &8| &7&l███&f&l█&7&l█ &8| &7&l█████" to {_lore::*}
+	add "&f&l█&7&l████ &8| &7&l████&f&l█ &8| &7&l█████" to {_lore::*}
+	add "" to {_lore::*}
+	add "&fDługość arenki &7odpowiada za maks czas trwania gry." to {_lore::*}
+	add "&7Po upływie czasu oraz nie wygraniu przez nikogo gry," to {_lore::*}
+	add "&7wygrywa drużyna, która ma najwięcej zdobytych przedmiotów." to {_lore::*}
+	add " " to {_lore::*}
+	set slot 8 of {_gui} to knowledge book with all flags hidden named "&f&lFAQ ustawień i opis kategorii" with lore {_lore::*}
+	set {gui-ustawienia} to {_gui}
+
+function gui_ustawienia_reflesh(zmiana: integer):
+	if {_zmiana} is 1 or 2:
+		set line 1 of lore of slot 1 of {gui-ustawienia} to "&7Liczba głosów: &f%size of {ustawienia-tryb-linia::*}%"
+		set line 1 of lore of slot 2 of {gui-ustawienia} to "&7Liczba głosów: &f%size of {ustawienia-tryb-wszystko::*}%"
+	if {_zmiana} is 4, 5 or 6:
+		set line 1 of lore of slot 4 of {gui-ustawienia} to "&7Liczba głosów: &f%size of {ustawienia-czas-20m::*}%"
+		set line 1 of lore of slot 5 of {gui-ustawienia} to "&7Liczba głosów: &f%size of {ustawienia-czas-40m::*}%"
+		set line 1 of lore of slot 6 of {gui-ustawienia} to "&7Liczba głosów: &f%size of {ustawienia-czas-60m::*}%"
+
+on right click:
+	if player's tool is 1 of totem of undying named "&f&lWybór drużyny":
+		open {gui-druzyn} to player
+		stop
+	if player's tool is 1 of minecart with command block named "&c&lUstawienia Gry":
+		open {gui-ustawienia} to player
+		stop
+	if player's tool is 1 of book named "&e&lStatystyki":
+		stop
+	if player's tool is 1 of stick named "&f&lWkrótce!":
+		stop
+	if player's tool is 1 of slimeball named "&c&lUkryj graczy":
+		if difference between {-cooldown-ukryj-graczy::%player's nickname%} and now is less than 1 second:
+			stop
+		set {-cooldown-ukryj-graczy::%player's nickname%} to now
+		hide all players from player
+		set slot 7 of player to 1 of magma cream named "&c&lPokaż graczy"
+	if player's tool is 1 of magma cream named "&c&lPokaż graczy":
+		if difference between {-cooldown-ukryj-graczy::%player's nickname%} and now is less than 1 second:
+			stop
+		set {-cooldown-ukryj-graczy::%player's nickname%} to now
+		reveal all players from player
+		set slot 7 of player to 1 of slimeball named "&c&lUkryj graczy"
+	if player's tool is 1 of oak door named "&c&lOpuść arenę":
+		proxy send player to "bingohub"
+		stop
+
+
+on inventory click:
+	if name of event-inventory is "&f&lWybierz Drużynę":
+		cancel event
+		clicked inventory is not player's inventory
+
+		if name of event-slot is "&c&lOpuść obecną drużynę":
+			if {druzyna::%player's nickname%} is set:
+				set {_druzyna} to {druzyna::%player's nickname%}
+				remove player's nickname from {druzyna-%{_druzyna}%::*}
+				delete {druzyna::%player's nickname%}
+				close player's inventory
+				gui_wybor_druzyn_refresh({_druzyna})
+			stop
+		else if name of event-slot contain "&f&lBiali":
+			if size of {druzyna-biala::*} is smaller than 2:
+				set {_nazwa} to "biala"
+			else:
+				stop
+		else if name of event-slot contain "&7&lSzary":
+			if size of {druzyna-szara::*} is smaller than 2:
+				set {_nazwa} to "szara"
+			else:
+				stop
+		else if name of event-slot contain "&e&lŻółci":
+			if size of {druzyna-zolta::*} is smaller than 2:
+				set {_nazwa} to "zolta"
+			else:
+				stop
+		else if name of event-slot contain "&c&lCzerwoni":
+			if size of {druzyna-czerwona::*} is smaller than 2:
+				set {_nazwa} to "czerwona"
+			else:
+				stop
+		else if name of event-slot contain "&a&lLimonka":
+			if size of {druzyna-limonkowa::*} is smaller than 2:
+				set {_nazwa} to "limonkowa"
+			else:
+				stop
+		else if name of event-slot contain "&2&lZieloni":
+			if size of {druzyna-zielona::*} is smaller than 2:
+				set {_nazwa} to "zielona"
+			else:
+				stop
+		else if name of event-slot contain "&b&lBłękitni":
+			if size of {druzyna-blekitna::*} is smaller than 2:
+				set {_nazwa} to "blekitna"
+			else:
+				stop
+		else if name of event-slot contain "&9&lNiebiescy":
+			if size of {druzyna-niebieska::*} is smaller than 2:
+				set {_nazwa} to "niebieska"
+			else:
+				stop
+
+		if {druzyna::%player's nickname%} is set:
+			if {druzyna::%player's nickname%} is {_nazwa}:
+				stop
+			set {_druzyna} to {druzyna::%player's nickname%}
+			remove player's nickname from {druzyna-%{_druzyna}%::*}
+			gui_wybor_druzyn_refresh({_druzyna})
+			delete {druzyna::%player's nickname%}
+
+		add player's nickname to {druzyna-%{_nazwa}%::*}
+		set {druzyna::%player's nickname%} to {_nazwa}
+		close player's inventory
+		gui_wybor_druzyn_refresh({_nazwa})
+
+	if name of event-inventory is "&c&lUstawienia Gry":
+		cancel event
+		clicked inventory is not player's inventory
+
+		if name of event-slot is set:
+			if index of event-slot is 1:
+				if {ustawienia-tryb-wszystko::*} contains player's nickname:
+					remove player's nickname from {ustawienia-tryb-wszystko::*}
+				if {ustawienia-tryb-linia::*} contains player's nickname:
+					stop
+				else:
+					add player's nickname to {ustawienia-tryb-linia::*}
+			else if index of event-slot is 2:
+				if {ustawienia-tryb-linia::*} contains player's nickname:
+					remove player's nickname from {ustawienia-tryb-linia::*}
+				if {ustawienia-tryb-wszystko::*} contains player's nickname:
+					stop
+				else:
+					add player's nickname to {ustawienia-tryb-wszystko::*}
+
+			else if index of event-slot is 4:
+				if {ustawienia-czas-40m::*} contains player's nickname:
+					remove player's nickname from {ustawienia-czas-40m::*}
+				if {ustawienia-czas-60m::*} contains player's nickname:
+					remove player's nickname from {ustawienia-czas-60m::*}
+				if {ustawienia-czas-20m::*} contains player's nickname:
+					stop
+				else:
+					add player's nickname to {ustawienia-czas-20m::*}
+			else if index of event-slot is 5:
+				if {ustawienia-czas-20m::*} contains player's nickname:
+					remove player's nickname from {ustawienia-czas-20m::*}
+				if {ustawienia-czas-60m::*} contains player's nickname:
+					remove player's nickname from {ustawienia-czas-60m::*}
+				if {ustawienia-czas-40m::*} contains player's nickname:
+					stop
+				else:
+					add player's nickname to {ustawienia-czas-40m::*}
+			else if index of event-slot is 6:
+				if {ustawienia-czas-40m::*} contains player's nickname:
+					remove player's nickname from {ustawienia-czas-40m::*}
+				if {ustawienia-czas-20m::*} contains player's nickname:
+					remove player's nickname from {ustawienia-czas-20m::*}
+				if {ustawienia-czas-60m::*} contains player's nickname:
+					stop
+				else:
+					add player's nickname to {ustawienia-czas-60m::*}
+
+			set {_id} to index of event-slot
+			gui_ustawienia_reflesh({_id})
+
+
+function odliczanie():
+	while {start-arenki} is false:
+		wait 1 second
+		if {gracze-ilosc} is bigger than ({@max-ilosc-graczy} / 2) - 1:
+			if {odliczanie} is not set:
+				if {gracze-ilosc} is {@max-ilosc-graczy} / 2:
+					set {odliczanie} to 60
+			else if {gracze-ilosc} is ({@max-ilosc-graczy} / 2) + ({@max-ilosc-graczy} / 4):
+				if {odliczanie} is bigger than 20:
+					set {odliczanie} to 20
+			else if {gracze-ilosc} is {@max-ilosc-graczy}:
+				if {odliczanie} is bigger than 10:
+					set {odliczanie} to 10
+
+			if {status-send} is not set:
+				set {status-send} to true
+				set proxy variable {arenki-status::bs1} to "&e⚠ &lOdliczanie &e⚠"
+				message "bingohub" the message "sprawdz" named "arenki status"
+		else:
+			if {status-send} is set:
+				set proxy variable {arenki-status::bs1} to "&a&l✔ Wolna ✔"
+				message "bingohub" the message "sprawdz" named "arenki status"
+			clear {status-send} and {odliczanie}
+		if {odliczanie} is set:
+			remove 1 from {odliczanie}
+			if {odliczanie} is 0:
+				if {gracze-ilosc} is smaller than ({@max-ilosc-graczy} / 2):
+					set proxy variable {arenki-status::bs1} to "&a&l✔ Wolna ✔"
+					message "bingohub" the message "sprawdz" named "arenki status"
+					send "&cWstrzymanie startu arenki z powodu nie wystarczającej ilości graczy! (min. %{@max-ilosc-graczy} / 2%)" to {arenki-gracze-nicki::*}
+					clear {odliczanie}
+				else:
+					set {start-arenki} to true
+					set proxy variable {arenki-status::bs1} to "&c&l❌ Trwa gra ❌"
+					message "bingohub" the message "sprawdz" named "arenki status"
+					set {_dr::*} to "biala", "szara", "zolta", "czerwona", "limonkowa", "zielona", "blekitna" and "niebieska"
+					loop {arenki-gracze-nicki::*}:
+						if indices of {druzyna::*} contains loop-value:
+							continue
+						else:
+							loop 8 times:
+								if size of {druzyna-%{_dr::%loop-number%}%::*} is smaller than {@max-size-team}:
+									set {druzyna::%loop-value-1's nickname%} to {_dr::%loop-number%}
+									add loop-value-1's nickname to {druzyna-%{_dr::%loop-number%}%::*}
+									gui_wybor_druzyn_refresh({_dr::%loop-number%})
+									exit loop
+					set proxy variable {arenki-gracze-nicki-wgrze-bs1::*} to {arenki-gracze-nicki::*}
+					start_arenki()
+					stop
+
+
+
+
+
+on placeholderapi placeholder request for the prefix "smyfbingo":
+	if the identifier is "gracze":
+		set the result to "%{gracze-ilosc}%"
+		stop
+	if the identifier is "druzyna":
+		if {druzyna::%player's nickname%} is set:
+			set {_dr::*} to "biala", "szara", "zolta", "czerwona", "limonkowa", "zielona", "blekitna" and "niebieska"
+			set {_nazwa::*} to "Biała", "Szara", "Żółta", "Czerwona", "Limonkowa", "Zielona", "Błękitna" and "Niebieska"
+			set {_c::*} to "f", "7", "e", "c", "a", "2", "b" and "9"
+			loop {_dr::*}:
+				if loop-value is {druzyna::%player's nickname%}:
+					set {_i} to loop-index
+					exit loop 
+			set the result to "&%{_c::%{_i}%}%%{_nazwa::%{_i}%}%"
+			stop
+		else:
+			set the result to "&fNie wybrana"
+	if the identifier is "status":
+		if {status-send} is set:
+			set the result to "Start za &l%{odliczanie}%s"
+		else:
+			set the result to "%%animation:oczekiwanie%%"
+
+	if the identifier is "tabdruzyna":
+		set {_dr::*} to "biala", "szara", "zolta", "czerwona", "limonkowa", "zielona", "blekitna" and "niebieska"
+		loop {_dr::*}:
+			if loop-value is {druzyna::%player's nickname%}:
+				set the result to loop-value
+				stop
+
+
+
+
+
+
+
+
+
+function koniecgry():
+	set proxy variable {arenki-status::bs1} to "&e⚠ &lOdliczanie &e⚠"
+	set proxy variable {arenki-status::bs1} to "&c&l❌ Trwa gra ❌"
+	set proxy variable {arenki-status::bs1} to "&e⚠ &lRestart &e⚠"
+	message "bingohub" the message "sprawdz" named "arenki status"
+
+
+command /quittest [<text>]:
+	trigger:
+		if arg-1 is "d":
+			send ""
+		send "druzyna: %{druzyna::*}%"
+		send "nicki: %{arenki-gracze-nicki::*}%"
+		send "ingame nicki: %proxy variable {arenki-gracze-nicki-wgrze-bs1::*}%"
+
+		teleport player to {druzyna-kordy-start::biala} ~ vector(0.5, 0, 0.5)

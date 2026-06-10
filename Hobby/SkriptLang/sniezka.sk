@@ -1,0 +1,78 @@
+on tab complete of "/sniezka":
+	set tab completions for position 1 to "dodaj", "usuń", "lista", "wyczyść-listę" and "główka-daj"
+
+on load:
+	set {_n} to nbt compound from "{SkullOwner:{Id:[I;-2016161354,1281444306,-2113520517,-1859305578],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTExNWM3OTY4ZWMzNzcxZWU5ZmY2YWU2YmNhMmQ1YmEzOTYyYWE3MjdhNGZhOGQzNzYwOGU0YzliZjE1MTJiYiJ9fX0=""}]}}}"
+	set {_head} to minecraft:player_head[rotation=0]
+	loop {sniezki::*}:
+		chance of 75%:
+			set {_i} to random integer between 0 and 15
+			set block data tag "rotation" of {_head} to {_i}
+			set nbt-block at loop-value to {_head} with nbt {_n}
+
+command /sniezka [<text>]:
+	permission: fullaccess.smyf.admin
+	trigger:
+		if arg-1 is not set:
+			send "&carg-1 błąd" to player
+			stop
+		if arg-1 is "lista":
+			send "&eLista lokalizacji śnieżek: (%size of {sniezki::*}%x)" to player
+			if {sniezki::*} is not set:
+				send "&ebrak wyników" to player
+			else:
+				set {_i} to 1
+				loop {sniezki::*}:
+					send "&e%{_i}%. &f%loop-value%" to player
+					add 1 to {_i}
+		if arg-1 is "dodaj":
+			if targeted block is not player head:
+				send "&cBlok nie jest główka gracza!" to player
+				stop
+			if {sniezki::*} contains location of targeted block:
+				send "&cWybrany blok jest już dodany na liste śnieżek!" to player
+				stop
+			add location of targeted block to {sniezki::*}
+			send "&aPrawidłowo dodano blok do listy śnieżek" to player
+		if arg-1 is "wyczyść-listę":
+			clear {sniezki::*}
+			send "&aWyczyszczono listę śnieżek" to player
+		if arg-1 is "usuń":
+			loop {sniezki::*}:
+				if loop-value is location of targeted block:
+					remove loop-value from {sniezki::*}
+					send "&aPoprawnie usunięto śnieżke z listy" to player
+					stop
+			send "&cNie znaleziono śnieżki na liście :(" to player
+		if arg-1 is "główka-daj":
+			give player 1 of player head with nbt nbt compound from "{SkullOwner:{Id:[I;-2016161354,1281444306,-2113520517,-1859305578],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTExNWM3OTY4ZWMzNzcxZWU5ZmY2YWU2YmNhMmQ1YmEzOTYyYWE3MjdhNGZhOGQzNzYwOGU0YzliZjE1MTJiYiJ9fX0=""}]}}}"
+			send "&aDodano do ekwipunku główke śnieżki" to player
+
+on right click on player head:
+	if difference between {-cooldown-sniezki::%player's nickname%} and now is less than 5 ticks:
+		stop
+	set {-cooldown-sniezki::%player's nickname%} to now
+	loop {sniezki::*}:
+		if loop-value is location of targeted block:
+			set {_find} to true
+			exit loop
+	if {_find} is not set:
+		stop
+	if number of snowball in player's inventory is less than 4:
+		set {_i} to random integer between 1 and 4
+		if number of snowball in player's inventory is bigger than 0:
+			set {_i} to random integer between 1 and (4 - number of snowball in player's inventory)
+		add {_i} of snowball to player's inventory
+		set targeted block to air
+	else:
+		send "&cPosiadasz już limit śnieżek!" to player
+
+
+on damage:
+	if victim and attacker is a player:
+		if projectile is snowball:
+			send "&cGracz %victim's nickname% posiada %victim's health%♥" to attacker
+			apply glowing 1 to victim for 5 seconds
+			add 5 seconds to the freeze time of victim
+			send "&3Zostałeś zamrożony na 5 sekund oraz jesteś widoczny dla wszystkich przez 5 sekund!" to victim
+		

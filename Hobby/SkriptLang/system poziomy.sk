@@ -1,0 +1,101 @@
+command /poziom [<player>]:
+	trigger:
+		if difference between {-poziom-cooldown::%player's nickname%} and now is less than 5 seconds:
+			send "&cOdczekaj chwilę przed ponownym uruchomienień komendy!" to player
+			stop
+		set {-poziom-cooldown::%player's nickname%} to now
+		if arg-1 is not set:
+			set {_arg-1} to uuid of player
+			set {_nick} to player's nickname
+		else:
+			set {_arg-1} to uuid of arg-1
+			set {_nick} to arg-1's nickname
+		set {_poziom-lvl} to proxy variable {poziom-lvl::%{_arg-1}%}
+		set {_poziom-xp} to proxy variable {poziom-xp::%{_arg-1}%}
+		set {_poziomy} to proxy variable {poziomy::%1 + proxy variable {poziom-lvl::%{_arg-1}%}%}
+		send "&fGracz &l%{_nick}% &fposiada poziom &a%{_poziom-lvl}%&l❊ &a%{_poziom-xp}%/%{_poziomy}%xp" to player
+
+on tab complete of "/adminpoziomy":
+	set tab completions for position 1 to "zresetuj", "ustaw" and "info"
+
+command /adminpoziomy [<text>] [<player>] [<integer>] [<integer>]:
+	permission: smyf.adminpoziomy
+	trigger:
+		if arg-1 is not set:
+			send "/adminpoziomy zresetuj <nick gracza>" to player
+			send "/adminpoziomy ustaw <nick gracza> <wartość dla poziomu> <wartość dla xp>" to player
+			send "&l!## &rPamiętaj! Każdy posiada X xp. Poziom może być np. 13, a xp to np. 1337/5000xp" to player
+			send "/adminpoziomy info <nick gracza>" to player
+			stop
+		if arg-1 is "zresetuj":
+			if arg-2 is not set:
+				send "&cbłąd arg-2" to player
+				stop
+			set proxy variable {poziom-lvl::%uuid of arg-2%} to 0
+			set proxy variable {poziom-xp::%uuid of arg-2%} to 0
+			send "&aPomyślnie zresetowano poziom i xp gracza %arg-2%" to player
+		if arg-1 is "ustaw":
+			if arg-2 is not set:
+				send "&cbłąd arg-2" to player
+				stop
+			if arg-3 is not between 0 and 100:
+				send "&cMusisz podać liczbę całkowitą między 0 a 100" to player
+				stop
+			if arg-4 is bigger or equal to proxy variable {poziomy::%1 + arg-3%}:
+				send "&cMusisz podać liczbę całkowitą między 0 a %proxy variable {poziomy::%1 + arg-3%} - 1%" to player
+				stop
+			set proxy variable {poziom-lvl::%uuid of arg-2%} to arg-3
+			set proxy variable {poziom-xp::%uuid of arg-2%} to arg-4
+			set {_poziom-lvl} to proxy variable {poziom-lvl::%uuid of arg-2%}
+			set {_poziom-xp} to proxy variable {poziom-xp::%uuid of arg-2%}
+			set {_poziomy} to proxy variable {poziomy::%1 + proxy variable {poziom-lvl::%uuid of arg-2%}%}
+			send "&aPomyślnie ustawiono poziom i xp dla gracza %arg-2%" to player
+			send "&fWynosi on teraz &f&lpoziom &a%{_poziom-lvl}%&l❊ &a%{_poziom-xp}%/%{_poziomy}%xp" to player
+		if arg-1 is "info":
+			if arg-2 is not set:
+				send "&cbłąd arg-2" to player
+				stop
+			set {_poziom-lvl} to proxy variable {poziom-lvl::%uuid of arg-2%}
+			set {_poziom-xp} to proxy variable {poziom-xp::%uuid of arg-2%}
+			set {_poziomy} to proxy variable {poziomy::%1 + proxy variable {poziom-lvl::%uuid of arg-2%}%}
+			send "&fGracz &l%arg-2% &fposiada poziom &a%{_poziom-lvl}%&l❊ &a%{_poziom-xp}%/%{_poziomy}%xp" to player
+		
+function sprawdz_poziom(p: text):
+	set {-checking::%{_p}%} to true
+	set {_player} to uuid of ("%{_p}%" parsed as offline player)
+	while proxy variable {poziom-xp::%{_player}%} is bigger or equal to proxy variable {poziomy::%1 + proxy variable {poziom-lvl::%{_player}%}%}:
+		remove proxy variable {poziomy::%1 + proxy variable {poziom-lvl::%{_player}%}%} from proxy variable {poziom-xp::%{_player}%}
+		add 1 to proxy variable {poziom-lvl::%{_player}%}
+		wait 1 tick
+		send title "&a&lLevel up!" to {_p}
+		send subtitle "&6&lOsiągnięto poziom %proxy variable {poziom-lvl::%{_player}%}%!" to {_p}
+		wait 3 seconds
+	clear {-checking::%{_p}%}
+
+
+on load:
+	stop #usuń to jeśli chcesz zmieniać wartości
+
+	clear proxy variable {poziomy::*}
+	#                                     1    2    3    4    5    6     7     8     9    10    11    12    13    14    15    16    17    18    19       20
+	# set proxy variable {poziomy::*} to 100, 200, 300, 400, 500, 1000, 1200, 1400, 1600, 1800, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000 and 9000
+	loop 5 times: # 1-5
+		set proxy variable {poziomy::%loop-number%} to (loop-number * 100)
+	loop 5 times: # 6-10
+		set proxy variable {poziomy::%loop-number + 5%} to 800 + (loop-number * 200)
+	loop 9 times: # 11-19
+		set proxy variable {poziomy::%loop-number + 10%} to 3500 + (loop-number * 500)
+
+	set proxy variable {poziomy::20} to 9000
+
+	loop 30 times: # 21-50
+		set proxy variable {poziomy::%loop-number + 20%} to 9000 + (loop-number * 1000)
+	loop 50 times: # 51-100
+		set proxy variable {poziomy::%loop-number + 50%} to 49000 + (loop-number * 1000)
+
+
+on placeholderapi placeholder request for the prefix "smyfpoziomy":
+    if the identifier is "poziom":
+        set the result to "%proxy variable {poziom-lvl::%uuid of player%}%❊"
+    else if the identifier is "postep":
+        set the result to "%proxy variable {poziom-xp::%uuid of player%}%/%proxy variable {poziomy::%1 + proxy variable {poziom-lvl::%uuid of player%}%}%"

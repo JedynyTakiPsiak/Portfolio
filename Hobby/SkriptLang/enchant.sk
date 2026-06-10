@@ -1,0 +1,379 @@
+on right click on enchanting table:
+	cancel event
+	if player's tool is not any helmet, chestplate, leggings, boots, trident, sword, crossbow, bow, hoe, shovel, axe, pickaxe, fishing rod or elytra:
+		send "&cWybrany przedmiot nie może zostać zenchantowany!" to player
+		stop
+	loop all blocks in radius 2.9 of event-block:
+		if loop-block is bookshelf:
+			if distance between loop-block and event-block is bigger or equal to 2:
+				if y-coordinate of event-block is less or equal to y-coordinate of loop-block:
+					add 1 to {_biblio}
+
+# WAŻNE! nie ustawić nigdzie potrzebnych biblioteczek na 1!
+
+	set {_gui} to chest inventory with 1 rows named "&5&lStół do zaklinania"
+	set slot (integers between 1 and 6) of {_gui} to 1 of black stained glass pane named " "
+	if {_biblio} is not set:
+		set slot 8 of {_gui} to 1 of barrier block named "&c&lBrak biblioteczek wokół stołu."
+	else:
+		set slot 8 of {_gui} to {_biblio} of bookshelf named "&6&lIlość biblioteczek: %{_biblio}%"
+	set slot 7 of {_gui} to 1 of grindstone named "&f&lZdejmowanie zaklęć" with lore "&7Możliwość zdjęcia wybranego zaklęcia z przedmiotu" and "&7Otrzymanie niego w postaci książki"
+	set {_slot} to 0 if player's tool is elytra
+	set {_slot} to 1 if {_slot} is not set
+
+	set slot {_slot} of {_gui} to 1 of enchanted book named "&5&lUnbreaking 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+	if level of unbreaking of player's tool is higher or equal to 1:
+		set slot {_slot} of {_gui} to 1 of enchanted book named "&5&lUnbreaking 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+		if level of unbreaking of player's tool is higher or equal to 2:
+			set slot {_slot} of {_gui} to 1 of enchanted book named "&5&lUnbreaking 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of unbreaking of player's tool is higher or equal to 3:
+				set slot {_slot} of {_gui} to 1 of enchanted book named "&c&lUnbreaking 3" with lore "&cMaksymalny poziom enchantu"
+
+	if player's tool is any axe, pickaxe, hoe or shovel:
+		set slot 0 of {_gui} to 1 of enchanted book named "&5&lEfficiency 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+		if level of efficiency of player's tool is higher or equal to 1:
+			set slot 0 of {_gui} to 1 of enchanted book named "&5&lEfficiency 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of efficiency of player's tool is higher or equal to 2:
+				set slot 0 of {_gui} to 1 of enchanted book named "&5&lEfficiency 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of efficiency of player's tool is higher or equal to 3:
+					set slot 0 of {_gui} to 1 of enchanted book named "&5&lEfficiency 4" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+					if level of efficiency of player's tool is higher or equal to 4:
+						set slot 0 of {_gui} to 1 of enchanted book named "&5&lEfficiency 5" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+						if level of efficiency of player's tool is higher or equal to 5:
+							set slot 0 of {_gui} to 1 of enchanted book named "&c&lEfficiency 5" with lore "&cMaksymalny poziom enchantu"
+		if player's tool is not enchanted with silk touch:
+			set slot 2 of {_gui} to 1 of enchanted book named "&5&lFortune 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of fortune of player's tool is higher or equal to 1:
+				set slot 2 of {_gui} to 1 of enchanted book named "&5&lFortune 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of fortune of player's tool is higher or equal to 2:
+					set slot 2 of {_gui} to 1 of enchanted book named "&5&lFortune 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+					if level of fortune of player's tool is higher or equal to 3:
+						set slot 2 of {_gui} to 1 of enchanted book named "&c&lFortune 3" with lore "&cMaksymalny poziom enchantu"
+		else:
+			set slot 2 of {_gui} to 1 of enchanted book named "&c&lFortune" with lore "&cNiekompatybilne zaklęcie z Silk Touch!"
+		if player's tool is not enchanted with fortune:
+			set slot 3 of {_gui} to 1 of enchanted book named "&5&lSilk Touch" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of silk touch of player's tool is 1:
+				set slot 3 of {_gui} to 1 of enchanted book named "&c&lSilk Touch" with lore "&cMaksymalny poziom enchantu"
+		else:
+			set slot 3 of {_gui} to 1 of enchanted book named "&c&lSilk Touch" with lore "&cNiekompatybilne zaklęcie z Fortune!"
+
+	if player's tool is fishing rod:
+		set slot 0 of {_gui} to 1 of enchanted book named "&5&lLuck of the Sea 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+		if level of luck of the sea of player's tool is higher or equal to 1:
+			set slot 0 of {_gui} to 1 of enchanted book named "&5&lLuck of the Sea 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of luck of the sea of player's tool is higher or equal to 2:
+				set slot 0 of {_gui} to 1 of enchanted book named "&5&lLuck of the Sea 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of luck of the sea of player's tool is 3:
+					set slot 0 of {_gui} to 1 of enchanted book named "&c&lLuck of the Sea 3" with lore "&cMaksymalny poziom enchantu"
+		set slot 2 of {_gui} to 1 of enchanted book named "&5&lLure 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+		if level of lure of player's tool is higher or equal to 1:
+			set slot 2 of {_gui} to 1 of enchanted book named "&5&lLure 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of lure of player's tool is higher or equal to 2:
+				set slot 2 of {_gui} to 1 of enchanted book named "&5&lLure 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of lure of player's tool is 3:
+					set slot 2 of {_gui} to 1 of enchanted book named "&c&lLure 3" with lore "&cMaksymalny poziom enchantu"
+
+	if player's tool is trident:
+		set slot 0 of {_gui} to 1 of enchanted book named "&5&lImpaling 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+		if level of impaling of player's tool is higher or equal to 1:
+			set slot 0 of {_gui} to 1 of enchanted book named "&5&lImpaling 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of impaling of player's tool is higher or equal to 2:
+				set slot 0 of {_gui} to 1 of enchanted book named "&5&lImpaling 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of impaling of player's tool is higher or equal to 3:
+					set slot 0 of {_gui} to 1 of enchanted book named "&5&lImpaling 4" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+					if level of impaling of player's tool is higher or equal to 4:
+						set slot 0 of {_gui} to 1 of enchanted book named "&5&lImpaling 5" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+						if level of impaling of player's tool is 5:
+							set slot 0 of {_gui} to 1 of enchanted book named "&c&lImpaling 5" with lore "&cMaksymalny poziom enchantu"
+		if player's tool is not enchanted with loyalty or channeling:
+			set slot 2 of {_gui} to 1 of enchanted book named "&5&lRiptide 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of riptide of player's tool is higher or equal to 1:
+				set slot 2 of {_gui} to 1 of enchanted book named "&5&lRiptide 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of riptide of player's tool is higher or equal to 2:
+					set slot 2 of {_gui} to 1 of enchanted book named "&5&lRiptide 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+					if level of riptide of player's tool is 3:
+						set slot 2 of {_gui} to 1 of enchanted book named "&c&lRiptide 3" with lore "&cMaksymalny poziom enchantu"
+		else:
+			set slot 2 of {_gui} to 1 of enchanted book named "&c&lRiptide" with lore "&cNiekompatybilne zaklęcie z Loyalty oraz Channeling!"
+		if player's tool is not enchanted with riptide:
+			set slot 3 of {_gui} to 1 of enchanted book named "&5&lLoyalty 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of loyalty of player's tool is higher or equal to 1:
+				set slot 3 of {_gui} to 1 of enchanted book named "&5&lLoyalty 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of loyalty of player's tool is higher or equal to 2:
+					set slot 3 of {_gui} to 1 of enchanted book named "&5&lLoyalty 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+					if level of loyalty of player's tool is 3:
+						set slot 3 of {_gui} to 1 of enchanted book named "&c&lLoyalty 3" with lore "&cMaksymalny poziom enchantu"
+			set slot 4 of {_gui} to 1 of enchanted book named "&5&lChanneling" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of channeling of player's tool is 1:
+				set slot 4 of {_gui} to 1 of enchanted book named "&c&lChanneling" with lore "&cMaksymalny poziom enchantu"
+		else:
+			set slot 3 of {_gui} to 1 of enchanted book named "&c&lLoyalty" with lore "&cNiekompatybilne zaklęcie z Riptide!"
+			set slot 4 of {_gui} to 1 of enchanted book named "&c&lChanneling" with lore "&cNiekompatybilne zaklęcie z Riptide!"
+
+	if player's tool is crossbow:
+		if player's tool is not enchanted with multishot:
+			set slot 0 of {_gui} to 1 of enchanted book named "&5&lPiercing 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of piercing of player's tool is higher or equal to 1:
+				set slot 0 of {_gui} to 1 of enchanted book named "&5&lPiercing 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of piercing of player's tool is higher or equal to 2:
+					set slot 0 of {_gui} to 1 of enchanted book named "&5&lPiercing 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+					if level of piercing of player's tool is higher or equal to 3:
+						set slot 0 of {_gui} to 1 of enchanted book named "&5&lPiercing 4" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+						if level of piercing of player's tool is 4:
+							set slot 0 of {_gui} to 1 of enchanted book named "&c&lPiercing 4" with lore "&cMaksymalny poziom enchantu"
+		else:
+			set slot 0 of {_gui} to 1 of enchanted book named "&c&lPiercing" with lore "&cNiekompatybilne zaklęcie z Multishot!"
+		set slot 2 of {_gui} to 1 of enchanted book named "&5&lQuick Charge 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+		if level of quick charge of player's tool is higher or equal to 1:
+			set slot 2 of {_gui} to 1 of enchanted book named "&5&lQuick Charge 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of quick charge of player's tool is higher or equal to 2:
+				set slot 2 of {_gui} to 1 of enchanted book named "&5&lQuick Charge 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of quick charge of player's tool is 3:
+					set slot 2 of {_gui} to 1 of enchanted book named "&c&lQuick Charge 3" with lore "&cMaksymalny poziom enchantu"
+		if player's tool is not enchanted with piercing:
+			set slot 3 of {_gui} to 1 of enchanted book named "&5&lMultishot" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of multishot of player's tool is 1:
+				set slot 3 of {_gui} to 1 of enchanted book named "&c&lMultishot" with lore "&cMaksymalny poziom enchantu"
+		else:
+			set slot 3 of {_gui} to 1 of enchanted book named "&c&lMultishot" with lore "&cNiekompatybilne zaklęcie z Piercing!"
+
+	if player's tool is bow:
+		set slot 0 of {_gui} to 1 of enchanted book named "&5&lPower 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+		if level of power of player's tool is higher or equal to 1:
+			set slot 0 of {_gui} to 1 of enchanted book named "&5&lPower 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of power of player's tool is higher or equal to 2:
+				set slot 0 of {_gui} to 1 of enchanted book named "&5&lPower 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of power of player's tool is higher or equal to 3:
+					set slot 0 of {_gui} to 1 of enchanted book named "&5&lPower 4" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+					if level of power of player's tool is higher or equal to 4:
+						set slot 0 of {_gui} to 1 of enchanted book named "&5&lPower 5" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+						if level of power of player's tool is 5:
+							set slot 0 of {_gui} to 1 of enchanted book named "&c&lPower 5" with lore "&cMaksymalny poziom enchantu"
+		set slot 2 of {_gui} to 1 of enchanted book named "&5&lPunch 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+		if level of punch of player's tool is higher or equal to 1:
+			set slot 2 of {_gui} to 1 of enchanted book named "&5&lPunch 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of punch of player's tool is 2:
+				set slot 2 of {_gui} to 1 of enchanted book named "&c&lPunch 2" with lore "&cMaksymalny poziom enchantu"
+		set slot 3 of {_gui} to 1 of enchanted book named "&5&lFlame" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+		if level of flame of player's tool is 1:
+			set slot 3 of {_gui} to 1 of enchanted book named "&c&lFlame" with lore "&cMaksymalny poziom enchantu"
+		set slot 4 of {_gui} to 1 of enchanted book named "&5&lInfinity" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+		if level of infinity of player's tool is 1:
+			set slot 4 of {_gui} to 1 of enchanted book named "&c&lInfinity" with lore "&cMaksymalny poziom enchantu"
+
+	if player's tool is any sword:
+		set slot 0 of {_gui} to 1 of enchanted book named "&5&lSharpness 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+		if level of sharpness of player's tool is higher or equal to 1:
+			set slot 0 of {_gui} to 1 of enchanted book named "&5&lSharpness 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of sharpness of player's tool is higher or equal to 2:
+				set slot 0 of {_gui} to 1 of enchanted book named "&5&lSharpness 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of sharpness of player's tool is higher or equal to 3:
+					set slot 0 of {_gui} to 1 of enchanted book named "&5&lSharpness 4" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+					if level of sharpness of player's tool is higher or equal to 4:
+						set slot 0 of {_gui} to 1 of enchanted book named "&5&lSharpness 5" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+						if level of sharpness of player's tool is 5:
+							set slot 0 of {_gui} to 1 of enchanted book named "&c&lSharpness 5" with lore "&cMaksymalny poziom enchantu"
+		set slot 2 of {_gui} to 1 of enchanted book named "&5&lLooting 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+		if level of looting of player's tool is higher or equal to 1:
+			set slot 2 of {_gui} to 1 of enchanted book named "&5&lLooting 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of looting of player's tool is higher or equal to 2:
+				set slot 2 of {_gui} to 1 of enchanted book named "&5&lLooting 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of looting of player's tool is higher or equal to 3:
+					set slot 2 of {_gui} to 1 of enchanted book named "&c&lLooting 3" with lore "&cMaksymalny poziom enchantu"
+		if player's tool is not enchanted with knockback:
+			set slot 3 of {_gui} to 1 of enchanted book named "&5&lFire Aspect 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of fire aspect of player's tool is higher or equal to 1:
+				set slot 3 of {_gui} to 1 of enchanted book named "&5&lFire Aspect 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of fire aspect of player's tool is 2:
+					set slot 3 of {_gui} to 1 of enchanted book named "&c&lFire Aspect 2" with lore "&cMaksymalny poziom enchantu"
+		else:
+			set slot 3 of {_gui} to 1 of enchanted book named "&c&lFire Aspect" with lore "&cNiekompatybilne zaklęcie z Knockback!"
+		if player's tool is not enchanted with fire aspect:
+			set slot 4 of {_gui} to 1 of enchanted book named "&5&lKnockback 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of knockback of player's tool is higher or equal to 1:
+				set slot 4 of {_gui} to 1 of enchanted book named "&5&lKnockback 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of knockback of player's tool is higher or equal to 2:
+					set slot 4 of {_gui} to 1 of enchanted book named "&c&lKnockback 2" with lore "&cMaksymalny poziom enchantu"
+		else:
+			set slot 4 of {_gui} to 1 of enchanted book named "&c&lKnockback" with lore "&cNiekompatybilne zaklęcie z Fire Aspect!"
+
+	if player's tool is any helmet, chestplate, leggings or boots:
+		set slot 0 of {_gui} to 1 of enchanted book named "&5&lProtection 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+		if level of protection of player's tool is higher or equal to 1:
+			set slot 0 of {_gui} to 1 of enchanted book named "&5&lProtection 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of protection of player's tool is higher or equal to 2:
+				set slot 0 of {_gui} to 1 of enchanted book named "&5&lProtection 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of protection of player's tool is higher or equal to 3:
+					set slot 0 of {_gui} to 1 of enchanted book named "&5&lProtection 4" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+					if level of protection of player's tool is 4:
+						set slot 0 of {_gui} to 1 of enchanted book named "&c&lProtection 4" with lore "&cMaksymalny poziom enchantu"
+		if player's tool is any helmet:
+			set slot 2 of {_gui} to 1 of enchanted book named "&5&lRespiration 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of respiration of player's tool is higher or equal to 1:
+				set slot 2 of {_gui} to 1 of enchanted book named "&5&lRespiration 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of respiration of player's tool is higher or equal to 2:
+					set slot 2 of {_gui} to 1 of enchanted book named "&5&lRespiration 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+					if level of respiration of player's tool is 3:
+						set slot 2 of {_gui} to 1 of enchanted book named "&c&lRespiration 3" with lore "&cMaksymalny poziom enchantu"
+			set slot 3 of {_gui} to 1 of enchanted book named "&5&lAqua Affinity" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of aqua affinity of player's tool is 1:
+				set slot 3 of {_gui} to 1 of enchanted book named "&c&lAqua Affinity" with lore "&cMaksymalny poziom enchantu"
+		if player's tool is any chestplate:
+			set slot 2 of {_gui} to 1 of enchanted book named "&5&lThorns 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of thorns of player's tool is higher or equal to 1:
+				set slot 2 of {_gui} to 1 of enchanted book named "&5&lThorns 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of thorns of player's tool is higher or equal to 2:
+					set slot 2 of {_gui} to 1 of enchanted book named "&5&lThorns 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+					if level of thorns of player's tool is 3:
+						set slot 2 of {_gui} to 1 of enchanted book named "&c&lThorns 3" with lore "&cMaksymalny poziom enchantu"
+		if player's tool is any boots:
+			set slot 2 of {_gui} to 1 of enchanted book named "&5&lFeather Falling 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of feather falling of player's tool is higher or equal to 1:
+				set slot 2 of {_gui} to 1 of enchanted book named "&5&lFeather Falling 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of feather falling of player's tool is higher or equal to 2:
+					set slot 2 of {_gui} to 1 of enchanted book named "&5&lFeather Falling 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+					if level of feather falling of player's tool is higher or equal to 3:
+						set slot 2 of {_gui} to 1 of enchanted book named "&5&lFeather Falling 4" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+						if level of feather falling of player's tool is higher or equal to 4:
+							set slot 2 of {_gui} to 1 of enchanted book named "&c&lFeather Falling 4" with lore "&cMaksymalny poziom enchantu"
+			set slot 3 of {_gui} to 1 of enchanted book named "&5&lDepth Strider 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of depth strider of player's tool is higher or equal to 1:
+				set slot 3 of {_gui} to 1 of enchanted book named "&5&lDepth Strider 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of depth strider of player's tool is higher or equal to 2:
+					set slot 3 of {_gui} to 1 of enchanted book named "&5&lDepth Strider 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+					if level of depth strider of player's tool is 3:
+						set slot 3 of {_gui} to 1 of enchanted book named "&c&lDepth Strider 3" with lore "&cMaksymalny poziom enchantu"
+			set slot 4 of {_gui} to 1 of enchanted book named "&5&lSoul Speed 1" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+			if level of soul speed of player's tool is higher or equal to 1:
+				set slot 4 of {_gui} to 1 of enchanted book named "&5&lSoul Speed 2" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+				if level of soul speed of player's tool is higher or equal to 2:
+					set slot 4 of {_gui} to 1 of enchanted book named "&5&lSoul Speed 3" with lore "&7Potrzebne:" and "&d◆ 3 Poziom Doświadczenia" and "&9◆ 1 Lapis Lazuli" and "&6◆ 0 Biblioteczek"
+					if level of soul speed of player's tool is 3:
+						set slot 4 of {_gui} to 1 of enchanted book named "&c&lSoul Speed 3" with lore "&cMaksymalny poziom enchantu"
+	open {_gui} to player
+
+on inventory click:
+	if name of player's current inventory is "&5&lStół do zaklinania":
+		cancel event
+		if clicked item is enchanted book:
+			if line 1 of lore of clicked item is "&cMaksymalny poziom enchantu":
+				close inventory of player
+				send "&cWybrane zaklęcie jest na maksymalny poziom!" to player	
+				stop
+			if line 1 of lore of clicked item contains "&cNiekompatybilne zaklęcie":
+				close inventory of player
+				send "&cWybrane zaklęcie jest niekompatybilne z obecnymi zaklęciami na narzędziu!" to player	
+				stop
+			set {_biblio} to line 4 of lore of clicked item
+			replace all "&6◆ " and " Biblioteczek" with "" in {_biblio}
+			set {_biblio} to {_biblio} parsed as integer
+			set {_bibliopostawione} to item amount of slot 8 of player's current inventory
+			if {_bibliopostawione} >= {_biblio}:
+				set {_poziom} to line 2 of lore of clicked item
+				replace all "&d◆ " and " Poziom Doświadczenia" with "" in {_poziom}
+				set {_poziom} to {_poziom} parsed as integer
+				if player's level is higher or equal to {_poziom}:
+					set {_lapis} to line 3 of lore of clicked item
+					replace all "&9◆ " and " Lapis Lazuli" with "" in {_lapis}
+					set {_lapis} to {_lapis} parsed as integer
+					if player has {_lapis} of lapis lazuli:
+						if player's tool is any helmet, chestplate, leggings, boots, trident, sword, crossbow, bow, hoe, shovel, axe, pickaxe, fishing rod or elytra:
+							set {_enchant} to name of clicked item
+							replace all "&5&l" with "" in {_enchant}
+							set {_enchant} to {_enchant} parsed as enchantment type
+							close inventory of player
+							remove {_lapis} of lapis lazuli from player
+							remove {_poziom} from player's level
+							play sound "block_enchantment_table_use" at player for player
+							enchant player's tool with {_enchant}
+							stop
+						else:
+							send "&cW twojej rece musi znajdować się narzędzie!" to player
+					else:
+						send "&cNie masz wystarczającej ilości lapisu!" to player	
+				else:
+					send "&cNie masz wystarczający poziom doświadczenia!" to player	
+			else:
+				send "&cW poblizu znajduję się za mało biblioteczek!" to player
+
+		if clicked item is grindstone named "&f&lZdejmowanie zaklęć":
+			if amount of enchantments of player's tool = 0:
+				close inventory of player
+				send "&cWybrane narzędzie nie posiada żadnych zaklęć do zdjęcia!" to player	
+				stop
+			set {_enchanty::*} to enchantments of player's tool 
+			set {_gui} to chest inventory with 1 rows named "&f&lZdejmowanie zaklęć"
+			set slot (integers between 0 and 8) of {_gui} to 1 of black stained glass pane named " "
+			set {_lore::1} to "&5&lMending - &d200 Poziom Doświadczenia"
+			set {_lore::2} to "&5&lEfficiency 6 - &d150 Poziom Doświadczenia"
+			set {_lore::3} to "&5&lFortune 4 - &d120 Poziom Doświadczenia" 
+			set {_lore::4} to "&5&lUnbreaking 10 - &d100 Poziom Doświadczenia" 
+			set {_lore::5} to "&5&lFeather Falling 6 - &d80 Poziom Doświadczenia" 
+			set {_lore::6} to "&5&lKnockback 3 - &d70 Poziom Doświadczenia" 
+			set {_lore::7} to "&5&lLooting 4 - &d60 Poziom Doświadczenia" 
+			set {_lore::8} to "&5&lReszta Zaklęć - &d50 Poziom Doświadczenia" 
+			set slot 8 of {_gui} to book named "&6&lCennik zdjęć zaklęć (Vip -50%%)" with lore {_lore::*}
+			loop (size of {_enchanty::*}) times:
+				clear {_poziom}
+				set {_poziom} to 200 if {_enchanty::%loop-number%} is mending 1
+				set {_poziom} to 150 if {_enchanty::%loop-number%} is efficiency 6
+				set {_poziom} to 120 if {_enchanty::%loop-number%} is fortune 4
+				set {_poziom} to 100 if {_enchanty::%loop-number%} is unbreaking 10
+				set {_poziom} to 80 if {_enchanty::%loop-number%} is feather falling 6
+				set {_poziom} to 70 if {_enchanty::%loop-number%} is knockback 3
+				set {_poziom} to 60 if {_enchanty::%loop-number%} is looting 4
+				set {_poziom} to 50 if {_poziom} is not set
+				if player has permission "smyf.enchantvip":
+					set slot (loop-number -1) of {_gui} to 1 of enchanted book named "&5&l%{_enchanty::%loop-number%}%" with lore "&7Potrzebne:" and "&d◆ %({_poziom}/2)% Poziom Doświadczenia" and "&7Szansa:" and "&6◆ 40%%"
+				else:
+					set slot (loop-number -1) of {_gui} to 1 of enchanted book named "&5&l%{_enchanty::%loop-number%}%" with lore "&7Potrzebne:" and "&d◆ %{_poziom}% Poziom Doświadczenia" and "&7Szansa:" and "&6◆ 40%%"
+			open {_gui} to player
+	
+	if name of player's current inventory is "&f&lZdejmowanie zaklęć":
+		cancel event
+		if clicked item is enchanted book:
+			set {_poziom} to line 2 of lore of clicked item
+			replace all "&d◆ " and " Poziom Doświadczenia" with "" in {_poziom}
+			set {_poziom} to {_poziom} parsed as integer
+			if player's level is higher or equal to {_poziom}:
+				if player's tool is any helmet, chestplate, leggings, boots, trident, sword, crossbow, bow, hoe, shovel, axe, pickaxe, fishing rod or elytra:
+					set {_enchant} to name of clicked item
+					replace all "&5&l" with "" in {_enchant}
+					set {_enchant} to {_enchant} parsed as enchantment type
+					close inventory of player
+					remove {_enchant} from enchantments of player's tool
+					remove {_poziom} from player's level
+					play sound "block.grindstone.use" at player for player
+					set {_ksiazka} to enchanted book
+					set stored enchants of {_ksiazka} to {_enchant}
+					chance of 40%:
+						if player has enough space for 1 of enchanted book:
+							add 1 of {_ksiazka} to player
+						else:
+							drop 1 of {_ksiazka} at player's location
+						send "&aPomyślnie udało Ci się zdjąć zaklęcie z przedmiotu." to player
+						stop
+					send "&cNie udało Ci się zdjąć zaklęcia z przedmiotu!" to player
+					stop
+				else:
+					send "&cW twojej rece musi znajdować się narzędzie!" to player
+			else:
+				send "&cNie masz wystarczający poziom doświadczenia!" to player	
+
+on anvil prepare:
+	if slot 1 of event-inventory is enchanted book:
+		set {_enchanty::*} to stored enchants of slot 1 of event-inventory
+		if {_enchanty::*} contains (unbreaking 10, efficiency 6, fortune 4, feather falling 6, knockback 3 or looting 4):
+			set {_i} to slot 0 of event-inventory
+			loop (size of {_enchanty::*}) times:
+				enchant {_i} with {_enchanty::%loop-number%} if {_enchanty::%loop-number%} is unbreaking 10
+				if slot 0 of event-inventory is any axe, pickaxe, hoe or shovel:
+					enchant {_i} with {_enchanty::%loop-number%} if {_enchanty::%loop-number%} is efficiency 6
+					enchant {_i} with {_enchanty::%loop-number%} if {_enchanty::%loop-number%} is fortune 4
+				if slot 0 of event-inventory is any boots:
+					enchant {_i} with {_enchanty::%loop-number%} if {_enchanty::%loop-number%} is feather falling 6
+				if slot 0 of event-inventory is any sword:
+					enchant {_i} with {_enchanty::%loop-number%} if {_enchanty::%loop-number%} is knockback 3
+					enchant {_i} with {_enchanty::%loop-number%} if {_enchanty::%loop-number%} is looting 4
+			set event-slot to {_i}

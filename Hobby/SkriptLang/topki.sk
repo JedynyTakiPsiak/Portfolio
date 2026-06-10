@@ -1,0 +1,112 @@
+import:
+	eu.decentsoftware.holograms.api.DHAPI
+	net.citizensnpcs.api.CitizensAPI
+	net.citizensnpcs.trait.SkinTrait
+	me.clip.placeholderapi.PlaceholderAPI
+
+#!FOLD NPC'ty
+on right click on entity:
+	if name of clicked entity is "&c&lzabojstwa":
+		if difference between {-npc-cooldown::%player's nickname%} and now is less than 5 seconds:
+			stop
+		set {-npc-cooldown::%player's nickname%} to now
+		loop (size of {topka-zabojstwa-nick::*}) times:
+			if {topka-zabojstwa-nick::%loop-number%} is player's uuid:
+				set {_id} to loop-number
+				exit loop
+		wait 3 tick
+		send "&r " to player
+		send "&7----- &eTopka Zabójstw &7-----" to player
+		loop 10 times:
+			send "&7&l%loop-number%&8&l. &f%{topka-zabojstwa-nick::%loop-number%} parsed as offlineplayer% &7- &f%{topka-zabojstwa-wartosc::%loop-number%}%" to player
+		send "&7----- &eTwoje Zabójstwa &7-----" to player
+		send "&7&l%{_id}%&8&l. &f%{topka-zabojstwa-nick::%{_id}%} parsed as offlineplayer% &7- &f%{topka-zabojstwa-wartosc::%{_id}%}%" to player
+		send "&r " to player
+
+on right click on entity:
+	if name of clicked entity is "&c&lkillstreak":
+		if difference between {-npc-cooldown::%player's nickname%} and now is less than 5 seconds:
+			stop
+		set {-npc-cooldown::%player's nickname%} to now
+		loop (size of {topka-killstreak-nick::*}) times:
+			if {topka-killstreak-nick::%loop-number%} is player's uuid:
+				set {_id} to loop-number
+				exit loop
+		wait 3 tick
+		send "&r " to player
+		send "&7----- &eTopka Zabójstw &7-----" to player
+		loop 10 times:
+			send "&7&l%loop-number%&8&l. &f%{topka-killstreak-nick::%loop-number%} parsed as offlineplayer% &7- &f%{topka-killstreak-wartosc::%loop-number%}%" to player
+		send "&7----- &eTwoje Zabójstwa &7-----" to player
+		send "&7&l%{_id}%&8&l. &f%{topka-killstreak-nick::%{_id}%} parsed as offlineplayer% &7- &f%{topka-killstreak-wartosc::%{_id}%}%" to player
+		send "&r " to player
+
+on right click on entity:
+	if name of clicked entity is "&a&lparkourlatwy":
+		if difference between {-npc-cooldown::%player's nickname%} and now is less than 5 seconds:
+			stop
+		set {-npc-cooldown::%player's nickname%} to now
+
+		send "&r " to player
+		send "&7----- &eTopka Parkour &aŁatwy &7-----" to player
+		loop 10 times:
+			set {_miejsce} to "hubparkour_positionname_2_%loop-number%"
+			set {_nick} to PlaceholderAPI.setPlaceholders(null, "%%%{_miejsce}%%%")
+			set {_miejsce} to "hubparkour_positiontime_2_%loop-number%"
+			set {_czas} to PlaceholderAPI.setPlaceholders(null, "%%%{_miejsce}%%%")
+			send "&7&l%loop-number%&8&l. &f%{_nick}% &7- &f%{_czas}%" to player
+		send "&7----- &eTwoje Statystyki &7-----" to player
+		set {_czas} to PlaceholderAPI.setPlaceholders(player, "%%hubparkour_besttime_2%%")
+		send "&eNajlepszy czas: &r%{_czas}%s" to player
+		execute player command "/parkour stats latwy"
+
+on right click on entity:
+	if name of clicked entity is "&cparkourtrudny":
+		if difference between {-npc-cooldown::%player's nickname%} and now is less than 5 seconds:
+			stop
+		set {-npc-cooldown::%player's nickname%} to now
+
+		send "&r " to player
+		send "&7----- &eTopka Parkour &cTrudny &7-----" to player
+		loop 10 times:
+			set {_miejsce} to "hubparkour_positionname_3_%loop-number%"
+			set {_nick} to PlaceholderAPI.setPlaceholders(null, "%%%{_miejsce}%%%")
+			set {_miejsce} to "hubparkour_positiontime_3_%loop-number%"
+			set {_czas} to PlaceholderAPI.setPlaceholders(null, "%%%{_miejsce}%%%")
+			send "&7&l%loop-number%&8&l. &f%{_nick}% &7- &f%{_czas}%" to player
+		send "&7----- &eTwoje Statystyki &7-----" to player
+		set {_czas} to PlaceholderAPI.setPlaceholders(player, "%%hubparkour_besttime_2%%")
+		send "&eNajlepszy czas: &r%{_czas}%s" to player
+		execute player command "/parkour stats trudny"
+
+#!UNFOLD
+
+#!FOLD topki
+every 30 minutes:
+	#!FOLD pvp
+	set {_sort::*} to sorted indices of {zabojstwa::*} in descending order
+	loop (size of {_sort::*}) times:
+		set {topka-zabojstwa-nick::%loop-number%} to {_sort::%loop-number%}
+		set {topka-zabojstwa-wartosc::%loop-number%} to {zabojstwa::%{_sort::%loop-number%}%}
+
+	DHAPI.setHologramLine(DHAPI.getHologram("zabojstwa"), 1, "&6&l%{topka-zabojstwa-nick::1} parsed as offline player% %{topka-zabojstwa-wartosc::1}%")
+	CitizensAPI.getNPCRegistry().getById(1).getOrAddTrait(SkinTrait.class).setSkinName("%{topka-zabojstwa-nick::1} parsed as offline player%", true)
+
+	set {_sort::*} to sorted indices of {killstreak::*} in descending order
+	loop (size of {_sort::*}) times:
+		set {topka-killstreak-nick::%loop-number%} to {_sort::%loop-number%}
+		set {topka-killstreak-wartosc::%loop-number%} to {killstreak::%{_sort::%loop-number%}%}
+
+	DHAPI.setHologramLine(DHAPI.getHologram("killstreak"), 1, "&6&l%{topka-killstreak-nick::1} parsed as offline player% %{topka-killstreak-wartosc::1}%")
+	CitizensAPI.getNPCRegistry().getById(3).getOrAddTrait(SkinTrait.class).setSkinName("%{topka-killstreak-nick::1} parsed as offline player%", true)
+	#!UNFOLD
+
+	#!FOLD parkour
+	set {_nick} to PlaceholderAPI.setPlaceholders(null, "%%hubparkour_positionname_2_1%%")
+	CitizensAPI.getNPCRegistry().getById(4).getOrAddTrait(SkinTrait.class).setSkinName("%{_nick}%", true)
+
+	set {_nick} to PlaceholderAPI.setPlaceholders(null, "%%hubparkour_positionname_3_1%%")
+	CitizensAPI.getNPCRegistry().getById(8).getOrAddTrait(SkinTrait.class).setSkinName("%{_nick}%", true)
+	#!UNFOLD
+
+#!UNFOLD

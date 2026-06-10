@@ -1,0 +1,19 @@
+#		losowanie na zasadzie wagi  
+#   	np. weightedRandom({zdrapki.itemy::*}, {zdrapki.waga::*})
+
+function weightedRandom(elements: objects, weights: numbers) :: object:
+    set {_random} to random number from 0 to sum({_weights::*})
+    loop {_weights::*}:
+        return {_elements::%loop-index%} if {_random} < loop-value
+        remove loop-value from {_random}
+
+#		tłumaczenie czasu angielskiego na polski
+#		np. translateTimespan(remaining time)
+
+function translateTimespan(ts: timespan) :: string:
+	set {_english::*} to ("years" and "year", "months", "month", "days", "day", "hours", "hour", "minutes", "minute", "seconds", "second", "and")
+	set {_polish::*} to ("lata" and "rok", "miesiące", "miesiąc", "dni", "dzień", "godzin", "godzina", "minut", "minuta", "sekund", "sekunda", "i")
+	set {_ts} to "%{_ts}%"
+	loop {_english::*}:
+		replace all loop-value with {_polish::%loop-index%} in {_ts}
+	return {_ts}

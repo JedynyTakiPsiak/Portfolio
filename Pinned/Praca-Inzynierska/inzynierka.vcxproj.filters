@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{916d4ec9-2b20-477c-9d1c-e8931a2c24d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\config">
+      <UniqueIdentifier>{d6f7d21e-8e9c-4f72-9839-990863b6d3e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\api">
+      <UniqueIdentifier>{518680cf-b314-42a4-9990-403814f0add8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\dane">
+      <UniqueIdentifier>{4297fe39-6b11-423d-969f-27a18209a4fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\funkcje">
+      <UniqueIdentifier>{eceae6be-bcc7-48a8-9416-abb8bb3448da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\analiza">
+      <UniqueIdentifier>{182aa391-cf07-45a2-a0c6-ffd095c191d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\wizualizacja">
+      <UniqueIdentifier>{58734ff7-5dcd-4af2-a3c0-a039bdd9eb08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui">
+      <UniqueIdentifier>{46108ebd-c101-4ef3-85be-74704dc88a05}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\config\config.cpp">
+      <Filter>src\config</Filter>
+    </ClCompile>
+    <ClCompile Include="src\api\api_client.cpp">
+      <Filter>src\api</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dane\data_manager.cpp">
+      <Filter>src\dane</Filter>
+    </ClCompile>
+    <ClCompile Include="src\analiza\analisys.cpp">
+      <Filter>src\analiza</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wizualizacja\analisys_raport.cpp">
+      <Filter>src\wizualizacja</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\user_interface.cpp">
+      <Filter>src\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wizualizacja\analisys_raport_header.cpp">
+      <Filter>src\wizualizacja</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\.gitignore">
+      <Filter>src</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\config\config.h">
+      <Filter>src\config</Filter>
+    </ClInclude>
+    <ClInclude Include="src\api\api_client.h">
+      <Filter>src\api</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dane\data_manager.h">
+      <Filter>src\dane</Filter>
+    </ClInclude>
+    <ClInclude Include="src\funkcje\rate_limiter.h">
+      <Filter>src\funkcje</Filter>
+    </ClInclude>
+    <ClInclude Include="src\analiza\analisys.h">
+      <Filter>src\analiza</Filter>
+    </ClInclude>
+    <ClInclude Include="src\wizualizacja\analisys_raport.h">
+      <Filter>src\wizualizacja</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\user_interface.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\version.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

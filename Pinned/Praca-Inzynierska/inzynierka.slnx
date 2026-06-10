@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="inzynierka.vcxproj" Id="f0bc636c-614c-4647-911b-23ffcdb784e9" />
+</Solution>

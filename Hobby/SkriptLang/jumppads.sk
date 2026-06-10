@@ -1,0 +1,76 @@
+options:
+	plytka: light weighted pressure plate
+
+on load:
+	while {jumppads::*} is set:
+		loop 12 times:
+			wait 10 ticks
+			loop {jumppads::*}:
+				set {_v} to cylindrical vector radius 0.5, yaw (loop-value-1 * 30), height -0.2
+				draw 1 of end_rod at loop-value-2 ~ {_v} with extra 0
+
+on step on pressure plate:
+	if event-block is {@plytka}:
+		if difference between {-jumppad-cooldown::%player's nickname%} and now is less than 1 second:
+			stop
+		set {-jumppad-cooldown::%player's nickname%} to now
+		if {jumppads::*} is set:
+			loop {jumppads::*}:
+				if loop-value is event-block's location:
+					set {_id} to loop-index
+					exit loop
+			push player forward with force {jumppads-power-forward::%{_id}%}
+			push player upward with force {jumppads-power-upward::%{_id}%}
+			stop
+
+
+on break of {@plytka}:	
+	if {jumppads::*} is set:
+		loop {jumppads::*}:
+			if loop-value is targeted block's location:
+				set {_id} to loop-index
+				clear {jumppads::%{_id}%}, {jumppads-power-forward::%{_id}%} and {jumppads-power-upward::%{_id}%}
+				send "&aUsunięto płytkę &6JumpPad!" to player
+				stop
+
+
+command /jumppads <text> [<number>] [<number>]: 
+	usage: "&e/remove oraz /create <moc do przodu> <moc do gory> - ustaw wartosci patrzac na złotą płytkę"
+	permission: jumppads.smyf
+	trigger:
+		if arg-1 is "create":
+			if targeted block is {@plytka}:
+				if arg-2 is not set:
+					send "&cBrak argumentu!" to player
+					stop
+				if arg-3 is not set:
+					send "&cBrak argumentu!" to player
+					stop
+				if {jumppads::*} is set:
+					loop {jumppads::*}:
+						if loop-value is targeted block's location:
+							set {_id} to loop-index
+							clear {jumppads::%{_id}%}, {jumppads-power-forward::%{_id}%} and {jumppads-power-upward::%{_id}%}
+							exit loop
+				add targeted block's location to {jumppads::*}
+				add arg-2 to {jumppads-power-forward::*}
+				add arg-3 to {jumppads-power-upward::*}				
+				send "&aStworzono &6JumpPad&a na kordach %location of targeted block% z mocą &6%arg-2% &ai &6%arg-3%" to player
+		if arg-1 is "remove":
+			if targeted block is {@plytka}:
+				loop {jumppads::*}:
+					if loop-value is targeted block's location:
+						set {_id} to loop-index
+						clear {jumppads::%{_id}%}, {jumppads-power-forward::%{_id}%} and {jumppads-power-upward::%{_id}%}
+						send "&aPomyślnie usunięto &6JumpPad &ana kordach %location of targeted block%" to player
+						stop
+		if arg-1 is "list":
+			send "&eIlość jumppadów: %size of {jumppads::*}%" to player
+		if arg-1 is "info":
+			if targeted block is {@plytka}:
+				loop {jumppads::*}:
+					if loop-value is targeted block's location:
+						set {_id} to loop-index
+						send "&eInfo o &6JumpPad&e:" to player
+						send "&eMoc forward: &f%{jumppads-power-forward::%{_id}%}%" to player
+						send "&eMoc upward: &f%{jumppads-power-upward::%{_id}%}%" to player

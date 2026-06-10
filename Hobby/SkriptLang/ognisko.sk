@@ -1,0 +1,95 @@
+on tab complete of "/ognisko":
+	set tab completions for position 1 to "stwórz", "usuń", "lista" and "wyczyść-listę"
+
+on load:
+	loop {ognisko::*}:
+		set block at loop-value to campfire[lit=true]
+
+command /ognisko [<text>]:
+	permission: fullaccess.smyf.admin
+	trigger:
+		if arg-1 is not set:
+			send "&carg-1 błąd" to player
+			stop
+		if arg-1 is "lista":
+			send "&eLista lokalizacji ognisk: (%size of {ognisko::*}%x)" to player
+			if {ognisko::*} is not set:
+				send "&ebrak wyników" to player
+			else:
+				set {_i} to 1
+				loop {ognisko::*}:
+					send "&e%{_i}%. &f%loop-value%" to player
+					add 1 to {_i}
+		if arg-1 is "stwórz":
+			if event-commandsender is not a player:
+				send "&cWybraną komendę może używać jedynie z poziomu gracza!" to player
+				stop
+			if targeted block is not campfire:
+				send "&cBlok nie jest ogniskiem!" to player
+				stop
+			if {ognisko::*} contains location of targeted block:
+				send "&cWybrany block jest już dodany na liste ognisk!" to player
+				stop
+			loop (size of {ognisko::*} + 1) times:
+				if {ognisko::ognisko%loop-number%} is not set:
+					set {_das} to loop-number
+					exit loop
+			if {_das} is not set:
+				set {_das} to 1
+			set {ognisko::ognisko%{_das}%} to location of targeted block
+			loop {ognisko::*}:
+				if loop-value is location of targeted block:
+					set {_i} to loop-index
+			set {_x} to x-coord of location of targeted block
+			set {_y} to y-coord of location of targeted block
+			set {_z} to z-coord of location of targeted block
+			# pos1
+			set {_x1} to {_x} + 1
+			set {_y1} to {_y} + 0
+			set {_z1} to {_z} + 1
+			# pos2
+			set {_x2} to {_x} - 1
+			set {_y2} to {_y} + 2
+			set {_z2} to {_z} - 1
+			execute player command "//pos1 %{_x1}%,%{_y1}%,%{_z1}%"
+			execute player command "//pos2 %{_x2}%,%{_y2}%,%{_z2}%"
+			wait 5 ticks
+			execute player command "/rg define %{_i}%"
+			send "&aPrawidłowo dodano blok do listy ognisk jako: %{_i}%" to player
+		if arg-1 is "wyczyść-listę":
+			loop {ognisko::*}:
+				execute player command "/rg remove %loop-index%"
+			clear {ognisko::*}
+			send "&aWyczyszczono listę ognisk" to player
+		if arg-1 is "usuń":
+			loop {ognisko::*}:
+				if loop-value is location of targeted block:
+					remove loop-value from {ognisko::*}
+					execute player command "/rg remove %loop-index%"
+					send "&aPoprawnie usunięto %loop-index% z listy" to player
+					stop
+			send "&cNie znaleziono ognisko na liście :(" to player
+
+
+on region enter:
+	if "%event-region%" contains "ognisko":
+		set {_region} to event-region
+		set {_das::*} to "%{_region}%" split at " in"
+		wait 1 second
+		while player is in region "%{_das::1}%":
+			if block at {ognisko::%{_das::1}%} is campfire[lit=true]: 
+				if player's health is less than 10:
+					heal player by 0.5 heart
+					draw 5 heart at location of player with offset vector(0.5, 1, 0.5)
+				wait 1 second
+			else:
+				stop
+
+on projectile hit:
+	if event-block is campfire[lit=true]:
+		set event-block to campfire[lit=false]
+	stop
+
+on damage:
+	if damage cause is fire:
+		cancel event
